@@ -37,6 +37,9 @@ export default defineConfig({
 		responsiveStyles: true,
 	},
 	vite: {
+		define: {
+			__BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+		},
 		ssr: {
 			optimizeDeps: {
 				// Pre-bundle so it isn't discovered mid-render under the workerd dev runner.

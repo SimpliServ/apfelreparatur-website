@@ -11,7 +11,7 @@ export type MailContent = {
 
 const esc = (v: string) => v.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 const font = "-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif";
-const ink = "#1d1d1f", muted = "#6e6e73", line = "#d2d2d7", gray = "#f5f5f7", blue = "#0071e3";
+const ink = "#1d1d1f", muted = "#6e6e73", line = "#d2d2d7", gray = "#f5f5f7", accent = "#1a7f37";
 
 export function mailText(c: MailContent): string {
 	const parts = [c.title, c.lead];
@@ -28,7 +28,7 @@ export function mailHtml(c: MailContent, siteUrl: string): string {
 		.join("");
 	const facts = rows ? `<tr><td style="padding:8px 0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid ${line}">${rows}</table></td></tr>` : "";
 	const steps = c.steps?.length
-		? `<tr><td style="padding:0 0 8px"><div style="font-size:17px;line-height:22px;font-weight:600;color:${ink};padding-bottom:12px">So geht es weiter</div>${c.steps.map((s, i) => `<div style="font-size:15px;line-height:22px;color:${ink};padding:0 0 10px"><span style="color:${blue};font-weight:600">${i + 1}.</span>&nbsp; ${esc(s)}</div>`).join("")}</td></tr>`
+		? `<tr><td style="padding:0 0 8px"><div style="font-size:17px;line-height:22px;font-weight:600;color:${ink};padding-bottom:12px">So geht es weiter</div>${c.steps.map((s, i) => `<div style="font-size:15px;line-height:22px;color:${ink};padding:0 0 10px"><span style="color:${accent};font-weight:600">${i + 1}.</span>&nbsp; ${esc(s)}</div>`).join("")}</td></tr>`
 		: "";
 	const footer = c.staff
 		? ""

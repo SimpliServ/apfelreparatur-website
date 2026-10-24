@@ -40,6 +40,176 @@
 			]
 		}
 	],
+	"redirects": [
+		{
+			"source": "/reparatur",
+			"destination": "/reparatur-anfragen",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/reparatur/[...rest]",
+			"destination": "/reparatur-anfragen",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/Reparaturformular.pdf",
+			"destination": "/reparatur-anfragen",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/service",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/service/[...rest]",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/1-iphone-ipad-ipod-service",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/entsperren",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/entsperren/[...rest]",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/shop",
+			"destination": "/kontakt",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/shop/[...rest]",
+			"destination": "/kontakt",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/anfahrt",
+			"destination": "/kontakt",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/anfahrt/[...rest]",
+			"destination": "/kontakt",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/reparatur",
+			"destination": "/reparatur-anfragen",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/service",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/1-iphone-ipad-ipod-service",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/entsperren",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/shop",
+			"destination": "/kontakt",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/anfahrt",
+			"destination": "/kontakt",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/kontakt",
+			"destination": "/kontakt",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/impressum",
+			"destination": "/impressum",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/datenschutz",
+			"destination": "/datenschutz",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/index.php/[...rest]",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		},
+		{
+			"source": "/component/[...rest]",
+			"destination": "/",
+			"type": 301,
+			"enabled": true,
+			"groupName": "Alte Website (apfelreparatur.at)"
+		}
+	],
 	"content": {
 		"pages": [
 			{

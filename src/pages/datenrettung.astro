@@ -11,7 +11,7 @@ import { dataCards } from "../lib/copy";
 import { breadcrumbLd, faqLd, localBusinessLd, serviceLd } from "../lib/seo";
 
 const description =
-	"Datenrettung und Datenübertragung in Wien für iPhone, iPad und Mac: Fotos, Kontakte und Dateien von defekten Geräten retten oder vollständig aufs neue Gerät übertragen. Vertraulich, ohne Termin und mit Preis vorab.";
+	"iPhone Datenrettung in Wien, auch für iPad und Mac: Fotos und Dateien von defekten Geräten retten, Daten aufs neue Gerät übertragen. Vertraulich, Preis vorab.";
 
 const cases = [
 	{ icon: "ph:drop", title: "Wasserschaden", text: "Gerät war im Wasser und startet nicht mehr." },
@@ -29,6 +29,7 @@ const transfer = [
 
 const faq: QA[] = [
 	{ q: "Kann man Daten von einem defekten iPhone retten?", a: "Oft ja. Häufig liegt der Fehler bei Display, Akku oder Ladebuchse. Tauschen wir das defekte Teil, startet das Gerät oft wieder, dass ein Backup möglich ist. Ob eine Rettung möglich ist, sagen wir Ihnen nach der Diagnose. Weitergearbeitet wird erst nach Ihrer Zustimmung." },
+	{ q: "Mein iPhone hatte einen Wasserschaden. Kann ich die Daten noch retten?", a: "Oft ja. Schalten Sie das iPhone aus, laden Sie es nicht und bringen Sie es so schnell wie möglich vorbei. Ob und welche Daten sich retten lassen, sagen wir Ihnen nach der Diagnose." },
 	{ q: "Was kostet eine Datenrettung in Wien?", a: "Das hängt vom Schaden ab. Nach der Diagnose erhalten Sie einen verbindlichen Kostenvoranschlag. Sie entscheiden, ob wir fortfahren." },
 	{ q: "Brauchen Sie meinen Code?", a: "Für die Datenrettung ja, denn iPhone und Mac verschlüsseln Ihre Daten. Sie geben den Code nur für diesen Auftrag frei, wir behandeln ihn vertraulich und löschen Rettungskopien nach der Übergabe." },
 	{ q: "Übertragen Sie Daten auch vom Android-Handy auf ein iPhone?", a: "Ja. Wir übertragen Fotos, Kontakte, Kalender und, wo technisch möglich, Chatverläufe von Android auf Ihr neues iPhone." },
@@ -38,7 +39,7 @@ const faq: QA[] = [
 
 <Base
 	og="datenrettung"
-	title="Datenrettung & Datenübertragung Wien – iPhone, iPad, Mac"
+	title="Datenrettung Wien: iPhone, iPad & Mac"
 	description={description}
 	jsonLd={[
 		...localBusinessLd(),
@@ -56,8 +57,8 @@ const faq: QA[] = [
 
 	<header class="dhero">
 		<div class="wrap center rise">
-			<p class="t-eyebrow muted">Datenrettung und Datenübertragung in Wien</p>
-			<h1 class="t-display dhero__title">Ihre Erinnerungen. <span class="grad">Zurückgeholt.</span></h1>
+			<h1 class="t-eyebrow muted">Datenrettung und Datenübertragung in Wien</h1>
+			<p class="t-display dhero__title">Ihre Erinnerungen. <span class="grad">Zurückgeholt.</span></p>
 			<p class="t-hero-sub dhero__sub">Von iPhone, iPad und Mac, auch wenn das Gerät nicht mehr startet.</p>
 			<div class="btn-row">
 				<a class="btn" href="/reparatur-anfragen?anliegen=datenrettung">Datenrettung anfragen</a>
@@ -222,7 +223,7 @@ const faq: QA[] = [
 		flex: none;
 		width: 26px;
 		height: 26px;
-		color: var(--blue);
+		color: var(--accent);
 	}
 
 	.ueb__list h3 {

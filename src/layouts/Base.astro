@@ -27,6 +27,8 @@ const siteTitle = settings.data?.title?.trim() || business.brand;
 const fullTitle = title ? (title.includes(siteTitle) ? title : `${title} – ${siteTitle}`) : siteTitle;
 const origin = (Astro.site?.origin ?? Astro.url.origin).replace(/\/$/, "");
 const ogImage = image ?? `${origin}/og/${og}.jpg`;
+const canonicalUrl = canonical ?? `${origin}${Astro.url.pathname}`;
+const indexable = !robots?.includes("noindex");
 const pageCtx = createPublicPageContext({
 	Astro,
 	kind: content ? "content" : "custom",
@@ -34,11 +36,12 @@ const pageCtx = createPublicPageContext({
 	title: fullTitle,
 	pageTitle: title ?? siteTitle,
 	description: description || settings.data?.tagline || undefined,
-	canonical: canonical ?? `${origin}${Astro.url.pathname}`,
+	canonical: indexable ? canonicalUrl : undefined,
 	image: ogImage,
 	content,
 	seo: { ogImage, robots },
 	siteName: siteTitle,
+	siteUrl: origin,
 });
 ---
 
@@ -55,6 +58,8 @@ const pageCtx = createPublicPageContext({
 		<link rel="manifest" href="/site.webmanifest" />
 		<EmDashHead page={pageCtx} />
 		<meta property="og:locale" content="de_AT" />
+		{indexable && <link rel="alternate" hreflang="de-AT" href={canonicalUrl} />}
+		{indexable && <link rel="alternate" hreflang="x-default" href={canonicalUrl} />}
 		{!image && <meta property="og:image:width" content="1200" />}
 		{!image && <meta property="og:image:height" content="630" />}
 		<meta property="og:image:alt" content={title ?? siteTitle} />

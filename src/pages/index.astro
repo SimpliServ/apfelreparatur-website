@@ -7,11 +7,21 @@ import Steps from "../components/Steps.astro";
 import FAQ from "../components/FAQ.astro";
 import Closing from "../components/Closing.astro";
 import { homeFaq, steps, whyCards } from "../lib/copy";
-import { faqLd, localBusinessLd } from "../lib/seo";
+import { faqLd, localBusinessLd, websiteLd } from "../lib/seo";
 import { business } from "../lib/business";
 import { getLocations } from "../lib/mobinil";
+import { deviceList } from "../lib/content";
+import { repairPages } from "../lib/repair-pages";
 
 const locations = await getLocations();
+const places = [...new Set(locations.map((l) => l.name))];
+const directory = [
+	...deviceList.map((d) => {
+		const dn = d.key === "mac" ? "MacBook" : d.name;
+		return { title: `${dn} Reparatur`, href: `/${d.key}`, links: repairPages.filter((p) => p.device === d.key).map((p) => [p.path, `${dn} ${p.copy.label}`] as const) };
+	}),
+	{ title: "Daten", href: "/datenrettung", links: [["/datenrettung", "Datenrettung für iPhone, iPad und Mac"], ["/datenrettung#uebertragung", "Datenübertragung aufs neue Gerät"]] as const },
+];
 
 const chapters = [
 	["/iphone", "ph:device-mobile", "iPhone"],
@@ -24,9 +34,9 @@ const chapters = [
 ---
 
 <Base
-	title="iPhone Reparatur Wien mit Original Apple Teilen – Apfelreparatur"
-	description="iPhone, iPad und Mac Reparatur in Wien: Display, Rückglas und Akku mit Original Apple Teilen, Datenrettung und Datenübertragung. Ohne Termin, Preis vorab."
-	jsonLd={[...localBusinessLd(locations), faqLd(homeFaq)]}
+	title="iPhone Reparatur Wien ohne Termin – Apfelreparatur"
+	description={`iPhone Reparatur in Wien ohne Termin: Display, Akku und Rückglas mit Original Apple Teilen. Auch iPad, MacBook, Datenrettung. Preis vorab, ${business.warrantyMonths} Monate Garantie.`}
+	jsonLd={[websiteLd(), ...localBusinessLd(locations), faqLd(homeFaq)]}
 >
 	<nav class="chapters" aria-label="Geräte und Leistungen">
 		<ul role="list" class="rise">
@@ -63,7 +73,7 @@ const chapters = [
 			title="Display."
 			sub="Gesprungen? Bald wieder makellos."
 			primary={{ href: "/reparatur-anfragen?geraet=iphone&anliegen=display", label: "Anfragen" }}
-			secondary={{ href: "/iphone#display", label: "Mehr erfahren" }}
+			secondary={{ href: "/iphone/display-reparatur", label: "Mehr erfahren" }}
 		/>
 		<Tile
 			half
@@ -72,7 +82,7 @@ const chapters = [
 			title="Rückglas."
 			sub="Die Rückseite, wieder aus einem Guss."
 			primary={{ href: "/reparatur-anfragen?geraet=iphone&anliegen=rueckglas", label: "Anfragen" }}
-			secondary={{ href: "/iphone#rueckglas", label: "Mehr erfahren" }}
+			secondary={{ href: "/iphone/rueckglas-reparatur", label: "Mehr erfahren" }}
 		/>
 		<Tile
 			half
@@ -81,7 +91,7 @@ const chapters = [
 			title="Akku."
 			sub="Wieder 100 % Batteriezustand."
 			primary={{ href: "/reparatur-anfragen?geraet=iphone&anliegen=akku", label: "Anfragen" }}
-			secondary={{ href: "/iphone#akku", label: "Mehr erfahren" }}
+			secondary={{ href: "/iphone/akku-tauschen", label: "Mehr erfahren" }}
 		/>
 		<Tile
 			half
@@ -126,7 +136,7 @@ const chapters = [
 		<figure class="workshop__img sd-grow">
 			<img
 				src="/img/schraube-1600.webp"
-				srcset="/img/schraube-800.webp 800w, /img/schraube-1600.webp 1600w, /img/schraube-2400.webp 2400w"
+				srcset="/img/schraube-800.webp 800w, /img/schraube-1200.webp 1200w, /img/schraube-1600.webp 1600w, /img/schraube-2400.webp 2400w"
 				sizes="(max-width: 1100px) 100vw, 1100px"
 				width="2400"
 				height="1600"
@@ -137,6 +147,34 @@ const chapters = [
 		</figure>
 	</section>
 
+	<section class="dir section on-gray" aria-labelledby="dir-h">
+		<div class="wrap wrap--xl">
+			<div class="dir__intro" data-reveal>
+				<h2 id="dir-h" class="t-section">Alle Reparaturen in Wien.</h2>
+				<p class="t-lead muted">
+					Ohne Termin an unseren Standorten {places.join(", ").replace(/, ([^,]*)$/, " und $1")}. Oder vorab <a href="/reparatur-anfragen">online anfragen</a>.
+				</p>
+			</div>
+			<div class="dir__cols">
+				{
+					directory.map((col, i) => (
+						<div data-reveal style={`--i:${i}`}>
+							<h3 class="dir__h">
+								<a href={col.href}>{col.title}</a>
+							</h3>
+							<ul role="list">
+								{col.links.map(([href, label]) => (
+									<li>
+										<a href={href}>{label}</a>
+									</li>
+								))}
+							</ul>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
 	<FAQ title="Häufige Fragen." items={homeFaq} />
 
 	<Closing />
@@ -202,6 +240,45 @@ const chapters = [
 		}
 	}
 
+	.dir__intro {
+		max-width: 760px;
+		margin-bottom: clamp(32px, 4vw, 56px);
+	}
+	.dir__intro .t-lead {
+		margin-top: 18px;
+	}
+	.dir__cols {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 32px;
+	}
+	.dir__h {
+		margin-bottom: 12px;
+		font-size: 21px;
+		font-weight: 600;
+	}
+	.dir__h a {
+		color: var(--ink);
+	}
+	.dir ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.dir li {
+		padding: 8px 0;
+		border-bottom: 1px solid var(--line);
+	}
+	@media (max-width: 1000px) {
+		.dir__cols {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+	@media (max-width: 520px) {
+		.dir__cols {
+			grid-template-columns: 1fr;
+		}
+	}
 	.workshop {
 		padding-top: clamp(88px, 12vw, 160px);
 		overflow: hidden;

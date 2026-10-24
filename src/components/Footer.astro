@@ -8,9 +8,11 @@ const columns = [
 			["/iphone", "iPhone Reparatur"],
 			["/ipad", "iPad Reparatur"],
 			["/mac", "Mac Reparatur"],
-			["/iphone#display", "Display tauschen"],
-			["/iphone#rueckglas", "Rückglas tauschen"],
-			["/iphone#akku", "Akku tauschen"],
+			["/iphone/display-reparatur", "iPhone Display Reparatur"],
+			["/iphone/rueckglas-reparatur", "iPhone Rückglas Reparatur"],
+			["/iphone/akku-tauschen", "iPhone Akku tauschen"],
+			["/ipad/display-reparatur", "iPad Display Reparatur"],
+			["/mac/akku-tauschen", "MacBook Akku tauschen"],
 		],
 	},
 	{
@@ -70,7 +72,7 @@ const year = new Date().getFullYear();
 			{
 				columns.map((col) => (
 					<div class="foot__col">
-						<h3>{col.title}</h3>
+						<h2>{col.title}</h2>
 						<ul role="list">
 							{col.links.map(([href, label]) => (
 								<li>
@@ -140,7 +142,7 @@ const year = new Date().getFullYear();
 		padding: 20px 0 30px;
 	}
 
-	.foot__col h3 {
+	.foot__col h2 {
 		margin: 0 0 9px;
 		font-size: 12px;
 		font-weight: 600;

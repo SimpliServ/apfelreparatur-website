@@ -108,6 +108,37 @@ Für Schäden an Personen und für Schäden an den Geräten, die Sie uns zur Rep
 Es gilt österreichisches Recht unter Ausschluss des UN-Kaufrechts. Für Verbraucher:innen gelten zwingende Schutzvorschriften ihres Wohnsitzstaates weiter. Gerichtsstand für Unternehmer ist Wien. Sollte eine Bestimmung unwirksam sein, bleiben die übrigen wirksam.
 """
 
+# Old Joomla site (apfelreparatur.at, crawled 2026-10-24): every URL without a counterpart 301s.
+# /kontakt, /impressum and /datenschutz exist on the new site and need no rule.
+OLD = "Alte Website (apfelreparatur.at)"
+OLD_REDIRECTS = [
+    ("/reparatur", "/reparatur-anfragen"),
+    ("/reparatur/[...rest]", "/reparatur-anfragen"),
+    ("/Reparaturformular.pdf", "/reparatur-anfragen"),
+    ("/service", "/"),
+    ("/service/[...rest]", "/"),
+    ("/1-iphone-ipad-ipod-service", "/"),
+    ("/entsperren", "/"),
+    ("/entsperren/[...rest]", "/"),
+    ("/shop", "/kontakt"),
+    ("/shop/[...rest]", "/kontakt"),
+    ("/anfahrt", "/kontakt"),
+    ("/anfahrt/[...rest]", "/kontakt"),
+    ("/index.php", "/"),
+    ("/index.php/reparatur", "/reparatur-anfragen"),
+    ("/index.php/service", "/"),
+    ("/index.php/1-iphone-ipad-ipod-service", "/"),
+    ("/index.php/entsperren", "/"),
+    ("/index.php/shop", "/kontakt"),
+    ("/index.php/anfahrt", "/kontakt"),
+    ("/index.php/kontakt", "/kontakt"),
+    ("/index.php/impressum", "/impressum"),
+    ("/index.php/datenschutz", "/datenschutz"),
+    ("/index.php/[...rest]", "/"),
+    ("/component/[...rest]", "/"),
+]
+REDIRECTS = [{"source": a, "destination": b, "type": 301, "enabled": True, "groupName": OLD} for a, b in OLD_REDIRECTS]
+
 seed = {
     "$schema": "https://emdashcms.com/seed.schema.json",
     "version": "1",
@@ -130,6 +161,7 @@ seed = {
             ],
         }
     ],
+    "redirects": REDIRECTS,
     "content": {
         "pages": [
             {"id": "datenschutz", "slug": "datenschutz", "status": "published", "data": {"title": "Datenschutzerklärung", "content": portable(DATENSCHUTZ)}},

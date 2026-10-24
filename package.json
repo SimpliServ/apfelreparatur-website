@@ -11,10 +11,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "astro build && wrangler deploy",
+    "deploy": "astro build && wrangler deploy && node scripts/indexnow.mjs",
     "typecheck": "astro check",
     "logs": "wrangler tail apfelreparatur-website --format pretty",
-    "og": "node scripts/og/render.mjs"
+    "og": "node scripts/og/render.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.1",

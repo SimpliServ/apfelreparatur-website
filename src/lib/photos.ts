@@ -10,8 +10,8 @@ export const photos = {
 	rueckglas: { w: 2400, h: 1600, alt: "Gesprungenes Glas mit feinen Rissen auf dunklem Grund", by: "Tima Miroshnichenko", id: 6755147 },
 	akku: { w: 2400, h: 1753, alt: "Smartphone mit sichtbarem Innenleben und Akku", by: "Tyler Lastovich", id: 719399 },
 	daten: { w: 2400, h: 1600, alt: "Geöffnete Festplatte mit Schreib-Lese-Kopf", by: "Pixabay", id: 209666 },
-	werkstatt: { w: 2400, h: 1600, alt: "Techniker arbeitet unter dem Mikroskop an einer Platine", by: "Tima Miroshnichenko", id: 6755092 },
-	labor: { w: 2400, h: 1600, alt: "Techniker am Reparaturplatz mit Mikroskop", by: "Tima Miroshnichenko", id: 6754839 },
+	werkstatt: { w: 2400, h: 1600, alt: "Techniker an einem Reparaturplatz", by: "Tima Miroshnichenko", id: 6755092 },
+	labor: { w: 2400, h: 1600, alt: "Techniker am Reparaturplatz", by: "Tima Miroshnichenko", id: 6754839 },
 	schraube: { w: 2400, h: 1601, alt: "Präzisionsschraubendreher an einem geöffneten Smartphone", by: "Tima Miroshnichenko", id: 6755075 },
 } as const;
 

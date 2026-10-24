@@ -1,0 +1,8 @@
+/img/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+/og/*
+  Cache-Control: public, max-age=86400
+/*.png
+  Cache-Control: public, max-age=604800
+/favicon.*
+  Cache-Control: public, max-age=604800

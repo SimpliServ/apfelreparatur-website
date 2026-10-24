@@ -12,6 +12,8 @@ export const business = {
 	country: "Österreich",
 	phone: "+43 1 399 23 49",
 	email: "office@apfelreparatur.at",
+	// Free service hotline shared with the operator's stores.
+	hotline: "0800 999 197",
 	vatId: "ATU68056505",
 	registerNo: "FN 397203y",
 	registerCourt: "Landesgericht Wiener Neustadt",

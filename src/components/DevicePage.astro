@@ -6,10 +6,11 @@ import Pic from "./Pic.astro";
 import PlusCards from "./PlusCards.astro";
 import FAQ from "./FAQ.astro";
 import Closing from "./Closing.astro";
-import { devices, services, type DeviceKey } from "../lib/content";
+import { devices, services, type DeviceKey, type ServiceKey } from "../lib/content";
 import { deviceFaq, repairPhoto, whyCards } from "../lib/copy";
 import { breadcrumbLd, faqLd, localBusinessLd, serviceLd } from "../lib/seo";
 import { getModels } from "../lib/mobinil";
+import { repairPages } from "../lib/repair-pages";
 
 interface Props {
 	device: DeviceKey;
@@ -20,7 +21,14 @@ const { device, title, description } = Astro.props;
 const d = devices[device];
 const faq = deviceFaq(d);
 const path = `/${d.key}`;
+// People search "MacBook Reparatur", not "Mac Reparatur".
+const dn = d.key === "mac" ? "MacBook" : d.name;
 const models = (await getModels(device)).map((m) => m.title);
+const detail = (key: ServiceKey): [string, string] | undefined => {
+	if (key === "datenrettung") return ["/datenrettung", `${dn} Datenrettung`];
+	const p = repairPages.find((x) => x.device === device && x.service === key);
+	return p && [p.path, `${dn} ${p.copy.label}`];
+};
 ---
 
 <Base
@@ -29,7 +37,7 @@ const models = (await getModels(device)).map((m) => m.title);
 	description={description}
 	jsonLd={[
 		...localBusinessLd(),
-		serviceLd(`${d.name} Reparatur in Wien`, description, path),
+		serviceLd(`${dn} Reparatur in Wien`, description, path, `${dn} Reparatur`),
 		faqLd(faq),
 		breadcrumbLd([["Start", "/"], [`${d.name} Reparatur`, path]]),
 	]}
@@ -42,7 +50,7 @@ const models = (await getModels(device)).map((m) => m.title);
 
 	<header class="hero">
 		<div class="wrap center rise">
-			<h1 class="t-display hero__title">{d.name} Reparatur<span class="hero__city">in Wien.</span></h1>
+			<h1 class="t-display hero__title">{dn} Reparatur <span class="hero__city">in Wien.</span></h1>
 			<p class="t-hero-sub hero__sub">{d.sub}<a class="fn" href="#fn-1">1</a></p>
 			<div class="btn-row">
 				<a class="btn" href={`/reparatur-anfragen?geraet=${d.key}`}>Reparatur anfragen</a>
@@ -75,10 +83,18 @@ const models = (await getModels(device)).map((m) => m.title);
 								</li>
 							))}
 						</ul>
-						<a class="more rep__link" href={`/reparatur-anfragen?geraet=${d.key}&anliegen=${r.key}`}>
-							{d.name} {services[r.key].label} Reparatur anfragen
-							<Icon name="ph:caret-right" aria-hidden="true" />
-						</a>
+						<p class="rep__links">
+							{detail(r.key) && (
+								<a class="more rep__link" href={detail(r.key)![0]}>
+									{detail(r.key)![1]}
+									<Icon name="ph:caret-right" aria-hidden="true" />
+								</a>
+							)}
+							<a class="more rep__link" href={`/reparatur-anfragen?geraet=${d.key}&anliegen=${r.key}`}>
+								Anfragen
+								<Icon name="ph:caret-right" aria-hidden="true" />
+							</a>
+						</p>
 					</div>
 					<figure class="rep__img sd-zoom">
 						<Pic name={repairPhoto(d.key, r.key)} sizes="(max-width: 900px) 100vw, 640px" />
@@ -99,7 +115,7 @@ const models = (await getModels(device)).map((m) => m.title);
 		</div>
 	</section>
 
-	<FAQ title={`Fragen zur ${d.name} Reparatur.`} items={faq} />
+	<FAQ title={`Fragen zur ${dn} Reparatur.`} items={faq} />
 
 	<Closing title={`Ihr ${d.name}. Bald wieder wie neu.`} href={`/reparatur-anfragen?geraet=${d.key}`} />
 </Base>
@@ -184,6 +200,12 @@ const models = (await getModels(device)).map((m) => m.title);
 		height: 16px;
 		color: var(--ok);
 		transform: translateY(2px);
+	}
+
+	.rep__links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px 28px;
 	}
 
 	.rep__link svg {

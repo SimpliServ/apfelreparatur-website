@@ -48,8 +48,8 @@ const visible = issueOptions[values.device] ?? allIssues;
 
 <Base
 	og="anfragen"
-	title="Reparatur anfragen – iPhone, iPad & Mac Reparatur Wien"
-	description="Reparatur in Wien anfragen: Gerät und Problem angeben, wir melden uns mit einer ersten Preiseinschätzung. Kostenlos und ohne Verpflichtung."
+	title="Reparatur anfragen – iPhone, iPad & Mac Wien"
+	description="Reparatur in Wien anfragen: Gerät und Problem angeben, wir melden uns mit einer ersten Preiseinschätzung. Unverbindlich."
 	jsonLd={[breadcrumbLd([["Start", "/"], ["Reparatur anfragen", "/reparatur-anfragen"]])]}
 >
 	{
@@ -245,7 +245,7 @@ const visible = issueOptions[values.device] ?? allIssues;
 	}
 
 	.head__eyebrow {
-		color: #f56300;
+		color: #b64400;
 		margin-bottom: 8px;
 	}
 
@@ -345,12 +345,12 @@ const visible = issueOptions[values.device] ?? allIssues;
 	}
 
 	.choice input:checked + .choice__box {
-		border-color: var(--blue);
-		box-shadow: 0 0 0 1px var(--blue);
+		border-color: var(--accent);
+		box-shadow: 0 0 0 1px var(--accent);
 	}
 
 	.choice input:focus-visible + .choice__box {
-		outline: 2px solid var(--blue);
+		outline: 2px solid var(--accent);
 		outline-offset: 3px;
 	}
 
@@ -425,8 +425,8 @@ const visible = issueOptions[values.device] ?? allIssues;
 
 	.field input:focus,
 	.field textarea:focus {
-		border-color: var(--blue);
-		box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+		border-color: var(--accent);
+		box-shadow: 0 0 0 3px var(--accent-ring);
 	}
 
 	.field input:focus + label,
@@ -461,7 +461,7 @@ const visible = issueOptions[values.device] ?? allIssues;
 		width: 20px;
 		height: 20px;
 		margin: 0;
-		accent-color: var(--blue);
+		accent-color: var(--accent);
 	}
 
 	.hp {

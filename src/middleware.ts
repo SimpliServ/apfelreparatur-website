@@ -8,6 +8,9 @@ const NO_STORE = "private, no-store";
 const PERSONAL_COOKIE = /(?:^|;\s*)(?:astro-session|emdash-edit-mode)=/;
 const PRIVATE_PATH = /^\/(?:_|reparatur-anfragen|vertrag-widerrufen)/;
 
+// EmDash's redirect table skips paths with a file extension, so the old site's file URLs live here.
+const LEGACY_FILES: Record<string, string> = { "/reparaturformular.pdf": "/reparatur-anfragen", "/index.php": "/" };
+
 type Ctx = Parameters<Parameters<typeof defineMiddleware>[0]>[0];
 
 // Some responses (redirects, rewrites) carry immutable headers.
@@ -54,5 +57,14 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
 		// no-store: the cache is shared across both hosts, a cached redirect would loop.
 		return new Response(null, { status: read ? 301 : 308, headers: { location: to.toString(), "cache-control": NO_STORE } });
 	}
-	return withCache(ctx, pathname, await next());
+	const legacy = LEGACY_FILES[pathname.toLowerCase()];
+	if (legacy) return new Response(null, { status: 301, headers: { location: legacy, "cache-control": "public, max-age=86400" } });
+	const out = mutable(withCache(ctx, pathname, await next()));
+	// Preview hosts (workers.dev) must not compete with apfelreparatur.at in search results.
+	if (hostname !== "apfelreparatur.at" && hostname !== "localhost") out.headers.set("x-robots-tag", "noindex, nofollow");
+	out.headers.set("x-content-type-options", "nosniff");
+	out.headers.set("referrer-policy", "strict-origin-when-cross-origin");
+	out.headers.set("permissions-policy", "camera=(), microphone=(), geolocation=(), payment=()");
+	if (!pathname.startsWith("/_emdash")) out.headers.set("x-frame-options", "SAMEORIGIN");
+	return out;
 });

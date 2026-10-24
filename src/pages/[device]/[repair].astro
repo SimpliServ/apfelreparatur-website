@@ -1,0 +1,281 @@
+---
+import { Icon } from "astro-iconset/components";
+import Base from "../../layouts/Base.astro";
+import LocalNav from "../../components/LocalNav.astro";
+import Pic from "../../components/Pic.astro";
+import Steps from "../../components/Steps.astro";
+import FAQ from "../../components/FAQ.astro";
+import Closing from "../../components/Closing.astro";
+import { devices } from "../../lib/content";
+import { repairPhoto } from "../../lib/copy";
+import { findRepairPage, repairPages } from "../../lib/repair-pages";
+import { getModels } from "../../lib/mobinil";
+import { breadcrumbLd, faqLd, organizationLd, serviceLd } from "../../lib/seo";
+
+const page = findRepairPage(Astro.params.device ?? "", Astro.params.repair ?? "");
+if (!page) return Astro.rewrite("/404");
+
+const d = devices[page.device];
+const repair = d.repairs.find((r) => r.key === page.service)!;
+const c = page.copy;
+// People search "MacBook Akku", not "Mac Akku".
+const dn = d.key === "mac" ? "MacBook" : d.name;
+const name = `${dn} ${c.label}`;
+const faq = c.faq(dn);
+const models = (await getModels(page.device)).map((m) => m.title);
+const description = c.desc(dn);
+const siblings = repairPages.filter((p) => p.device === page.device && p.path !== page.path);
+const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
+---
+
+<Base
+	og={d.key}
+	title={c.title(dn)}
+	description={description}
+	jsonLd={[
+		organizationLd(),
+		serviceLd(`${name} in Wien`, description, page.path, `${dn} ${c.label}`),
+		faqLd(faq),
+		breadcrumbLd([["Start", "/"], [`${d.name} Reparatur`, `/${d.key}`], [c.label, page.path]]),
+	]}
+>
+	<LocalNav title={name} links={[["#symptome", "Symptome"], ["#ablauf", "Ablauf"], ["#modelle", "Modelle"], ["#faq", "Fragen"]]} cta={{ href: anfrage, label: "Anfragen" }} />
+
+	<header class="hero">
+		<div class="wrap center rise">
+			<p class="t-eyebrow muted"><a href={`/${d.key}`}>{d.name} Reparatur</a></p>
+			<h1 class="t-display hero__title">{name} <span class="hero__city">in Wien.</span></h1>
+			<p class="t-hero-sub hero__sub">{c.sub(dn)}<a class="fn" href="#fn-1">1</a></p>
+			<div class="btn-row">
+				<a class="btn" href={anfrage}>Reparatur anfragen</a>
+				<a class="btn btn--ghost" href="/kontakt">Standorte ansehen</a>
+			</div>
+		</div>
+		<figure class="hero__img wrap wrap--xl sd-grow">
+			<Pic name={repairPhoto(d.key, page.service)} eager sizes="(max-width: 1260px) 100vw, 1260px" />
+		</figure>
+	</header>
+
+	<section id="symptome" class="section on-gray" aria-labelledby="symptome-h">
+		<div class="wrap wrap--xl">
+			<h2 id="symptome-h" class="t-section intro" data-reveal>Woran Sie es erkennen.</h2>
+			<ul class="signs" role="list">
+				{
+					c.signs.filter((s) => !s.skip?.includes(dn)).map((s, i) => (
+						<li class="card" data-reveal style={`--i:${i}`}>
+							<Icon name={s.icon} class="icon-lg" aria-hidden="true" />
+							<h3>{s.title}</h3>
+							<p class="muted">{s.text}</p>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	<section class="section" aria-labelledby="get-h">
+		<div class="wrap wrap--xl get">
+			<div data-reveal>
+				<h2 id="get-h" class="t-section">{repair.title}</h2>
+				<p class="t-lead get__text">{repair.text}</p>
+			</div>
+			<ul class="get__points" role="list" data-reveal>
+				{
+					repair.points.map((p) => (
+						<li>
+							<Icon name="ph:check-circle-fill" aria-hidden="true" />
+							{p}
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	<Steps id="ablauf" title="So läuft die Reparatur." items={c.steps(dn)} />
+
+	<section id="modelle" class="models section on-dark" aria-labelledby="models-h">
+		<div class="wrap center" data-reveal>
+			<h2 id="models-h" class="t-section">{c.label} für jedes {dn}.</h2>
+			<p class="t-lead muted models__lead">Wir reparieren aktuelle und ältere Modelle, unter anderem:</p>
+			<ul class="models__list" role="list">
+				{models.map((m) => <li>{m}</li>)}
+			</ul>
+		</div>
+	</section>
+
+	<FAQ title={`Fragen zur ${name}.`} items={faq} />
+
+	{
+		siblings.length > 0 && (
+			<nav class="section on-gray more-rep" aria-labelledby="more-h">
+				<div class="wrap wrap--xl">
+					<h2 id="more-h" class="t-title">Weitere {dn} Reparaturen</h2>
+					<ul role="list">
+						{siblings.map((s) => (
+							<li>
+								<a class="more" href={s.path}>
+									{dn} {s.copy.label} <Icon name="ph:caret-right" aria-hidden="true" />
+								</a>
+							</li>
+						))}
+						<li>
+							<a class="more" href="/datenrettung">
+								Datenrettung <Icon name="ph:caret-right" aria-hidden="true" />
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		)
+	}
+
+	<Closing title={`Ihr ${dn}. Bald wieder wie neu.`} href={anfrage} />
+</Base>
+
+<style>
+	.hero {
+		padding: clamp(56px, 8vw, 96px) 0 clamp(40px, 5vw, 64px);
+		overflow: hidden;
+	}
+
+	.hero .t-eyebrow a {
+		color: inherit;
+	}
+
+	.hero__title {
+		margin-top: 6px;
+	}
+
+	.hero__city {
+		display: block;
+		color: var(--muted);
+	}
+
+	.hero__sub {
+		max-width: 32ch;
+		margin: 18px auto 28px;
+		color: var(--ink-2);
+	}
+
+	.hero__img {
+		margin-top: clamp(48px, 6vw, 72px);
+	}
+
+	.hero__img :global(img) {
+		width: 100%;
+		aspect-ratio: 16 / 8;
+		object-fit: cover;
+		border-radius: var(--radius-lg);
+	}
+
+	.intro {
+		margin-bottom: clamp(32px, 4vw, 56px);
+	}
+
+	.signs {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 20px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.signs h3 {
+		margin: 22px 0 6px;
+		font-size: 21px;
+		font-weight: 600;
+	}
+
+	.get {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(32px, 6vw, 88px);
+		align-items: start;
+	}
+
+	.get__text {
+		margin-top: 18px;
+		color: var(--ink-2);
+	}
+
+	.get__points {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.get__points li {
+		display: flex;
+		gap: 14px;
+		align-items: center;
+		padding: 20px 0;
+		border-bottom: 1px solid var(--line);
+		font-size: 19px;
+		font-weight: 500;
+	}
+
+	.get__points svg {
+		flex: none;
+		width: 24px;
+		height: 24px;
+		color: var(--accent);
+	}
+
+	.models__lead {
+		margin: 16px auto 36px;
+	}
+
+	.models__list {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 10px;
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 0;
+		list-style: none;
+	}
+
+	.models__list li {
+		padding: 8px 16px;
+		border-radius: 980px;
+		background: #1d1d1f;
+		color: #f5f5f7;
+		font-size: 14px;
+	}
+
+	.more-rep ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px 32px;
+		list-style: none;
+		margin: 20px 0 0;
+		padding: 0;
+		font-size: 19px;
+	}
+
+	.more-rep svg {
+		width: 0.75em;
+		height: 0.75em;
+	}
+
+	@media (max-width: 1000px) {
+		.signs {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.get {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.signs {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

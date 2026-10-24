@@ -11,14 +11,21 @@ const groups = [...new Set(locations.map((l) => l.name))].map((name) => [name, l
 
 <Base
 	og="kontakt"
-	title="Standorte & Öffnungszeiten – iPhone Reparatur Wien ohne Termin"
+	title="Standorte – iPhone Reparatur Wien ohne Termin"
 	description="Apfelreparatur in Wien und Umgebung: Wien Hauptbahnhof, Shopping City Süd und G3 Gerasdorf. Ohne Termin vorbeikommen, Öffnungszeiten und Telefonnummern."
 	jsonLd={[...localBusinessLd(locations), breadcrumbLd([["Start", "/"], ["Kontakt", "/kontakt"]])]}
 >
 	<header class="khead">
 		<div class="wrap wrap--xl rise">
-			<h1 class="t-display">Kontakt.</h1>
+			<h1 class="t-display">Kontakt und Standorte.</h1>
 			<p class="t-hero-sub muted khead__sub">Kommen Sie einfach vorbei, ein Termin ist nicht nötig. In Wien und Umgebung, auch am Wochenende.</p>
+			<a class="hotline" href={`tel:${business.hotline.replace(/\s/g, "")}`}>
+				<Icon name="ph:phone" aria-hidden="true" />
+				<span>
+					<span class="hotline__label">Gratis Service-Hotline</span>
+					<span class="hotline__num">{business.hotline}</span>
+				</span>
+			</a>
 		</div>
 	</header>
 
@@ -50,7 +57,7 @@ const groups = [...new Set(locations.map((l) => l.name))].map((name) => [name, l
 									</dl>
 									<div class="kcard__links">
 										{l.phone && <a href={`tel:${l.phone.replace(/\s/g, "")}`}>{l.phone}</a>}
-										<a href={`https://www.openstreetmap.org/?mlat=${l.lat}&mlon=${l.lng}#map=18/${l.lat}/${l.lng}`} rel="noopener" target="_blank">
+										<a href={`https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}`} rel="noopener" target="_blank">
 											Route planen
 										</a>
 									</div>
@@ -82,6 +89,48 @@ const groups = [...new Set(locations.map((l) => l.name))].map((name) => [name, l
 	.khead__sub {
 		max-width: 32ch;
 		margin-top: 16px;
+	}
+
+	.hotline {
+		display: inline-flex;
+		align-items: center;
+		gap: 16px;
+		margin-top: 32px;
+		padding: 16px 28px 16px 20px;
+		border-radius: var(--radius);
+		background: var(--gray);
+		color: var(--ink);
+		transition: transform 0.4s var(--ease-out), background-color 0.3s var(--ease);
+	}
+
+	.hotline:hover {
+		text-decoration: none;
+		background: #ebebef;
+		transform: scale(1.015);
+	}
+
+	.hotline > :global(svg) {
+		width: 40px;
+		height: 40px;
+		padding: 9px;
+		border-radius: 50%;
+		background: var(--accent);
+		color: #fff;
+	}
+
+	.hotline__label {
+		display: block;
+		font-size: 14px;
+		color: var(--muted);
+	}
+
+	.hotline__num {
+		display: block;
+		font-size: clamp(24px, 3vw, 32px);
+		line-height: 1.15;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.01em;
 	}
 
 	.kgroup + .kgroup {
