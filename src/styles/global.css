@@ -7,13 +7,15 @@
 	--paper: #ffffff;
 	--gray: #f5f5f7;
 	--night: #000000;
+	--night-muted: #86868b;
+	--on-night: #f5f5f7;
 	--night-2: #161617;
-	--accent: #1a7f37;
-	--accent-hover: #157030;
-	--accent-ring: rgba(26, 127, 55, 0.22);
-	--accent-soft: #e9f6ed;
-	--link: #187a35;
-	--link-dark: #5fd47f;
+	--accent: #0b6e7d;
+	--accent-hover: #095c69;
+	--accent-ring: rgba(11, 110, 125, 0.22);
+	--accent-soft: #e6f3f5;
+	--link: #0a6876;
+	--link-dark: #6fd0de;
 	--ok: #1d8a3a;
 	--err: #e30000;
 	--radius: 18px;
@@ -281,7 +283,7 @@ textarea {
 
 .on-dark .btn--ghost:hover {
 	background: var(--link-dark);
-	color: #000;
+	color: var(--night);
 }
 
 .btn--sm {
@@ -326,11 +328,11 @@ textarea {
 
 .on-dark {
 	background: var(--night);
-	color: #f5f5f7;
+	color: var(--on-night);
 }
 
 .on-dark .muted {
-	color: var(--faint);
+	color: var(--night-muted);
 }
 
 .on-gray {

@@ -11,7 +11,7 @@ export type MailContent = {
 
 const esc = (v: string) => v.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 const font = "-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif";
-const ink = "#1d1d1f", muted = "#6e6e73", line = "#d2d2d7", gray = "#f5f5f7", accent = "#1a7f37";
+const ink = "#1d1d1f", muted = "#6e6e73", line = "#d2d2d7", gray = "#f5f5f7", accent = "#0b6e7d";
 
 export function mailText(c: MailContent): string {
 	const parts = [c.title, c.lead];

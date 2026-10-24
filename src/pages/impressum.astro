@@ -66,12 +66,18 @@ const credits = Object.values(photos).filter((p, i, all) => all.findIndex((x) =>
 	</p>
 
 	<h2>Urheberrecht und Bildnachweise</h2>
-	<p>Texte und Gestaltung dieser Website sind urheberrechtlich geschützt. Fotos stammen von Pexels und werden gemäß der Pexels-Lizenz verwendet. Abgebildete Personen und Räume sind Symbolbilder, nicht unsere Werkstatt.</p>
+	<p>Texte und Gestaltung dieser Website sind urheberrechtlich geschützt. Fotos stammen von Pexels und werden gemäß der Pexels-Lizenz verwendet; einige Produktbilder sind KI-generiert. Abgebildete Personen und Räume sind Symbolbilder, nicht unsere Werkstatt.</p>
 	<ul>
 		{
 			credits.map((p) => (
 				<li>
-					{p.alt}{"retouched" in p && p.retouched ? " (retuschiert)" : ""}: {p.by} / <a href={`https://www.pexels.com/photo/${p.id}/`} rel="noopener">Pexels</a>
+					{p.alt}{"retouched" in p && p.retouched ? " (retuschiert)" : ""}: {p.by}
+					{!("ai" in p) && (
+						<>
+							{" / "}
+							<a href={`https://www.pexels.com/photo/${p.id}/`} rel="noopener">Pexels</a>
+						</>
+					)}
 				</li>
 			))
 		}
