@@ -1,0 +1,14 @@
+{
+	"name": "Apfelreparatur",
+	"short_name": "Apfelreparatur",
+	"description": "Premium Reparatur für iPhone, iPad und Mac in Wien.",
+	"lang": "de-AT",
+	"start_url": "/",
+	"display": "browser",
+	"background_color": "#ffffff",
+	"theme_color": "#f5f5f7",
+	"icons": [
+		{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+		{ "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+	]
+}

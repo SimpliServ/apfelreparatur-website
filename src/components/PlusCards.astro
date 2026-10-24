@@ -1,0 +1,261 @@
+---
+import { Icon } from "astro-iconset/components";
+
+export type PlusCard = {
+	icon: string;
+	color: string;
+	pre?: string;
+	hl: string;
+	post?: string;
+	detailTitle: string;
+	detail: string[];
+};
+
+interface Props {
+	id: string;
+	title: string;
+	link?: { href: string; label: string };
+	cards: PlusCard[];
+	gray?: boolean;
+}
+const { id, title, link, cards, gray = true } = Astro.props;
+---
+
+<section class:list={["pc section", { "on-gray": gray }]} aria-labelledby={`${id}-h`}>
+	<div class="wrap wrap--xl">
+		<div class="pc__head" data-reveal>
+			<h2 id={`${id}-h`} class="t-section">{title}</h2>
+			{link && <a class="more pc__link" href={link.href}>{link.label}</a>}
+		</div>
+		<ul class="pc__grid" role="list">
+			{
+				cards.map((c, i) => (
+					<li class="pc__card" style={`--c:${c.color};--i:${i}`} data-reveal>
+						<Icon name={c.icon} class="pc__icon" aria-hidden="true" />
+						<p class="pc__text">
+							{c.pre && <>{c.pre} </>}
+							<span class="pc__hl">{c.hl}</span>
+							{c.post && <> {c.post}</>}
+						</p>
+						<button type="button" class="pc__plus" data-open={`${id}-d${i}`} aria-haspopup="dialog">
+							<span class="sr-only">Mehr zu: {c.detailTitle}</span>
+							<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="18" /><path d="M18 11v14M11 18h14" /></svg>
+						</button>
+						<dialog id={`${id}-d${i}`} class="pc__modal" aria-labelledby={`${id}-d${i}-h`}>
+							<div class="pc__modal-body">
+								<button type="button" class="pc__close" data-close aria-label="Schließen">
+									<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="18" /><path d="M12.5 12.5l11 11M23.5 12.5l-11 11" /></svg>
+								</button>
+								<Icon name={c.icon} class="pc__icon" aria-hidden="true" />
+								<h3 id={`${id}-d${i}-h`} class="t-section pc__modal-title">{c.detailTitle}</h3>
+								{c.detail.map((p) => <p class="t-lead">{p}</p>)}
+							</div>
+						</dialog>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<script>
+	document.querySelectorAll<HTMLButtonElement>(".pc__plus").forEach((btn) => {
+		const dialog = document.getElementById(btn.dataset.open!) as HTMLDialogElement;
+		// The whole card opens the dialog; the button stays the keyboard/screen-reader target.
+		btn.closest(".pc__card")!.addEventListener("click", (e) => {
+			if (!(e.target as Element).closest("dialog")) dialog.showModal();
+		});
+		dialog.querySelector("[data-close]")!.addEventListener("click", () => dialog.close());
+		dialog.addEventListener("click", (e) => e.target === dialog && dialog.close());
+	});
+</script>
+
+<style>
+	.pc__head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px 40px;
+		margin-bottom: clamp(40px, 5vw, 64px);
+	}
+
+	.pc__link {
+		font-size: 17px;
+	}
+
+	.pc__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.pc__card {
+		cursor: pointer;
+		transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out), box-shadow 0.6s var(--ease-out);
+		transition-delay: calc(var(--i, 0) * 90ms);
+		position: relative;
+		min-height: 272px;
+		padding: 56px 30px 80px;
+		border-radius: var(--radius-lg);
+		background: var(--paper);
+	}
+
+	.pc:not(.on-gray) .pc__card {
+		background: var(--gray);
+	}
+
+	.pc__icon {
+		width: 40px;
+		height: 40px;
+		color: var(--c, var(--ink));
+		margin-bottom: 26px;
+	}
+
+	.pc__text {
+		font-size: clamp(24px, 2.3vw, 28px);
+		line-height: 1.14286;
+		font-weight: 600;
+		letter-spacing: 0.007em;
+		max-width: 15ch;
+	}
+
+	.pc__hl {
+		color: var(--c);
+	}
+
+	.pc__plus,
+	.pc__close {
+		position: absolute;
+		right: 22px;
+		bottom: 22px;
+		width: 36px;
+		height: 36px;
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+		border-radius: 50%;
+	}
+
+	.pc__plus svg,
+	.pc__close svg {
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
+
+	.pc__plus circle {
+		fill: var(--ink);
+		transition: fill 0.2s var(--ease);
+	}
+
+	.pc__plus:hover circle {
+		fill: #000;
+	}
+
+	.pc__plus svg {
+		transition: transform 0.4s var(--ease-out);
+	}
+
+	.pc__grid .pc__card.is-in:hover {
+		transition-delay: 0s;
+		transform: scale(1.015);
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+	}
+
+	.pc__card:hover .pc__plus svg {
+		transform: rotate(90deg);
+	}
+
+	.pc__plus path,
+	.pc__close path {
+		stroke: #fff;
+		stroke-width: 2.4;
+		stroke-linecap: round;
+	}
+
+	.pc__modal {
+		cursor: auto;
+		width: min(1000px, calc(100% - 32px));
+		max-height: calc(100dvh - 80px);
+		margin: auto;
+		padding: 0;
+		border: 0;
+		border-radius: var(--radius-lg);
+		background: var(--paper);
+		color: var(--ink);
+		box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+	}
+
+	.pc__modal::backdrop {
+		background: rgba(0, 0, 0, 0.48);
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+	}
+
+	.pc__modal[open] {
+		animation: pc-in 0.45s var(--ease);
+	}
+
+	@keyframes pc-in {
+		from {
+			opacity: 0;
+			transform: translateY(40px) scale(0.98);
+		}
+	}
+
+	.pc__modal-body {
+		position: relative;
+		padding: clamp(48px, 7vw, 76px) clamp(28px, 7vw, 76px);
+	}
+
+	.pc__close {
+		position: sticky;
+		top: 0;
+		float: right;
+		margin: -32px -40px 0 0;
+	}
+
+	.pc__close circle {
+		fill: #333336;
+	}
+
+	.pc__modal-title {
+		max-width: 18ch;
+		margin-bottom: 28px;
+		color: var(--c);
+	}
+
+	.pc__modal .t-lead {
+		max-width: 60ch;
+		color: var(--ink-2);
+	}
+
+	.pc__modal .t-lead + .t-lead {
+		margin-top: 16px;
+	}
+
+	@media (max-width: 900px) {
+		.pc__grid {
+			grid-template-columns: 1fr;
+			gap: 16px;
+		}
+
+		.pc__card {
+			min-height: 200px;
+			padding: 40px 28px 72px;
+		}
+
+		.pc__text {
+			max-width: 20ch;
+		}
+
+		.pc__close {
+			margin: -24px -12px 0 0;
+		}
+	}
+</style>

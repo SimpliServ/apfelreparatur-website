@@ -1,0 +1,89 @@
+---
+import { getSiteSettingsWithCacheHint } from "emdash";
+import { EmDashBodyEnd, EmDashBodyStart, EmDashHead } from "emdash/ui";
+import { createPublicPageContext } from "emdash/page";
+import GlobalNav from "../components/GlobalNav.astro";
+import Footer from "../components/Footer.astro";
+import { business } from "../lib/business";
+import "../styles/global.css";
+
+interface Props {
+	title?: string;
+	description?: string | null;
+	image?: string | null;
+	/** Link preview card in public/og/<og>.jpg (scripts/og). */
+	og?: string;
+	canonical?: string | null;
+	robots?: string | null;
+	jsonLd?: object[];
+	content?: { collection: string; id: string; slug?: string | null };
+}
+
+const { title, description, image, og = "default", canonical, robots, jsonLd = [], content } = Astro.props;
+const settings = await getSiteSettingsWithCacheHint();
+if (Astro.cache?.enabled) Astro.cache.set(settings.cacheHint);
+
+const siteTitle = settings.data?.title?.trim() || business.brand;
+const fullTitle = title ? (title.includes(siteTitle) ? title : `${title} – ${siteTitle}`) : siteTitle;
+const origin = (Astro.site?.origin ?? Astro.url.origin).replace(/\/$/, "");
+const ogImage = image ?? `${origin}/og/${og}.jpg`;
+const pageCtx = createPublicPageContext({
+	Astro,
+	kind: content ? "content" : "custom",
+	pageType: "website",
+	title: fullTitle,
+	pageTitle: title ?? siteTitle,
+	description: description || settings.data?.tagline || undefined,
+	canonical: canonical ?? `${origin}${Astro.url.pathname}`,
+	image: ogImage,
+	content,
+	seo: { ogImage, robots },
+	siteName: siteTitle,
+});
+---
+
+<!doctype html>
+<html lang="de-AT">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#f5f5f7" />
+		<title>{fullTitle}</title>
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<EmDashHead page={pageCtx} />
+		<meta property="og:locale" content="de_AT" />
+		{!image && <meta property="og:image:width" content="1200" />}
+		{!image && <meta property="og:image:height" content="630" />}
+		<meta property="og:image:alt" content={title ?? siteTitle} />
+		<meta name="format-detection" content="telephone=no" />
+		<script is:inline>document.documentElement.classList.add("js");</script>
+		{jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
+	</head>
+	<body>
+		<EmDashBodyStart page={pageCtx} />
+		<a href="#main" class="skip-link">Zum Inhalt springen</a>
+		<GlobalNav />
+		<main id="main" tabindex="-1">
+			<slot />
+		</main>
+		<Footer />
+		<EmDashBodyEnd page={pageCtx} />
+		<script>
+			const io = new IntersectionObserver(
+				(entries) => {
+					for (const e of entries) {
+						if (e.isIntersecting) {
+							e.target.classList.add("is-in");
+							io.unobserve(e.target);
+						}
+					}
+				},
+				{ rootMargin: "0px 0px -8% 0px" },
+			);
+			document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+		</script>
+	</body>
+</html>

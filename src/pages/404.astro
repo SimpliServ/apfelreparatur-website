@@ -1,0 +1,30 @@
+---
+import Base from "../layouts/Base.astro";
+
+Astro.response.status = 404;
+---
+
+<Base title="Seite nicht gefunden" robots="noindex">
+	<section class="nf section">
+		<div class="wrap wrap--narrow center">
+			<h1 class="t-display">Diese Seite gibt es nicht.</h1>
+			<p class="t-hero-sub muted nf__sub">Vielleicht hilft Ihnen einer dieser Links weiter.</p>
+			<div class="btn-row">
+				<a class="btn" href="/">Zur Startseite</a>
+				<a class="btn btn--ghost" href="/reparatur-anfragen">Reparatur anfragen</a>
+			</div>
+		</div>
+	</section>
+</Base>
+
+<style>
+	.nf {
+		min-height: 60vh;
+		display: flex;
+		align-items: center;
+	}
+
+	.nf__sub {
+		margin: 18px 0 32px;
+	}
+</style>

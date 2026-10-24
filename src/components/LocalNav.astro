@@ -1,0 +1,159 @@
+---
+interface Props {
+	title: string;
+	links: [string, string][];
+	cta?: { href: string; label: string };
+}
+const { title, links, cta = { href: "/reparatur-anfragen", label: "Anfragen" } } = Astro.props;
+---
+
+<nav class="lnav" aria-label={title} data-lnav>
+	<div class="lnav__bar">
+		<p class="lnav__title">{title}</p>
+		<button type="button" class="lnav__toggle" aria-expanded="false" aria-controls="lnav-links" aria-label="Abschnitte anzeigen" data-lnav-toggle>
+			<svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5l5 5 5-5" /></svg>
+		</button>
+		<ul class="lnav__links" id="lnav-links" role="list">
+			{links.map(([href, label]) => <li><a href={href}>{label}</a></li>)}
+		</ul>
+		<a class="btn btn--sm" href={cta.href}>{cta.label}</a>
+	</div>
+</nav>
+
+<script>
+	const nav = document.querySelector<HTMLElement>("[data-lnav]");
+	const toggle = nav?.querySelector<HTMLButtonElement>("[data-lnav-toggle]");
+	if (nav && toggle) {
+		const set = (open: boolean) => {
+			nav.classList.toggle("is-open", open);
+			toggle.setAttribute("aria-expanded", String(open));
+		};
+		toggle.addEventListener("click", () => set(!nav.classList.contains("is-open")));
+		nav.querySelectorAll(".lnav__links a").forEach((a) => a.addEventListener("click", () => set(false)));
+		addEventListener("keydown", (e) => e.key === "Escape" && set(false));
+	}
+</script>
+
+<style>
+	.lnav {
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		height: 56px;
+		background: rgba(255, 255, 255, 0.72);
+		backdrop-filter: saturate(180%) blur(20px);
+		-webkit-backdrop-filter: saturate(180%) blur(20px);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+	}
+
+	.lnav__bar {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 20px;
+		height: 100%;
+		width: min(1100px, calc(100% - 2 * var(--gutter)));
+		margin-inline: auto;
+	}
+
+	.lnav__title {
+		margin-right: auto;
+		font-size: 21px;
+		line-height: 1.14;
+		font-weight: 600;
+		letter-spacing: 0.011em;
+		white-space: nowrap;
+	}
+
+	.lnav__toggle {
+		display: none;
+	}
+
+	.lnav__links {
+		display: flex;
+		gap: 24px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.lnav__links a {
+		display: inline-block;
+		padding: 10px 0;
+		font-size: 13px;
+		color: var(--ink);
+		opacity: 0.88;
+	}
+
+	.lnav__links a:hover {
+		color: var(--link);
+		text-decoration: none;
+	}
+
+	@media (max-width: 734px) {
+		.lnav__title {
+			margin-right: 0;
+			font-size: 19px;
+		}
+
+		.lnav__toggle {
+			display: grid;
+			place-items: center;
+			width: 36px;
+			height: 36px;
+			margin: 0 auto 0 -16px;
+			padding: 0;
+			border: 0;
+			background: none;
+			cursor: pointer;
+		}
+
+		.lnav__toggle svg {
+			width: 12px;
+			height: 8px;
+			fill: none;
+			stroke: var(--ink);
+			stroke-width: 1.5;
+			transition: transform 0.35s var(--ease-out);
+		}
+
+		.is-open .lnav__toggle svg {
+			transform: rotate(180deg);
+		}
+
+		.lnav__links {
+			position: absolute;
+			top: 100%;
+			left: calc(-1 * var(--gutter));
+			right: calc(-1 * var(--gutter));
+			flex-direction: column;
+			gap: 0;
+			padding: 4px var(--gutter) 16px;
+			background: #fff;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+			box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(-8px);
+			transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out), visibility 0s 0.3s;
+		}
+
+		.is-open .lnav__links {
+			opacity: 1;
+			visibility: visible;
+			transform: none;
+			transition-delay: 0s;
+		}
+
+		.lnav__links a {
+			display: block;
+			padding: 12px 0;
+			font-size: 17px;
+			border-bottom: 1px solid #e8e8ed;
+		}
+
+		.lnav__links li:last-child a {
+			border-bottom: 0;
+		}
+	}
+</style>

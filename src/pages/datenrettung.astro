@@ -1,0 +1,251 @@
+---
+import { Icon } from "astro-iconset/components";
+import Base from "../layouts/Base.astro";
+import LocalNav from "../components/LocalNav.astro";
+import Pic from "../components/Pic.astro";
+import PlusCards from "../components/PlusCards.astro";
+import FAQ from "../components/FAQ.astro";
+import Closing from "../components/Closing.astro";
+import type { QA } from "../components/FAQ.astro";
+import { dataCards } from "../lib/copy";
+import { breadcrumbLd, faqLd, localBusinessLd, serviceLd } from "../lib/seo";
+
+const description =
+	"Datenrettung und Datenübertragung in Wien für iPhone, iPad und Mac: Fotos, Kontakte und Dateien von defekten Geräten retten oder vollständig aufs neue Gerät übertragen. Vertraulich, ohne Termin und mit Preis vorab.";
+
+const cases = [
+	{ icon: "ph:drop", title: "Wasserschaden", text: "Gerät war im Wasser und startet nicht mehr." },
+	{ icon: "ph:device-mobile", title: "Startet nicht", text: "Bootschleife, schwarzer Bildschirm oder Apple Logo hängt." },
+	{ icon: "ph:warning-circle", title: "Sturzschaden", text: "Display tot, Gerät reagiert nicht mehr." },
+	{ icon: "ph:laptop", title: "Mac fährt nicht hoch", text: "SSD, Platine oder macOS beschädigt." },
+];
+
+const transfer = [
+	["Fotos und Videos", "In voller Auflösung, mit Alben und Aufnahmedatum."],
+	["Kontakte und Kalender", "Vollständig, ohne Duplikate."],
+	["Nachrichten und WhatsApp", "Inklusive Verlauf und Medien, sofern ein Backup möglich ist."],
+	["Apps und Einstellungen", "Ihr neues Gerät fühlt sich sofort vertraut an."],
+];
+
+const faq: QA[] = [
+	{ q: "Kann man Daten von einem defekten iPhone retten?", a: "Oft ja. Häufig liegt der Fehler bei Display, Akku oder Ladebuchse. Tauschen wir das defekte Teil, startet das Gerät oft wieder, dass ein Backup möglich ist. Ob eine Rettung möglich ist, sagen wir Ihnen nach der Diagnose. Weitergearbeitet wird erst nach Ihrer Zustimmung." },
+	{ q: "Was kostet eine Datenrettung in Wien?", a: "Das hängt vom Schaden ab. Nach der Diagnose erhalten Sie einen verbindlichen Kostenvoranschlag. Sie entscheiden, ob wir fortfahren." },
+	{ q: "Brauchen Sie meinen Code?", a: "Für die Datenrettung ja, denn iPhone und Mac verschlüsseln Ihre Daten. Sie geben den Code nur für diesen Auftrag frei, wir behandeln ihn vertraulich und löschen Rettungskopien nach der Übergabe." },
+	{ q: "Übertragen Sie Daten auch vom Android-Handy auf ein iPhone?", a: "Ja. Wir übertragen Fotos, Kontakte, Kalender und, wo technisch möglich, Chatverläufe von Android auf Ihr neues iPhone." },
+	{ q: "Wie lange dauert eine Datenübertragung?", a: "Meist wenige Stunden, abhängig von der Datenmenge. Oft können Sie Ihr neues Gerät am selben Tag mitnehmen." },
+];
+---
+
+<Base
+	og="datenrettung"
+	title="Datenrettung & Datenübertragung Wien – iPhone, iPad, Mac"
+	description={description}
+	jsonLd={[
+		...localBusinessLd(),
+		serviceLd("Datenrettung in Wien", description, "/datenrettung"),
+		serviceLd("Datenübertragung in Wien", "Daten vom alten aufs neue iPhone, iPad oder Mac übertragen.", "/datenrettung#uebertragung"),
+		faqLd(faq),
+		breadcrumbLd([["Start", "/"], ["Datenrettung", "/datenrettung"]]),
+	]}
+>
+	<LocalNav
+		title="Datenrettung"
+		links={[["#rettung", "Datenrettung"], ["#uebertragung", "Datenübertragung"], ["#faq", "Fragen"]]}
+		cta={{ href: "/reparatur-anfragen?anliegen=datenrettung", label: "Anfragen" }}
+	/>
+
+	<header class="dhero">
+		<div class="wrap center rise">
+			<p class="t-eyebrow muted">Datenrettung und Datenübertragung in Wien</p>
+			<h1 class="t-display dhero__title">Ihre Erinnerungen. <span class="grad">Zurückgeholt.</span></h1>
+			<p class="t-hero-sub dhero__sub">Von iPhone, iPad und Mac, auch wenn das Gerät nicht mehr startet.</p>
+			<div class="btn-row">
+				<a class="btn" href="/reparatur-anfragen?anliegen=datenrettung">Datenrettung anfragen</a>
+				<a class="btn btn--ghost" href="#uebertragung">Datenübertragung</a>
+			</div>
+		</div>
+		<figure class="dhero__img wrap wrap--xl sd-grow">
+			<Pic name="daten" eager sizes="(max-width: 1260px) 100vw, 1260px" />
+		</figure>
+	</header>
+
+	<section id="rettung" class="section" aria-labelledby="rettung-h">
+		<div class="wrap wrap--xl">
+			<div class="intro" data-reveal>
+				<h2 id="rettung-h" class="t-section">Datenrettung. Wenn nichts mehr geht.</h2>
+				<p class="t-lead muted">
+					Die meisten Daten sind nicht verloren, nur unerreichbar. Wir reparieren das Gerät so weit, dass es wieder startet, und sichern alles, was
+					sich sichern lässt.
+				</p>
+			</div>
+			<ul class="cases" role="list">
+				{
+					cases.map((c, i) => (
+						<li class="card card--gray" data-reveal style={`--i:${i}`}>
+							<Icon name={c.icon} class="icon-lg" aria-hidden="true" />
+							<h3>{c.title}</h3>
+							<p class="muted">{c.text}</p>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	<PlusCards id="sicher" title="Sicher. Vertraulich. Gründlich." cards={dataCards} />
+
+	<section id="uebertragung" class="section" aria-labelledby="ueb-h">
+		<div class="wrap wrap--xl ueb">
+			<div data-reveal>
+				<p class="t-eyebrow muted">Datenübertragung</p>
+				<h2 id="ueb-h" class="t-section">Neues Gerät. Alles dabei.</h2>
+				<p class="t-lead ueb__lead">
+					Vom alten iPhone aufs neue, von Android auf iPhone oder vom alten Mac auf den neuen. Wir übertragen Ihre Daten und prüfen vor der Übergabe, dass alles angekommen ist.
+				</p>
+				<a class="more" href="/reparatur-anfragen?anliegen=datenuebertragung">Datenübertragung anfragen <Icon name="ph:caret-right" aria-hidden="true" /></a>
+			</div>
+			<ul class="ueb__list" role="list" data-reveal>
+				{
+					transfer.map(([t, x]) => (
+						<li>
+							<Icon name="ph:check-circle-fill" aria-hidden="true" />
+							<div>
+								<h3>{t}</h3>
+								<p class="muted">{x}</p>
+							</div>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	<FAQ title="Fragen zur Datenrettung." items={faq} />
+
+	<Closing title="Ihre Daten sind es wert." text="Vertraulicher Umgang, Preis vorab und eine ehrliche Einschätzung. Ohne Termin, in Wien und Umgebung." href="/reparatur-anfragen?anliegen=datenrettung" />
+</Base>
+
+<style>
+	.dhero {
+		padding: clamp(56px, 8vw, 96px) 0 clamp(40px, 5vw, 64px);
+		overflow: hidden;
+	}
+
+	.dhero__title {
+		max-width: 15ch;
+		margin: 8px auto 0;
+	}
+
+	.dhero__sub {
+		max-width: 30ch;
+		margin: 18px auto 28px;
+		color: var(--ink-2);
+	}
+
+	.dhero__img {
+		margin-top: clamp(48px, 6vw, 72px);
+	}
+
+	.dhero__img :global(img) {
+		width: 100%;
+		aspect-ratio: 16 / 8;
+		object-fit: cover;
+		border-radius: var(--radius-lg);
+	}
+
+	@media (max-width: 734px) {
+		.dhero__img :global(img) {
+			aspect-ratio: 4 / 3;
+		}
+	}
+
+	.intro {
+		max-width: 760px;
+		margin-bottom: clamp(40px, 5vw, 64px);
+	}
+
+	.intro .t-lead {
+		margin-top: 18px;
+	}
+
+	.cases {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 20px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.cases h3 {
+		margin: 22px 0 6px;
+		font-size: 21px;
+		line-height: 1.19;
+		font-weight: 600;
+	}
+
+	.ueb {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(32px, 6vw, 88px);
+		align-items: start;
+	}
+
+	.ueb__lead {
+		margin: 18px 0 24px;
+		color: var(--ink-2);
+	}
+
+	.ueb .more svg {
+		width: 0.75em;
+		height: 0.75em;
+	}
+
+	.ueb__list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.ueb__list li {
+		display: flex;
+		gap: 16px;
+		padding: 22px 0;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.ueb__list li:first-child {
+		padding-top: 0;
+	}
+
+	.ueb__list svg {
+		flex: none;
+		width: 26px;
+		height: 26px;
+		color: var(--blue);
+	}
+
+	.ueb__list h3 {
+		font-size: 19px;
+		font-weight: 600;
+		margin-bottom: 2px;
+	}
+
+	@media (max-width: 1000px) {
+		.cases {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.ueb {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.cases {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

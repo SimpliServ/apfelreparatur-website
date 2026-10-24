@@ -1,0 +1,500 @@
+:root {
+	--ink: #1d1d1f;
+	--ink-2: #424245;
+	--muted: #6e6e73;
+	--faint: #86868b;
+	--line: #d2d2d7;
+	--paper: #ffffff;
+	--gray: #f5f5f7;
+	--night: #000000;
+	--night-2: #161617;
+	--blue: #0071e3;
+	--blue-hover: #0077ed;
+	--link: #0066cc;
+	--link-dark: #2997ff;
+	--ok: #1d8a3a;
+	--err: #e30000;
+	--radius: 18px;
+	--radius-lg: 28px;
+	--wide: 1024px;
+	--narrow: 692px;
+	--nav-h: 52px;
+	--gutter: clamp(16px, 4vw, 22px);
+	--font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	--ease: cubic-bezier(0.28, 0.11, 0.32, 1);
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	interpolate-size: allow-keywords;
+	color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	scroll-padding-top: calc(var(--nav-h) + 60px);
+}
+
+body {
+	margin: 0;
+	font-family: var(--font);
+	font-size: 17px;
+	line-height: 1.47059;
+	font-weight: 400;
+	letter-spacing: -0.022em;
+	color: var(--ink);
+	background: var(--paper);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-synthesis: none;
+}
+
+img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	text-wrap: balance;
+	overflow-wrap: break-word;
+}
+
+h3,
+h4 {
+	hyphens: auto;
+}
+
+p,
+li,
+dd {
+	overflow-wrap: break-word;
+}
+
+p {
+	text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure {
+	margin: 0;
+}
+
+a {
+	color: var(--link);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+button,
+input,
+select,
+textarea {
+	font: inherit;
+	letter-spacing: inherit;
+	color: inherit;
+}
+
+:focus-visible {
+	outline: 2px solid var(--blue);
+	outline-offset: 3px;
+	border-radius: 4px;
+}
+
+.skip-link {
+	position: absolute;
+	left: 12px;
+	top: -60px;
+	z-index: 100;
+	padding: 8px 14px;
+	border-radius: 999px;
+	background: var(--ink);
+	color: #fff;
+	font-size: 14px;
+}
+
+.skip-link:focus {
+	top: 8px;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+.wrap {
+	width: min(var(--wide), calc(100% - 2 * var(--gutter)));
+	margin-inline: auto;
+}
+
+.wrap--narrow {
+	width: min(var(--narrow), calc(100% - 2 * var(--gutter)));
+}
+
+.wrap--xl {
+	width: min(1260px, calc(100% - 2 * var(--gutter)));
+}
+
+/* Type scale */
+.t-hero {
+	font-size: clamp(32px, 9vw, 56px);
+	line-height: 1.07143;
+	font-weight: 600;
+	letter-spacing: -0.005em;
+}
+
+.t-hero-sub {
+	text-wrap: balance;
+	font-size: clamp(21px, 2.8vw, 28px);
+	line-height: 1.14286;
+	font-weight: 400;
+	letter-spacing: 0.007em;
+}
+
+.t-display {
+	font-size: clamp(34px, 10.5vw, 80px);
+	line-height: 1.05;
+	font-weight: 600;
+	letter-spacing: -0.015em;
+}
+
+.t-section {
+	font-size: clamp(27px, 7.4vw, 48px);
+	line-height: 1.08349;
+	font-weight: 600;
+	letter-spacing: -0.003em;
+}
+
+.t-title {
+	font-size: clamp(24px, 3vw, 32px);
+	line-height: 1.125;
+	font-weight: 600;
+	letter-spacing: 0.004em;
+}
+
+.t-lead {
+	font-size: clamp(19px, 2vw, 21px);
+	line-height: 1.381;
+	font-weight: 400;
+	letter-spacing: 0.011em;
+}
+
+.t-eyebrow {
+	font-size: clamp(17px, 2vw, 21px);
+	line-height: 1.19;
+	font-weight: 600;
+	letter-spacing: 0.011em;
+}
+
+@keyframes grad-shift {
+	to {
+		background-position: 100% 0;
+	}
+}
+
+.muted {
+	color: var(--muted);
+}
+
+.grad {
+	background: linear-gradient(90deg, #0a84ff 0%, #5e5ce6 30%, #bf5af2 50%, #5e5ce6 70%, #0a84ff 100%) 0 0 / 200% auto;
+	animation: grad-shift 8s ease-in-out infinite alternate;
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+/* Buttons and links */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	min-height: 44px;
+	padding: 11px 22px;
+	border-radius: 980px;
+	border: 1px solid var(--blue);
+	background: var(--blue);
+	color: #fff;
+	font-size: 17px;
+	line-height: 1.17648;
+	font-weight: 400;
+	letter-spacing: -0.022em;
+	cursor: pointer;
+	transition: background-color 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease);
+	white-space: nowrap;
+}
+
+.btn:active {
+	transform: scale(0.97);
+}
+
+.btn:hover {
+	background: var(--blue-hover);
+	border-color: var(--blue-hover);
+	text-decoration: none;
+}
+
+.btn--ghost {
+	background: transparent;
+	color: var(--blue);
+}
+
+.btn--ghost:hover {
+	background: var(--blue);
+	color: #fff;
+}
+
+.on-dark .btn--ghost {
+	color: var(--link-dark);
+	border-color: var(--link-dark);
+}
+
+.on-dark .btn--ghost:hover {
+	background: var(--link-dark);
+	color: #000;
+}
+
+.btn--sm {
+	min-height: 28px;
+	padding: 4px 12px;
+	font-size: 12px;
+	line-height: 1.33337;
+	letter-spacing: -0.01em;
+}
+
+.btn--lg {
+	min-height: 56px;
+	padding: 16px 32px;
+	font-size: 17px;
+}
+
+.btn-row {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 14px;
+}
+
+.more {
+	display: inline-block;
+	padding-block: 12px;
+	margin-block: -12px;
+	color: var(--link);
+}
+
+.on-dark .more {
+	color: var(--link-dark);
+}
+
+.more svg {
+	display: inline;
+	width: 0.75em;
+	height: 0.75em;
+	margin-left: 2px;
+	vertical-align: -0.05em;
+}
+
+.on-dark {
+	background: var(--night);
+	color: #f5f5f7;
+}
+
+.on-dark .muted {
+	color: var(--faint);
+}
+
+.on-gray {
+	background: var(--gray);
+}
+
+.section {
+	padding-block: clamp(72px, 10vw, 120px);
+}
+
+.center {
+	text-align: center;
+}
+
+/* Reveal on scroll; without JS everything stays visible. --i staggers siblings. */
+.js [data-reveal] {
+	opacity: 0;
+	transform: translate3d(0, 40px, 0);
+	transition: opacity 0.9s var(--ease-out), transform 1.2s var(--ease-out);
+	transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+.js [data-reveal].is-in {
+	opacity: 1;
+	transform: none;
+}
+
+/* Hero copy rises in on load, child by child. */
+.js .rise > * {
+	animation: rise 1.1s var(--ease-out) both;
+}
+
+.js .rise > :nth-child(2) { animation-delay: 0.1s; }
+.js .rise > :nth-child(3) { animation-delay: 0.2s; }
+.js .rise > :nth-child(4) { animation-delay: 0.3s; }
+.js .rise > :nth-child(5) { animation-delay: 0.4s; }
+.js .rise > :nth-child(6) { animation-delay: 0.5s; }
+
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translate3d(0, 28px, 0);
+	}
+}
+
+.js .settle :is(img) {
+	animation: settle 2.4s var(--ease-out) both;
+}
+
+@keyframes settle {
+	from {
+		opacity: 0;
+		transform: scale(1.08);
+	}
+}
+
+/* Scroll-linked motion where supported; otherwise everything simply sits still. */
+@supports (animation-timeline: view()) {
+	@media (prefers-reduced-motion: no-preference) {
+		.sd-zoom {
+			overflow: hidden;
+		}
+
+		.sd-zoom :is(img) {
+			animation: sd-zoom linear both;
+			animation-timeline: view();
+			animation-range: entry 0% cover 60%;
+		}
+
+		.sd-grow {
+			animation: sd-grow linear both;
+			animation-timeline: view();
+			animation-range: entry 0% cover 40%;
+		}
+
+		.sd-drift {
+			animation: sd-drift linear both;
+			animation-timeline: view();
+			animation-range: exit 0% exit 100%;
+		}
+
+		.sd-text {
+			background: linear-gradient(90deg, var(--fill, #f5f5f7) 50%, var(--dim, #48484a) 50%) 100% 0 / 200% 100% no-repeat;
+			-webkit-background-clip: text;
+			background-clip: text;
+			color: transparent;
+			animation: sd-text linear both;
+			animation-timeline: view();
+			animation-range: entry 30% cover 55%;
+		}
+	}
+}
+
+@keyframes sd-zoom {
+	from {
+		transform: scale(1.18);
+	}
+}
+
+@keyframes sd-grow {
+	from {
+		transform: scale(0.86);
+		opacity: 0.5;
+	}
+}
+
+@keyframes sd-drift {
+	to {
+		transform: translate3d(0, 14%, 0) scale(1.06);
+		opacity: 0.4;
+	}
+}
+
+@keyframes sd-text {
+	to {
+		background-position: 0 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation: none !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	.js [data-reveal] {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+/* Cards */
+.card {
+	background: var(--paper);
+	border-radius: var(--radius-lg);
+	padding: clamp(24px, 6vw, 36px);
+}
+
+.on-gray .card {
+	background: var(--paper);
+}
+
+.card--gray {
+	background: var(--gray);
+}
+
+.icon-lg {
+	width: 44px;
+	height: 44px;
+}
+
+/* Footnote markers */
+.fn {
+	font-size: 0.6em;
+	vertical-align: super;
+	line-height: 0;
+	margin-left: 1px;
+	color: inherit;
+}
+
+.fn:hover {
+	text-decoration: underline;
+}
+
+/* Product pages: the local nav sticks, the global nav scrolls away (like apple.com). */
+body:has(.lnav) .gnav {
+	position: relative;
+}
+
+@media (max-width: 833px) {
+	body:has(.lnav) .gnav__cta {
+		display: none;
+	}
+}

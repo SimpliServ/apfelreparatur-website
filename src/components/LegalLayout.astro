@@ -1,0 +1,130 @@
+---
+import Base from "../layouts/Base.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	slug: string;
+	updated?: string;
+	content?: { collection: string; id: string; slug?: string | null };
+}
+const { title, description, slug, updated, content } = Astro.props;
+const docs = [
+	["impressum", "Impressum"],
+	["datenschutz", "Datenschutz"],
+	["agb", "AGB"],
+	["vertrag-widerrufen", "Vertrag widerrufen"],
+] as const;
+---
+
+<Base title={title} description={description} content={content}>
+	<article class="legal">
+		<header class="wrap wrap--narrow legal__head">
+			<nav aria-label="Rechtliches">
+				<ul role="list" class="legal__docs">
+					{docs.map(([s, label]) => <li><a href={`/${s}`} aria-current={s === slug ? "page" : undefined}>{label}</a></li>)}
+				</ul>
+			</nav>
+			<h1 class="t-section">{title}</h1>
+			{updated && <p class="muted legal__updated">Stand: {updated}</p>}
+		</header>
+		<div class="wrap wrap--narrow legal__body">
+			<slot />
+		</div>
+	</article>
+</Base>
+
+<style>
+	.legal {
+		padding: clamp(40px, 6vw, 72px) 0 clamp(72px, 10vw, 120px);
+	}
+
+	.legal__docs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 22px;
+		list-style: none;
+		margin: 0 0 40px;
+		padding: 0;
+		font-size: 14px;
+	}
+
+	.legal__docs a {
+		display: inline-block;
+		padding: 6px 0;
+		color: var(--muted);
+	}
+
+	.legal__docs a[aria-current="page"] {
+		color: var(--ink);
+		font-weight: 600;
+	}
+
+	.legal__updated {
+		margin-top: 10px;
+		font-size: 14px;
+	}
+
+	.legal__body {
+		margin-top: 40px;
+		hyphens: auto;
+		color: var(--ink-2);
+	}
+
+	.legal__body :global(h2) {
+		margin: 44px 0 12px;
+		font-size: 24px;
+		line-height: 1.17;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.legal__body :global(h3) {
+		margin: 28px 0 8px;
+		font-size: 19px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.legal__body :global(p),
+	.legal__body :global(ul),
+	.legal__body :global(ol) {
+		margin: 0 0 14px;
+	}
+
+	.legal__body :global(ul),
+	.legal__body :global(ol) {
+		padding-left: 22px;
+	}
+
+	.legal__body :global(li) {
+		margin-bottom: 6px;
+	}
+
+	.legal__body :global(dl) {
+		display: grid;
+		grid-template-columns: minmax(140px, 220px) 1fr;
+		gap: 10px 24px;
+		margin: 0 0 14px;
+	}
+
+	.legal__body :global(dt) {
+		color: var(--muted);
+	}
+
+	.legal__body :global(dd) {
+		margin: 0;
+		color: var(--ink);
+	}
+
+	@media (max-width: 560px) {
+		.legal__body :global(dl) {
+			grid-template-columns: 1fr;
+			gap: 2px;
+		}
+
+		.legal__body :global(dd) {
+			margin-bottom: 10px;
+		}
+	}
+</style>

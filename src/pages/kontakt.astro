@@ -1,0 +1,182 @@
+---
+import { Icon } from "astro-iconset/components";
+import Base from "../layouts/Base.astro";
+import { business } from "../lib/business";
+import { getLocations } from "../lib/mobinil";
+import { breadcrumbLd, localBusinessLd } from "../lib/seo";
+
+const locations = await getLocations();
+const groups = [...new Set(locations.map((l) => l.name))].map((name) => [name, locations.filter((l) => l.name === name)] as const);
+---
+
+<Base
+	og="kontakt"
+	title="Standorte & Öffnungszeiten – iPhone Reparatur Wien ohne Termin"
+	description="Apfelreparatur in Wien und Umgebung: Wien Hauptbahnhof, Shopping City Süd und G3 Gerasdorf. Ohne Termin vorbeikommen, Öffnungszeiten und Telefonnummern."
+	jsonLd={[...localBusinessLd(locations), breadcrumbLd([["Start", "/"], ["Kontakt", "/kontakt"]])]}
+>
+	<header class="khead">
+		<div class="wrap wrap--xl rise">
+			<h1 class="t-display">Kontakt.</h1>
+			<p class="t-hero-sub muted khead__sub">Kommen Sie einfach vorbei, ein Termin ist nicht nötig. In Wien und Umgebung, auch am Wochenende.</p>
+		</div>
+	</header>
+
+	<section class="section kloc" aria-label="Standorte">
+		<div class="wrap wrap--xl">
+			{
+				groups.map(([name, list], gi) => (
+					<div class="kgroup" data-reveal style={`--i:${gi}`}>
+						<h2 class="t-title kgroup__h">
+							<Icon name="ph:map-pin" aria-hidden="true" />
+							{name}
+						</h2>
+						<ul class="kgrid" role="list">
+							{list!.map((l) => (
+								<li class="card card--gray">
+									<p class="kcard__venue">{l.venue}</p>
+									<p class="muted">
+										{l.street}
+										<br />
+										{l.zip} {l.city}
+									</p>
+									<dl class="kcard__hours">
+										{l.hours.map(([d, h]) => (
+											<>
+												<dt>{d}</dt>
+												<dd>{h}</dd>
+											</>
+										))}
+									</dl>
+									<div class="kcard__links">
+										{l.phone && <a href={`tel:${l.phone.replace(/\s/g, "")}`}>{l.phone}</a>}
+										<a href={`https://www.openstreetmap.org/?mlat=${l.lat}&mlon=${l.lng}#map=18/${l.lat}/${l.lng}`} rel="noopener" target="_blank">
+											Route planen
+										</a>
+									</div>
+								</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
+			<div class="kmail card" data-reveal>
+				<Icon name="ph:envelope-simple" class="icon-lg" aria-hidden="true" />
+				<div>
+					<h2 class="t-title">Lieber schreiben?</h2>
+					<p class="muted">
+						Stellen Sie eine Anfrage oder schreiben Sie an <a href={`mailto:${business.email}`}>{business.email}</a>.
+					</p>
+				</div>
+				<a class="btn" href="/reparatur-anfragen">Reparatur anfragen</a>
+			</div>
+		</div>
+	</section>
+</Base>
+
+<style>
+	.khead {
+		padding: clamp(56px, 8vw, 96px) 0 0;
+	}
+
+	.khead__sub {
+		max-width: 32ch;
+		margin-top: 16px;
+	}
+
+	.kgroup + .kgroup {
+		margin-top: 56px;
+	}
+
+	.kgroup__h {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin-bottom: 20px;
+	}
+
+	.kgroup__h svg {
+		width: 28px;
+		height: 28px;
+		color: var(--muted);
+	}
+
+	.kgrid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.kgrid .card {
+		padding: 28px;
+	}
+
+	.kcard__venue {
+		font-size: 19px;
+		font-weight: 600;
+		margin-bottom: 6px;
+	}
+
+	.kcard__hours {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 4px 16px;
+		margin: 18px 0;
+		font-size: 15px;
+	}
+
+	.kcard__hours dt {
+		color: var(--muted);
+	}
+
+	.kcard__hours dd {
+		margin: 0;
+	}
+
+	.kcard__links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 20px;
+		font-size: 15px;
+	}
+
+	.kmail {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+		margin-top: 64px;
+		background: var(--gray);
+	}
+
+	.kmail .t-title {
+		margin-bottom: 4px;
+	}
+
+	.kmail .btn {
+		margin-left: auto;
+	}
+
+	@media (max-width: 1000px) {
+		.kgrid {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.kgrid {
+			grid-template-columns: 1fr;
+		}
+
+		.kmail {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.kmail .btn {
+			margin-left: 0;
+		}
+	}
+</style>

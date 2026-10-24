@@ -1,0 +1,995 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "Apfelreparatur",
+		"description": "Reparatur für iPhone, iPad und Mac in Wien",
+		"author": "Apfelreparatur"
+	},
+	"settings": {
+		"title": "Apfelreparatur",
+		"tagline": "Premium Reparatur für iPhone, iPad und Mac in Wien. Mit Original Apple Teilen.",
+		"seo": {
+			"titleSeparator": "–"
+		}
+	},
+	"collections": [
+		{
+			"slug": "pages",
+			"label": "Seiten",
+			"labelSingular": "Seite",
+			"urlPattern": "/{slug}",
+			"supports": [
+				"drafts",
+				"revisions",
+				"preview",
+				"seo"
+			],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Titel",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "content",
+					"label": "Inhalt",
+					"type": "portableText"
+				}
+			]
+		}
+	],
+	"content": {
+		"pages": [
+			{
+				"id": "datenschutz",
+				"slug": "datenschutz",
+				"status": "published",
+				"data": {
+					"title": "Datenschutzerklärung",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "k1",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k2",
+									"text": "Wir nehmen den Schutz Ihrer Daten ernst und verarbeiten sie ausschließlich auf Grundlage der Datenschutz-Grundverordnung (DSGVO) und des österreichischen Datenschutzgesetzes (DSG). Hier erfahren Sie, welche Daten wir verarbeiten, wozu und wie lange.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k3",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k4",
+									"text": "Verantwortlicher",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k5",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "k7",
+									"href": "/impressum"
+								},
+								{
+									"_type": "link",
+									"_key": "k10",
+									"href": "mailto:office@apfelreparatur.at"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k6",
+									"text": "Verantwortlich für die Datenverarbeitung ist die Mobi GmbH, SCS Allee 4, 2331 Vösendorf, Österreich (Betreiberin der Marke Apfelreparatur, weitere Angaben im ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k8",
+									"text": "Impressum",
+									"marks": [
+										"k7"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "k9",
+									"text": "). Sie erreichen uns unter ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k11",
+									"text": "office@apfelreparatur.at",
+									"marks": [
+										"k10"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "k12",
+									"text": ".",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k13",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k14",
+									"text": "Aufruf der Website",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k15",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k16",
+									"text": "Beim Aufruf unserer Website verarbeitet unser Hosting-Anbieter technisch notwendige Daten wie IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, Browser und Betriebssystem. Das ist nötig, um die Website auszuliefern und vor Angriffen zu schützen (Art. 6 Abs. 1 lit. f DSGVO).",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k17",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k18",
+									"text": "Die Website wird über Cloudflare (Cloudflare, Inc., 101 Townsend St., San Francisco, CA 94107, USA) bereitgestellt. Cloudflare ist nach dem EU-US Data Privacy Framework zertifiziert; mit Cloudflare besteht ein Auftragsverarbeitungsvertrag. Protokolldaten werden nach kurzer Zeit automatisch gelöscht.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k19",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k20",
+									"text": "Keine Tracking-Cookies, keine externen Schriften",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k21",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k22",
+									"text": "Wir verwenden keine Analyse- oder Marketing-Tools, keine Tracking-Cookies und laden keine Schriften, Karten oder Videos von Drittanbietern. Deshalb brauchen wir auch keinen Cookie-Banner. Technisch notwendige Cookies setzen wir nur im geschützten Verwaltungsbereich der Website.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k23",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k24",
+									"text": "Reparaturanfrage und Kontakt",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k25",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k26",
+									"text": "Wenn Sie uns über das Formular „Reparatur anfragen“ oder per E-Mail kontaktieren, verarbeiten wir Ihre Angaben (Name, E-Mail-Adresse, optional Telefonnummer, Gerät, Modell, Anliegen und Beschreibung), um Ihre Anfrage zu beantworten und einen Termin zu vereinbaren. Rechtsgrundlage ist die Durchführung vorvertraglicher Maßnahmen (Art. 6 Abs. 1 lit. b DSGVO).",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k27",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k28",
+									"text": "Die Anfrage wird nicht in einer Datenbank gespeichert, sondern per E-Mail an uns übermittelt; Sie erhalten eine Kopie als Bestätigung. Für den E-Mail-Versand nutzen wir Resend (Resend, Inc., USA) als Auftragsverarbeiter. Die Übermittlung in die USA erfolgt auf Grundlage von Standardvertragsklauseln der EU-Kommission.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k29",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k30",
+									"text": "Kommt kein Auftrag zustande, löschen wir Ihre Anfrage spätestens nach 6 Monaten.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k31",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k32",
+									"text": "Reparaturauftrag",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k33",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k34",
+									"text": "Für die Abwicklung eines Auftrags verarbeiten wir Ihre Kontaktdaten, Angaben zum Gerät (Modell, Seriennummer), den Auftragsumfang sowie Rechnungsdaten (Art. 6 Abs. 1 lit. b DSGVO). Rechnungen und Buchhaltungsunterlagen bewahren wir 7 Jahre auf, wie es das Unternehmens- und Steuerrecht vorschreibt (Art. 6 Abs. 1 lit. c DSGVO).",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k35",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k36",
+									"text": "Auf die Inhalte Ihres Geräts greifen wir bei einer Reparatur nicht zu. Nur wenn Sie uns mit einer Datenrettung oder Datenübertragung beauftragen, verarbeiten wir die dafür nötigen Daten ausschließlich zu diesem Zweck und löschen Rettungskopien nach der Übergabe sicher.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k37",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k38",
+									"text": "Widerruf eines Vertrags",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k39",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "k41",
+									"href": "/vertrag-widerrufen"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k40",
+									"text": "Nutzen Sie die Seite ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k42",
+									"text": "Vertrag widerrufen",
+									"marks": [
+										"k41"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "k43",
+									"text": ", verarbeiten wir Ihre Angaben, um den Widerruf zu bearbeiten und den Eingang zu bestätigen (Art. 6 Abs. 1 lit. c DSGVO).",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k44",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k45",
+									"text": "Ihre Rechte",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k46",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "k48",
+									"href": "mailto:office@apfelreparatur.at"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k47",
+									"text": "Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Eine erteilte Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen. Schreiben Sie uns dazu einfach an ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k49",
+									"text": "office@apfelreparatur.at",
+									"marks": [
+										"k48"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "k50",
+									"text": ".",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k51",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "k53",
+									"href": "https://www.dsb.gv.at"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k52",
+									"text": "Wenn Sie glauben, dass die Verarbeitung Ihrer Daten gegen das Datenschutzrecht verstößt, können Sie sich bei der Österreichischen Datenschutzbehörde beschweren: Barichgasse 40–42, 1030 Wien, ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k54",
+									"text": "www.dsb.gv.at",
+									"marks": [
+										"k53"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "k55",
+									"text": ".",
+									"marks": []
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "agb",
+				"slug": "agb",
+				"status": "published",
+				"data": {
+					"title": "Allgemeine Geschäftsbedingungen",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "k56",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k57",
+									"text": "Diese Allgemeinen Geschäftsbedingungen gelten für alle Reparatur-, Datenrettungs- und Datenübertragungsaufträge an Apfelreparatur. Apfelreparatur ist eine Marke der Mobi GmbH, SCS Allee 4, 2331 Vösendorf, FN 397203y, Landesgericht Wiener Neustadt („wir“); sie ist Ihr Vertragspartner. Abweichende Vereinbarungen gelten nur, wenn wir sie schriftlich bestätigen. Für Verbraucher:innen gelten zusätzlich die zwingenden Bestimmungen des Konsumentenschutzgesetzes (KSchG) und des Fern- und Auswärtsgeschäfte-Gesetzes (FAGG).",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k58",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k59",
+									"text": "1. Anfrage und Vertragsabschluss",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k60",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k61",
+									"text": "Eine Anfrage über unsere Website ist unverbindlich. Ein Auftrag kommt erst zustande, wenn Sie an einem unserer Standorte den genannten Preis bzw. Kostenvoranschlag annehmen.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k62",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k63",
+									"text": "2. Kostenvoranschlag",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k64",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k65",
+									"text": "Vor der Reparatur nennen wir Ihnen den Preis. Dieser Kostenvoranschlag ist verbindlich. Stellt sich während der Reparatur heraus, dass zusätzliche Arbeiten nötig sind, informieren wir Sie vorher und führen sie nur mit Ihrer Zustimmung durch. Lehnen Sie den Kostenvoranschlag ab, erhalten Sie Ihr Gerät im Zustand der Übergabe zurück.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k66",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k67",
+									"text": "3. Ersatzteile",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k68",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k69",
+									"text": "Wir verwenden Original Apple Ersatzteile, sofern Apple sie für das jeweilige Modell und die jeweilige Reparatur bereitstellt. Ist kein Originalteil erhältlich, nennen wir Ihnen vor der Reparatur die Alternative und deren Preis. Ohne Ihre Zustimmung wird kein anderes Teil verbaut. Ausgebaute Teile entsorgen wir fachgerecht, sofern Sie sie nicht zurückhaben möchten.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k70",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k71",
+									"text": "4. Ihre Mitwirkung und Datensicherung",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k72",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k73",
+									"text": "Bitte sichern Sie Ihre Daten vor der Übergabe (z. B. Backup in der Cloud oder am Computer). Reparaturen können in seltenen Fällen zu Datenverlust führen, auch wenn wir sorgfältig arbeiten. Haben Sie keine Sicherung angelegt, kann Sie bei einem Datenverlust ein Mitverschulden treffen. Für Tests nach der Reparatur kann es nötig sein, den Gerätecode anzugeben oder die Ortungsfunktion vorübergehend zu deaktivieren; wir weisen Sie darauf hin.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k74",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k75",
+									"text": "5. Vorschäden, Wasser- und Sturzschäden",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k76",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k77",
+									"text": "Geräte mit Flüssigkeits- oder schweren Sturzschäden können versteckte Folgeschäden haben. Treten diese erst während oder nach der Reparatur zutage, informieren wir Sie vor weiteren Arbeiten. Bereits vorhandene Schäden, die nicht Gegenstand des Auftrags sind, sind von der Garantie ausgeschlossen.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k78",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k79",
+									"text": "6. Preise und Zahlung",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k80",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k81",
+									"text": "Alle Preise verstehen sich in Euro inklusive gesetzlicher Umsatzsteuer. Die Zahlung erfolgt bei Abholung des Geräts in bar oder mit Karte.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k82",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k83",
+									"text": "7. Abholung",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k84",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k85",
+									"text": "Wir informieren Sie, sobald Ihr Gerät abholbereit ist. Holen Sie es trotz Erinnerung nicht innerhalb von 3 Monaten ab, können wir nach nochmaliger schriftlicher Ankündigung angemessene Lagerkosten verrechnen.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k86",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k87",
+									"text": "8. Garantie und Gewährleistung",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k88",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "k90",
+									"href": "mailto:office@apfelreparatur.at"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k89",
+									"text": "Garantiegeberin ist die Mobi GmbH (Anschrift siehe oben). Auf getauschte Teile und unsere Arbeit geben wir 3 Monate Garantie ab Abholung, gültig in Österreich an allen unseren Standorten. Tritt in dieser Zeit ein Mangel am getauschten Teil oder an unserer Arbeit auf, beheben wir ihn kostenlos. Melden Sie sich dazu mit Ihrer Rechnung per E-Mail an ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k91",
+									"text": "office@apfelreparatur.at",
+									"marks": [
+										"k90"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "k92",
+									"text": " oder an einem unserer Standorte.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k93",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k94",
+									"text": "Ausgenommen sind Schäden durch Sturz, Bruch, Flüssigkeit oder unsachgemäße Behandlung nach der Reparatur sowie Eingriffe Dritter. Die Garantie gilt zusätzlich zu Ihren gesetzlichen Gewährleistungsrechten; diese bleiben durch die Garantie unberührt und werden nicht eingeschränkt.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k95",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k96",
+									"text": "9. Widerrufsrecht für Verbraucher:innen",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k97",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k98",
+									"text": "Schließen Sie einen Vertrag mit uns im Fernabsatz oder außerhalb unserer Geschäftsräume, können Sie ihn binnen 14 Tagen ab Vertragsabschluss ohne Angabe von Gründen widerrufen. Für Verträge, die Sie an einem unserer Standorte abschließen, besteht kein gesetzliches Widerrufsrecht.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k99",
+							"style": "normal",
+							"markDefs": [
+								{
+									"_type": "link",
+									"_key": "k101",
+									"href": "/vertrag-widerrufen"
+								},
+								{
+									"_type": "link",
+									"_key": "k104",
+									"href": "mailto:office@apfelreparatur.at"
+								}
+							],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k100",
+									"text": "Den Widerruf erklären Sie über unsere Seite ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k102",
+									"text": "Vertrag widerrufen",
+									"marks": [
+										"k101"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "k103",
+									"text": " oder formlos per E-Mail an ",
+									"marks": []
+								},
+								{
+									"_type": "span",
+									"_key": "k105",
+									"text": "office@apfelreparatur.at",
+									"marks": [
+										"k104"
+									]
+								},
+								{
+									"_type": "span",
+									"_key": "k106",
+									"text": ". Zur Fristwahrung genügt das rechtzeitige Absenden.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k107",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k108",
+									"text": "Verlangen Sie ausdrücklich, dass wir vor Ablauf der Widerrufsfrist mit der Reparatur beginnen, und ist die Leistung vollständig erbracht, erlischt Ihr Widerrufsrecht (§ 18 Abs. 1 Z 1 FAGG). Widerrufen Sie nach Beginn, aber vor vollständiger Erbringung, zahlen Sie einen anteiligen Betrag für die bis dahin erbrachten Leistungen (§ 16 FAGG).",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k109",
+							"style": "h3",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k110",
+									"text": "Muster-Widerrufsformular",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k111",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k112",
+									"text": "Wenn Sie den Vertrag widerrufen wollen, können Sie dieses Formular ausfüllen und an uns senden (Pflicht ist das nicht):",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k113",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k114",
+									"text": "An Mobi GmbH (Apfelreparatur), SCS Allee 4, 2331 Vösendorf, E-Mail office@apfelreparatur.at:",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k115",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k116",
+									"text": "Hiermit widerrufe(n) ich/wir den von mir/uns abgeschlossenen Vertrag über die Erbringung der folgenden Dienstleistung: …",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k117",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k118",
+									"text": "Bestellt am … / erhalten am …",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k119",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k120",
+									"text": "Name des/der Verbraucher(s): …",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k121",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k122",
+									"text": "Anschrift des/der Verbraucher(s): …",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k123",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k124",
+									"text": "Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier): …",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k125",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k126",
+									"text": "Datum: …",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k127",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k128",
+									"text": "10. Haftung",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k129",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k130",
+									"text": "Für Schäden an Personen und für Schäden an den Geräten, die Sie uns zur Reparatur übergeben, haften wir nach den gesetzlichen Bestimmungen. Für sonstige Schäden haften wir bei Vorsatz und grober Fahrlässigkeit; gegenüber Unternehmern ist die Haftung für leichte Fahrlässigkeit ausgeschlossen. Zwingende Bestimmungen des Konsumentenschutzgesetzes bleiben unberührt.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k131",
+							"style": "h2",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k132",
+									"text": "11. Schlussbestimmungen",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "k133",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "k134",
+									"text": "Es gilt österreichisches Recht unter Ausschluss des UN-Kaufrechts. Für Verbraucher:innen gelten zwingende Schutzvorschriften ihres Wohnsitzstaates weiter. Gerichtsstand für Unternehmer ist Wien. Sollte eine Bestimmung unwirksam sein, bleiben die übrigen wirksam.",
+									"marks": []
+								}
+							]
+						}
+					]
+				}
+			}
+		]
+	}
+}

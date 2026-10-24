@@ -1,0 +1,102 @@
+---
+import LegalLayout from "../components/LegalLayout.astro";
+import { inquiry } from "../lib/inquiry-copy";
+import { sendToPlugin } from "../lib/send";
+
+Astro.response.headers.set("Cache-Control", "private, no-store");
+let values: Record<string, string> = {};
+let error = "";
+const sent = Astro.request.method === "GET" && Astro.url.searchParams.has("gesendet");
+
+if (Astro.request.method === "POST") {
+	const form = await Astro.request.formData();
+	values = Object.fromEntries([...form.entries()].map(([k, v]) => [k, String(v)]));
+	const res = await sendToPlugin(Astro.locals, Astro.url, "withdrawal", values, Astro.request);
+	if (res.ok) return Astro.redirect("/vertrag-widerrufen?gesendet=1", 303);
+	error = inquiry.error[res.error] ?? inquiry.error.UNAVAILABLE;
+}
+---
+
+<LegalLayout title="Vertrag widerrufen" slug="vertrag-widerrufen" description="Einen online oder außerhalb unserer Geschäftsräume geschlossenen Vertrag mit Apfelreparatur widerrufen.">
+	{
+		sent ? (
+			<p class="ok" role="status">Ihr Widerruf ist eingegangen. Eine Bestätigung mit Datum und Uhrzeit haben wir Ihnen per E-Mail geschickt.</p>
+		) : (
+			<>
+				<p>
+					Haben Sie als Verbraucher:in einen Vertrag mit uns im Fernabsatz oder außerhalb unserer Geschäftsräume geschlossen, können Sie ihn innerhalb von 14 Tagen
+					ohne Angabe von Gründen widerrufen. Details finden Sie in unseren <a href="/agb">AGB</a>. Mit diesem Formular erklären Sie den Widerruf; Sie
+					erhalten sofort eine Eingangsbestätigung per E-Mail.
+				</p>
+				{error && <p class="err" role="alert">{error}</p>}
+				<form method="post" class="wf" toolname="withdraw_contract" tooldescription="Widerruf eines Vertrags mit Apfelreparatur erklären">
+					<label>Name *<input name="name" required autocomplete="name" value={values.name ?? ""} maxlength="120" /></label>
+					<label>E-Mail *<input name="email" type="email" required autocomplete="email" value={values.email ?? ""} maxlength="160" /></label>
+					<label>Auftrags- oder Rechnungsnummer *<input name="order" required value={values.order ?? ""} maxlength="80" /></label>
+					<label>Datum des Vertragsabschlusses<input name="date" type="date" value={values.date ?? ""} /></label>
+					<label>Nachricht (optional)<textarea name="message" rows="4" maxlength="2000">{values.message ?? ""}</textarea></label>
+					<div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off" /></label></div>
+					<button class="btn" type="submit">Widerruf bestätigen</button>
+				</form>
+			</>
+		)
+	}
+</LegalLayout>
+
+<style>
+	.wf {
+		display: grid;
+		gap: 16px;
+		margin-top: 28px;
+	}
+
+	.wf label {
+		display: grid;
+		gap: 6px;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.wf input,
+	.wf textarea {
+		padding: 14px 16px;
+		border: 1px solid var(--faint);
+		border-radius: 12px;
+		font-size: 17px;
+		font-weight: 400;
+	}
+
+	.wf input:focus,
+	.wf textarea:focus {
+		outline: none;
+		border-color: var(--blue);
+		box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+	}
+
+	.wf .btn {
+		justify-self: start;
+		margin-top: 8px;
+	}
+
+	.hp {
+		position: absolute;
+		left: -9999px;
+	}
+
+	.ok,
+	.err {
+		padding: 16px 20px;
+		border-radius: 12px;
+	}
+
+	.ok {
+		background: #effaf2;
+		color: var(--ok);
+	}
+
+	.err {
+		background: #fff2f2;
+		color: var(--err);
+	}
+</style>

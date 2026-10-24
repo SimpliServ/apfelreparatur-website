@@ -1,0 +1,203 @@
+---
+import Pic from "./Pic.astro";
+import type { PhotoKey } from "../lib/photos";
+
+interface Props {
+	title: string;
+	sub?: string;
+	eyebrow?: string;
+	photo: PhotoKey;
+	alt?: string;
+	dark?: boolean;
+	half?: boolean;
+	primary?: { href: string; label: string };
+	secondary?: { href: string; label: string };
+	heading?: "h1" | "h2" | "h3";
+	eager?: boolean;
+}
+const { title, sub, eyebrow, photo, alt, dark = false, half = false, primary, secondary, heading = "h2", eager = false } = Astro.props;
+const H = heading;
+---
+
+<section class:list={["tile", { "tile--half": half, "tile--hero": heading === "h1", "on-dark": dark, "tile--light": !dark }]}>
+	<div class:list={["tile__copy", heading === "h1" ? "rise" : null]} data-reveal={heading === "h1" ? undefined : true}>
+		{
+			heading === "h1" && eyebrow ? (
+				<>
+					<h1 class="tile__eyebrow">{eyebrow}</h1>
+					<p class="tile__title t-hero">{title}</p>
+				</>
+			) : (
+				<>
+					{eyebrow && <p class="tile__eyebrow">{eyebrow}</p>}
+					<H class:list={["tile__title", half ? "t-section" : "t-hero"]}>{title}</H>
+				</>
+			)
+		}
+		{sub && <p class="tile__sub t-hero-sub" set:html={sub} />}
+		{
+			(primary || secondary) && (
+				<div class="btn-row tile__ctas">
+					{primary && <a class="btn" href={primary.href}>{primary.label}</a>}
+					{secondary && (
+						<a class="btn btn--ghost" href={secondary.href}>
+							{secondary.label}
+						</a>
+					)}
+				</div>
+			)
+		}
+		<slot />
+	</div>
+	<div class:list={["tile__media", heading === "h1" ? "settle sd-drift" : "sd-zoom"]}>
+		<Pic name={photo} alt={alt} sizes={half ? "(max-width: 833px) 100vw, 50vw" : "100vw"} eager={eager} />
+	</div>
+</section>
+
+<style>
+	.tile {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: clamp(560px, 62vw, 692px);
+		overflow: hidden;
+		text-align: center;
+		background: var(--gray);
+	}
+
+	.tile.on-dark {
+		background: #000;
+	}
+
+	.tile--half {
+		height: clamp(500px, 48vw, 580px);
+	}
+
+	.tile__copy {
+		position: relative;
+		z-index: 2;
+		padding: 52px 22px 0;
+		max-width: 760px;
+	}
+
+	.tile--half .tile__copy {
+		padding-top: 48px;
+	}
+
+	.tile__eyebrow {
+		font-size: 17px;
+		font-weight: 600;
+		letter-spacing: -0.022em;
+		margin-bottom: 6px;
+		color: var(--muted);
+	}
+
+	.on-dark .tile__eyebrow {
+		color: var(--faint);
+	}
+
+	.tile__sub {
+		margin-top: 6px;
+	}
+
+	.tile--half .tile__sub {
+		font-size: clamp(19px, 2vw, 21px);
+		line-height: 1.381;
+		letter-spacing: 0.011em;
+		margin-top: 8px;
+	}
+
+	.tile__ctas {
+		margin-top: 18px;
+	}
+
+	.tile--half .btn {
+		min-height: 36px;
+		padding: 8px 16px;
+		font-size: 14px;
+	}
+
+	.tile__media {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+	}
+
+	.tile__media :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 70%;
+	}
+
+	/* Fade the photo into the tile colour behind the copy. */
+	.tile__media::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, var(--fade) 0%, var(--fade) 26%, transparent 62%);
+	}
+
+	.on-dark .tile__media {
+		--fade: #000;
+	}
+
+	.tile--light .tile__media {
+		--fade: var(--gray);
+	}
+
+	.tile--half .tile__media::after {
+		background: linear-gradient(180deg, var(--fade) 0%, var(--fade) 34%, transparent 72%);
+	}
+
+	.tile--hero {
+		height: clamp(620px, 66vw, 760px);
+	}
+
+	.tile--hero .tile__media {
+		top: 26%;
+	}
+
+	.tile--hero .tile__media :global(img) {
+		object-position: center 38%;
+		filter: brightness(1.5) contrast(1.05);
+	}
+
+	.tile--hero .tile__media::after {
+		background: linear-gradient(180deg, #000 0%, transparent 35%, transparent 85%, #000 100%);
+	}
+
+	@media (max-width: 734px) {
+		.tile__copy {
+			padding-top: 40px;
+		}
+
+		.tile__ctas {
+			flex-wrap: nowrap;
+			gap: 10px;
+		}
+
+		.tile__ctas .btn {
+			min-height: 40px;
+			padding: 9px 18px;
+			font-size: 15px;
+		}
+	}
+
+	@media (max-width: 374px) {
+		.tile__ctas .btn {
+			padding: 8px 13px;
+			font-size: 14px;
+		}
+
+		.tile--hero .tile__media {
+			top: 36%;
+		}
+
+		.tile__media::after,
+		.tile--half .tile__media::after {
+			background: linear-gradient(180deg, var(--fade) 0%, var(--fade) 42%, transparent 78%);
+		}
+	}
+</style>

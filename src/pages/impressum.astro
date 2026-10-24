@@ -1,0 +1,79 @@
+---
+import LegalLayout from "../components/LegalLayout.astro";
+import { business } from "../lib/business";
+import { photos } from "../lib/photos";
+
+const b = business;
+const rows: [string, string][] = [
+	["Medieninhaber und Betreiber", b.legalName],
+	["Rechtsform", b.legalForm],
+	["Sitz", b.seat],
+	["Anschrift", `${b.street}, ${b.zip} ${b.city}, ${b.country}`],
+	["Telefon", b.phone],
+	["E-Mail", b.email],
+	["UID-Nummer", b.vatId],
+	["Firmenbuch", `${b.registerNo}, ${b.registerCourt}`],
+	["Gewerbebehörde", b.authority],
+	["Kammer", b.chamber],
+];
+const credits = Object.values(photos).filter((p, i, all) => all.findIndex((x) => x.id === p.id) === i);
+---
+
+<LegalLayout title="Impressum" slug="impressum" description="Impressum und Offenlegung von Apfelreparatur, unabhängiger Reparaturbetrieb für iPhone, iPad und Mac in Wien.">
+	<h2>Angaben nach § 5 ECG, § 14 UGB und § 25 MedienG</h2>
+	<dl>
+		{
+			rows.map(([k, v]) => (
+				<>
+					<dt>{k}</dt>
+					<dd>{k === "E-Mail" ? <a href={`mailto:${v}`}>{v}</a> : v}</dd>
+				</>
+			))
+		}
+	</dl>
+
+	<p>{b.brand} ist eine Marke der {b.legalName}. Reparaturen werden an den auf der Seite <a href="/kontakt">Kontakt</a> genannten Standorten erbracht.</p>
+
+	<h2>Gewerbeberechtigungen</h2>
+	<ul>
+		{b.trades.map((t) => <li>{t}</li>)}
+	</ul>
+
+	<h2>Berufsrecht</h2>
+	<p>Gewerbeordnung 1994 (GewO), abrufbar im Rechtsinformationssystem des Bundes unter <a href="https://www.ris.bka.gv.at" rel="noopener">www.ris.bka.gv.at</a>.</p>
+
+	<h2>Offenlegung nach § 25 MedienG</h2>
+	<p>Medieninhaber und Herausgeber: {b.legalName}, {b.street}, {b.zip} {b.city}. Unternehmensgegenstand: Reparatur und Handel mit Mobiltelefonen, Tablets und Computern.</p>
+	<p>Grundlegende Richtung: Information über Reparatur, Datenrettung und Datenübertragung für Apple Geräte in Wien.</p>
+
+	<h2>Verbraucherstreitbeilegung</h2>
+	<p>
+		Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. Bei Fragen oder Beschwerden
+		erreichen Sie uns unter <a href={`mailto:${b.email}`}>{b.email}</a>.
+	</p>
+
+	<h2>Markenhinweis</h2>
+	<p>
+		Apple, das Apple Logo, iPhone, iPad, iPad Air, iPad Pro, iPad mini, Mac, MacBook, MacBook Air, MacBook Pro, iMac, Mac mini, Mac Studio, iOS, macOS, iCloud, Face ID, True Tone, MagSafe und Lightning sind Marken der Apple Inc., die in den USA und
+		weiteren Ländern eingetragen sind. {b.brand} ist ein unabhängiger Reparaturbetrieb. Wir sind weder ein Apple Store noch ein Apple Autorisierter Service Provider und
+		stehen in keiner geschäftlichen Verbindung zu Apple Inc. Markennamen verwenden wir ausschließlich, um die von uns reparierten Geräte zu beschreiben. Logos von Apple verwenden wir nicht; auf den verwendeten Fotos wurden sichtbare Logos entfernt.
+	</p>
+
+	<h2>Haftung für Inhalte und Links</h2>
+	<p>
+		Wir erstellen die Inhalte dieser Website mit Sorgfalt, übernehmen aber keine Gewähr für Vollständigkeit und Aktualität. Für Inhalte externer Websites, auf die wir
+		verlinken, sind ausschließlich deren Betreiber verantwortlich. Bei Bekanntwerden von Rechtsverletzungen entfernen wir entsprechende Links umgehend.
+	</p>
+
+	<h2>Urheberrecht und Bildnachweise</h2>
+	<p>Texte und Gestaltung dieser Website sind urheberrechtlich geschützt. Fotos stammen von Pexels und werden gemäß der Pexels-Lizenz verwendet. Abgebildete Personen und Räume sind Symbolbilder, nicht unsere Werkstatt.</p>
+	<ul>
+		{
+			credits.map((p) => (
+				<li>
+					{p.alt}{"retouched" in p && p.retouched ? " (retuschiert)" : ""}: {p.by} / <a href={`https://www.pexels.com/photo/${p.id}/`} rel="noopener">Pexels</a>
+				</li>
+			))
+		}
+	</ul>
+</LegalLayout>

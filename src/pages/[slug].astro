@@ -1,0 +1,27 @@
+---
+import { decodeSlug, getEmDashEntry, getSeoMeta } from "emdash";
+import { PortableText } from "emdash/ui";
+import LegalLayout from "../components/LegalLayout.astro";
+
+const slug = decodeSlug(Astro.params.slug);
+if (!slug) return Astro.rewrite("/404");
+
+const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
+if (!page) return Astro.rewrite("/404");
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const seo = getSeoMeta(page, { siteUrl: Astro.url.origin, path: `/${page.id}` });
+const updated = page.data.updatedAt
+	? new Intl.DateTimeFormat("de-AT", { dateStyle: "long", timeZone: "Europe/Vienna" }).format(new Date(page.data.updatedAt))
+	: undefined;
+---
+
+<LegalLayout
+	title={page.data.title}
+	slug={page.id}
+	description={seo.description || `${page.data.title} von Apfelreparatur, Reparatur für iPhone, iPad und Mac in Wien.`}
+	updated={updated}
+	content={{ collection: "pages", id: page.data.id, slug: page.id }}
+>
+	<PortableText value={page.data.content ?? []} />
+</LegalLayout>

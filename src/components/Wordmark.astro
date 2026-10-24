@@ -1,0 +1,23 @@
+---
+// Plain wordmark on purpose: no fruit silhouette, so nothing can be mistaken for Apple's logo.
+interface Props {
+	size?: number;
+}
+const { size = 17 } = Astro.props;
+---
+
+<span class="wm" style={`--wm:${size}px`}><b>Apfel</b>reparatur</span>
+
+<style>
+	.wm {
+		font-size: var(--wm);
+		line-height: 1;
+		font-weight: 400;
+		letter-spacing: -0.02em;
+		white-space: nowrap;
+	}
+
+	.wm b {
+		font-weight: 600;
+	}
+</style>

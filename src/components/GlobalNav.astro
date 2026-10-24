@@ -1,0 +1,274 @@
+---
+import Wordmark from "./Wordmark.astro";
+
+const links = [
+	["/iphone", "iPhone"],
+	["/ipad", "iPad"],
+	["/mac", "Mac"],
+	["/datenrettung", "Datenrettung"],
+	["/#ablauf", "So funktioniert’s"],
+	["/kontakt", "Kontakt"],
+] as const;
+const path = Astro.url.pathname;
+---
+
+<header class="gnav" data-gnav>
+	<nav class="gnav__bar" aria-label="Hauptnavigation">
+		<a href="/" class="gnav__logo" aria-label="Apfelreparatur – Startseite"><Wordmark size={20} /></a>
+		<ul class="gnav__links" role="list">
+			{
+				links.map(([href, label]) => (
+					<li>
+						<a href={href} aria-current={path === href ? "page" : undefined}>
+							{label}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+		<a href="/reparatur-anfragen" class="gnav__cta"><span class="gnav__cta-long">Reparatur </span>anfragen</a>
+		<button type="button" class="gnav__toggle" aria-expanded="false" aria-controls="gnav-menu" aria-label="Menü öffnen" data-gnav-toggle>
+			<span></span><span></span>
+		</button>
+	</nav>
+	<div id="gnav-menu" class="gnav__menu" data-gnav-menu>
+		<ul role="list">
+			{links.map(([href, label], i) => <li style={`--i:${i}`}><a href={href}>{label}</a></li>)}
+			<li style={`--i:${links.length}`}><a href="/reparatur-anfragen">Reparatur anfragen</a></li>
+		</ul>
+	</div>
+</header>
+<div class="gnav__curtain" data-gnav-curtain aria-hidden="true"></div>
+
+<script>
+	const root = document.querySelector<HTMLElement>("[data-gnav]")!;
+	const toggle = root.querySelector<HTMLButtonElement>("[data-gnav-toggle]")!;
+	const set = (open: boolean) => {
+		root.classList.toggle("is-open", open);
+		document.documentElement.classList.toggle("gnav-open", open);
+		toggle.setAttribute("aria-expanded", String(open));
+		toggle.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+	};
+	toggle.addEventListener("click", () => set(!root.classList.contains("is-open")));
+	root.querySelectorAll("[data-gnav-menu] a").forEach((a) => a.addEventListener("click", () => set(false)));
+	addEventListener("keydown", (e) => e.key === "Escape" && set(false));
+	matchMedia("(min-width: 834px)").addEventListener("change", () => set(false));
+</script>
+
+<style>
+	.gnav {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		height: var(--nav-h);
+		background: rgba(250, 250, 252, 0.8);
+		backdrop-filter: saturate(180%) blur(20px);
+		-webkit-backdrop-filter: saturate(180%) blur(20px);
+	}
+
+	.gnav__bar {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		height: var(--nav-h);
+		width: min(1100px, calc(100% - 44px));
+		margin-inline: auto;
+	}
+
+	.gnav__logo {
+		display: inline-flex;
+		align-items: center;
+		height: var(--nav-h);
+		margin-right: auto;
+		color: var(--ink);
+	}
+
+	.gnav__logo:hover {
+		text-decoration: none;
+		opacity: 0.8;
+	}
+
+	.gnav__links {
+		display: flex;
+		list-style: none;
+		padding: 0;
+		margin: 0 auto 0 0;
+	}
+
+	.gnav__links a {
+		display: block;
+		padding: 0 13px;
+		line-height: var(--nav-h);
+		font-size: 14px;
+		letter-spacing: -0.01em;
+		color: rgba(0, 0, 0, 0.8);
+		transition: color 0.3s var(--ease);
+	}
+
+	.gnav__links a:hover,
+	.gnav__links a[aria-current="page"] {
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.gnav__links a[aria-current="page"] {
+		font-weight: 600;
+	}
+
+	.gnav__cta {
+		font-size: 14px;
+		line-height: 1;
+		padding: 9px 16px;
+		border-radius: 980px;
+		background: var(--blue);
+		color: #fff;
+		white-space: nowrap;
+	}
+
+	.gnav__cta:hover {
+		background: var(--blue-hover);
+		text-decoration: none;
+	}
+
+	.gnav__toggle {
+		display: none;
+		position: relative;
+		width: 44px;
+		height: var(--nav-h);
+		margin-right: -12px;
+		border: 0;
+		background: none;
+		cursor: pointer;
+	}
+
+	.gnav__toggle span {
+		position: absolute;
+		left: 15px;
+		width: 14px;
+		height: 1.2px;
+		border-radius: 1px;
+		background: var(--ink);
+		transition: transform 0.3s var(--ease), top 0.3s var(--ease);
+	}
+
+	.gnav__toggle span:first-child {
+		top: 22px;
+	}
+
+	.gnav__toggle span:last-child {
+		top: 29px;
+	}
+
+	.is-open .gnav__toggle span:first-child {
+		top: 25.5px;
+		transform: rotate(45deg);
+	}
+
+	.is-open .gnav__toggle span:last-child {
+		top: 25.5px;
+		transform: rotate(-45deg);
+	}
+
+	.gnav__menu {
+		display: none;
+	}
+
+	.gnav__curtain {
+		display: none;
+	}
+
+	.gnav__cta-long {
+		text-transform: none;
+	}
+
+	@media (max-width: 420px) {
+		.gnav__cta-long {
+			display: none;
+		}
+
+		.gnav__cta {
+			text-transform: capitalize;
+		}
+
+		.gnav__bar {
+			width: calc(100% - 32px);
+		}
+	}
+
+	@media (max-width: 833px) {
+		.gnav__links {
+			display: none;
+		}
+
+		.gnav__cta {
+			margin-right: 4px;
+		}
+
+		.gnav__toggle {
+			display: block;
+		}
+
+		.gnav__menu {
+			display: block;
+			position: absolute;
+			inset: var(--nav-h) 0 auto 0;
+			background: rgba(250, 250, 252, 0.97);
+			backdrop-filter: saturate(180%) blur(20px);
+			-webkit-backdrop-filter: saturate(180%) blur(20px);
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.5s var(--ease);
+		}
+
+		.is-open .gnav__menu {
+			max-height: calc(100dvh - var(--nav-h));
+			overflow: auto;
+		}
+
+		.gnav__menu ul {
+			list-style: none;
+			margin: 0;
+			padding: 20px 48px 40px;
+		}
+
+		.gnav__menu a {
+			display: block;
+			padding: 8px 0;
+			font-size: 28px;
+			line-height: 1.14;
+			font-weight: 600;
+			letter-spacing: 0.007em;
+			color: var(--ink);
+			opacity: 0;
+			transform: translateY(-8px);
+			transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+		}
+
+		.is-open .gnav__menu a {
+			opacity: 1;
+			transform: none;
+			transition-delay: calc(0.1s + var(--i, 0) * 40ms);
+		}
+
+		.gnav__curtain {
+			display: block;
+			position: fixed;
+			inset: 0;
+			z-index: 40;
+			background: rgba(232, 232, 237, 0.4);
+			backdrop-filter: blur(20px);
+			-webkit-backdrop-filter: blur(20px);
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s var(--ease);
+		}
+
+		:global(.gnav-open) .gnav__curtain {
+			opacity: 1;
+		}
+
+		:global(.gnav-open) body {
+			overflow: hidden;
+		}
+	}
+</style>

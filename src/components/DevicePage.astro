@@ -1,0 +1,253 @@
+---
+import { Icon } from "astro-iconset/components";
+import Base from "../layouts/Base.astro";
+import LocalNav from "./LocalNav.astro";
+import Pic from "./Pic.astro";
+import PlusCards from "./PlusCards.astro";
+import FAQ from "./FAQ.astro";
+import Closing from "./Closing.astro";
+import { devices, services, type DeviceKey } from "../lib/content";
+import { deviceFaq, repairPhoto, whyCards } from "../lib/copy";
+import { breadcrumbLd, faqLd, localBusinessLd, serviceLd } from "../lib/seo";
+import { getModels } from "../lib/mobinil";
+
+interface Props {
+	device: DeviceKey;
+	title: string;
+	description: string;
+}
+const { device, title, description } = Astro.props;
+const d = devices[device];
+const faq = deviceFaq(d);
+const path = `/${d.key}`;
+const models = (await getModels(device)).map((m) => m.title);
+---
+
+<Base
+	og={device}
+	title={title}
+	description={description}
+	jsonLd={[
+		...localBusinessLd(),
+		serviceLd(`${d.name} Reparatur in Wien`, description, path),
+		faqLd(faq),
+		breadcrumbLd([["Start", "/"], [`${d.name} Reparatur`, path]]),
+	]}
+>
+	<LocalNav
+		title={`${d.name} Reparatur`}
+		links={d.repairs.map((r) => [`#${r.key}`, services[r.key].label])}
+		cta={{ href: `/reparatur-anfragen?geraet=${d.key}`, label: "Anfragen" }}
+	/>
+
+	<header class="hero">
+		<div class="wrap center rise">
+			<h1 class="t-display hero__title">{d.name} Reparatur<span class="hero__city">in Wien.</span></h1>
+			<p class="t-hero-sub hero__sub">{d.sub}<a class="fn" href="#fn-1">1</a></p>
+			<div class="btn-row">
+				<a class="btn" href={`/reparatur-anfragen?geraet=${d.key}`}>Reparatur anfragen</a>
+				<a class="btn btn--ghost" href={`#${d.repairs[0].key}`}>Reparaturen ansehen</a>
+			</div>
+		</div>
+		<figure class="hero__img wrap wrap--xl sd-grow">
+			<Pic name={d.image as never} alt={d.imageAlt} eager sizes="(max-width: 1260px) 100vw, 1260px" />
+		</figure>
+	</header>
+
+	<PlusCards id="warum" title={`Ihr ${d.name}. In besten Händen.`} cards={whyCards} />
+
+	{
+		d.repairs.map((r, i) => (
+			<section id={r.key} class:list={["rep section", { "on-gray": i % 2 === 1 }]} aria-labelledby={`${r.key}-h`}>
+				<div class:list={["wrap wrap--xl rep__grid", { "rep__grid--flip": i % 2 === 1 }]}>
+					<div class="rep__copy" data-reveal>
+						<p class="rep__eyebrow">
+							<Icon name={services[r.key].icon} aria-hidden="true" />
+							{services[r.key].label}
+						</p>
+						<h2 id={`${r.key}-h`} class="t-section">{r.title}</h2>
+						<p class="t-lead rep__text">{r.text}</p>
+						<ul class="rep__points" role="list">
+							{r.points.map((p) => (
+								<li>
+									<Icon name="ph:check" aria-hidden="true" />
+									{p}
+								</li>
+							))}
+						</ul>
+						<a class="more rep__link" href={`/reparatur-anfragen?geraet=${d.key}&anliegen=${r.key}`}>
+							{d.name} {services[r.key].label} Reparatur anfragen
+							<Icon name="ph:caret-right" aria-hidden="true" />
+						</a>
+					</div>
+					<figure class="rep__img sd-zoom">
+						<Pic name={repairPhoto(d.key, r.key)} sizes="(max-width: 900px) 100vw, 640px" />
+					</figure>
+				</div>
+			</section>
+		))
+	}
+
+	<section class="models section on-dark" aria-labelledby="models-h">
+		<div class="wrap center" data-reveal>
+			<h2 id="models-h" class="t-section">Jedes Modell. Ein Anspruch.</h2>
+			<p class="t-lead muted models__lead">Wir reparieren aktuelle und ältere {d.name} Modelle, unter anderem:</p>
+			<ul class="models__list" role="list">
+				{models.map((m, i) => <li data-reveal style={`--i:${i % 8}`}>{m}</li>)}
+			</ul>
+			<a class="more" href={`/reparatur-anfragen?geraet=${d.key}`}>Ihr Modell ist nicht dabei? Fragen Sie uns <Icon name="ph:caret-right" aria-hidden="true" /></a>
+		</div>
+	</section>
+
+	<FAQ title={`Fragen zur ${d.name} Reparatur.`} items={faq} />
+
+	<Closing title={`Ihr ${d.name}. Bald wieder wie neu.`} href={`/reparatur-anfragen?geraet=${d.key}`} />
+</Base>
+
+<style>
+	.hero {
+		padding: clamp(56px, 8vw, 96px) 0 clamp(40px, 5vw, 64px);
+		overflow: hidden;
+	}
+
+	.hero__city {
+		display: block;
+		color: var(--muted);
+	}
+
+	.hero__sub {
+		max-width: 30ch;
+		margin: 18px auto 28px;
+		color: var(--ink-2);
+	}
+
+	.hero__img {
+		margin-top: clamp(48px, 6vw, 72px);
+	}
+
+	.hero__img :global(img) {
+		width: 100%;
+		aspect-ratio: 16 / 8;
+		object-fit: cover;
+		border-radius: var(--radius-lg);
+	}
+
+	.rep__grid {
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		align-items: center;
+		gap: clamp(32px, 6vw, 88px);
+	}
+
+	.rep__grid--flip .rep__copy {
+		order: 2;
+	}
+
+	.rep__eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		margin-bottom: 14px;
+		font-size: 17px;
+		font-weight: 600;
+		color: var(--muted);
+	}
+
+	.rep__eyebrow svg {
+		width: 22px;
+		height: 22px;
+	}
+
+	.rep__text {
+		margin-top: 18px;
+		color: var(--ink-2);
+	}
+
+	.rep__points {
+		list-style: none;
+		margin: 26px 0 28px;
+		padding: 0;
+	}
+
+	.rep__points li {
+		display: flex;
+		gap: 12px;
+		align-items: baseline;
+		padding: 12px 0;
+		border-bottom: 1px solid var(--line);
+		font-weight: 500;
+	}
+
+	.rep__points svg {
+		flex: none;
+		width: 16px;
+		height: 16px;
+		color: var(--ok);
+		transform: translateY(2px);
+	}
+
+	.rep__link svg {
+		width: 0.75em;
+		height: 0.75em;
+	}
+
+	.rep__img {
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		transform: translateZ(0);
+	}
+
+	.rep__img :global(img) {
+		width: 100%;
+		aspect-ratio: 5 / 4;
+		object-fit: cover;
+	}
+
+	.models__lead {
+		margin: 16px auto 36px;
+	}
+
+	.models__list {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 10px;
+		max-width: 900px;
+		margin: 0 auto 36px;
+		padding: 0;
+		list-style: none;
+	}
+
+	.models__list li {
+		padding: 8px 16px;
+		border-radius: 980px;
+		background: #1d1d1f;
+		color: #f5f5f7;
+		font-size: 14px;
+	}
+
+	.models .more svg {
+		width: 0.75em;
+		height: 0.75em;
+	}
+
+	@media (max-width: 734px) {
+		.hero__img :global(img) {
+			aspect-ratio: 4 / 3;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.rep__grid {
+			grid-template-columns: 1fr;
+		}
+
+		.rep__img :global(img) {
+			aspect-ratio: 16 / 10;
+		}
+
+		.rep__grid--flip .rep__copy {
+			order: 0;
+		}
+	}
+</style>

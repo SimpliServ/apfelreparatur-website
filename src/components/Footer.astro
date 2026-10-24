@@ -1,0 +1,214 @@
+---
+import { business } from "../lib/business";
+
+const columns = [
+	{
+		title: "Reparaturen",
+		links: [
+			["/iphone", "iPhone Reparatur"],
+			["/ipad", "iPad Reparatur"],
+			["/mac", "Mac Reparatur"],
+			["/iphone#display", "Display tauschen"],
+			["/iphone#rueckglas", "Rückglas tauschen"],
+			["/iphone#akku", "Akku tauschen"],
+		],
+	},
+	{
+		title: "Daten",
+		links: [
+			["/datenrettung", "Datenrettung"],
+			["/datenrettung#uebertragung", "Datenübertragung"],
+		],
+	},
+	{
+		title: "Service",
+		links: [
+			["/reparatur-anfragen", "Reparatur anfragen"],
+			["/#ablauf", "So funktioniert’s"],
+			["/#garantie", "Garantie"],
+			["/kontakt", "Kontakt und Öffnungszeiten"],
+		],
+	},
+	{
+		title: "Rechtliches",
+		links: [
+			["/impressum", "Impressum"],
+			["/datenschutz", "Datenschutz"],
+			["/agb", "AGB"],
+			["/vertrag-widerrufen", "Vertrag widerrufen"],
+		],
+	},
+] as const;
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+	<div class="wrap">
+		<section class="foot__notes" aria-label="Fußnoten">
+			<ol>
+				<li id="fn-1">
+					Wir verwenden Original Apple Ersatzteile, sofern Apple sie für das jeweilige Modell und die jeweilige Reparatur bereitstellt.
+					Ist das nicht der Fall, sprechen wir vor der Reparatur mit Ihnen über die Alternative. Ohne Ihre Zustimmung wird nichts verbaut.
+				</li>
+				<li id="fn-2">
+					Den Preis nennen wir Ihnen vor der Reparatur. Repariert wird erst nach Ihrer Zustimmung.
+				</li>
+				<li id="fn-3">
+					{business.warrantyMonths} Monate Garantie auf getauschte Teile und die Arbeit. Ausgenommen sind Sturz-, Bruch- und Flüssigkeitsschäden nach der Reparatur.
+					Ihre gesetzlichen Gewährleistungsrechte bleiben davon unberührt.
+				</li>
+			</ol>
+			<p>
+				Apple, das Apple Logo, iPhone, iPad, iPad Air, iPad Pro, iPad mini, Mac, MacBook, MacBook Air, MacBook Pro, iMac, Mac mini, Mac Studio, iOS, macOS, iCloud, Face ID, True Tone, MagSafe und Lightning sind Marken der Apple Inc.,
+				die in den USA und weiteren Ländern eingetragen sind. {business.brand} ist ein unabhängiger Reparaturbetrieb. Wir sind kein Apple Store und
+				kein Apple Autorisierter Service Provider und stehen in keiner geschäftlichen Verbindung zu Apple Inc. Produktnamen nennen wir nur, um zu beschreiben,
+				welche Geräte wir reparieren.
+			</p>
+		</section>
+
+		<nav class="foot__dir" aria-label="Seitenverzeichnis">
+			{
+				columns.map((col) => (
+					<div class="foot__col">
+						<h3>{col.title}</h3>
+						<ul role="list">
+							{col.links.map(([href, label]) => (
+								<li>
+									<a href={href}>{label}</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
+		</nav>
+
+		<div class="foot__legal">
+			<p>Copyright © {year} {business.brand}. Alle Rechte vorbehalten.</p>
+			<ul role="list">
+				<li><a href="/datenschutz">Datenschutz</a></li>
+				<li><a href="/agb">AGB</a></li>
+				<li><a href="/impressum">Impressum</a></li>
+				<li><a href="/vertrag-widerrufen">Vertrag widerrufen</a></li>
+			</ul>
+			<p class="foot__country">Österreich</p>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.foot {
+		background: var(--gray);
+		color: var(--muted);
+		font-size: 12px;
+		line-height: 1.33337;
+		letter-spacing: -0.01em;
+		padding: 17px 0 21px;
+	}
+
+	.foot a {
+		color: var(--ink-2);
+	}
+
+	.foot__notes {
+		padding: 0 0 11px;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.foot__notes ol {
+		margin: 0 0 12px;
+		padding-left: 16px;
+	}
+
+	.foot__notes li {
+		padding-left: 2px;
+		margin-bottom: 8px;
+	}
+
+	.foot__notes li:target {
+		color: var(--ink);
+	}
+
+	.foot__notes p {
+		margin-bottom: 8px;
+	}
+
+	.foot__dir {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 24px;
+		padding: 20px 0 30px;
+	}
+
+	.foot__col h3 {
+		margin: 0 0 9px;
+		font-size: 12px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.foot__col ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.foot__col li {
+		margin-bottom: 9px;
+	}
+
+	.foot__legal {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 8px 30px;
+		padding-top: 8px;
+		border-top: 1px solid var(--line);
+	}
+
+	.foot__legal ul {
+		display: flex;
+		flex-wrap: wrap;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.foot__legal li + li {
+		border-left: 1px solid var(--line);
+		margin-left: 8px;
+		padding-left: 8px;
+	}
+
+	.foot__country {
+		margin-left: auto;
+		color: var(--ink-2);
+	}
+
+	@media (max-width: 833px) {
+		.foot__dir {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.foot__legal ul {
+			gap: 4px 16px;
+		}
+
+		.foot__legal li + li {
+			border-left: 0;
+			margin-left: 0;
+			padding-left: 0;
+		}
+
+		.foot__dir {
+			grid-template-columns: 1fr;
+			gap: 16px;
+		}
+
+		.foot__country {
+			margin-left: 0;
+		}
+	}
+</style>

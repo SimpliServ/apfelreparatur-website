@@ -1,0 +1,78 @@
+---
+interface Props {
+	id: string;
+	title: string;
+	items: { n: string; title: string; text: string }[];
+}
+const { id, title, items } = Astro.props;
+---
+
+<section class="steps section" id={id} aria-labelledby={`${id}-h`}>
+	<div class="wrap wrap--xl">
+		<h2 id={`${id}-h`} class="t-section steps__title" data-reveal>{title}</h2>
+		<ol class="steps__list" role="list">
+			{
+				items.map((s, i) => (
+					<li data-reveal style={`--i:${i}`}>
+						<span class="steps__n">{s.n}</span>
+						<h3 class="steps__h">{s.title}</h3>
+						<p>{s.text}</p>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.steps__title {
+		margin-bottom: clamp(40px, 5vw, 64px);
+	}
+
+	.steps__list {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 40px 32px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.steps__list li {
+		padding-top: 22px;
+		border-top: 1px solid var(--line);
+	}
+
+	.steps__n {
+		display: block;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--muted);
+		font-variant-numeric: tabular-nums;
+		margin-bottom: 18px;
+	}
+
+	.steps__h {
+		font-size: clamp(24px, 2.3vw, 28px);
+		line-height: 1.14;
+		font-weight: 600;
+		letter-spacing: 0.007em;
+		margin-bottom: 10px;
+	}
+
+	.steps__list p {
+		color: var(--ink-2);
+	}
+
+	@media (max-width: 1000px) {
+		.steps__list {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.steps__list {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

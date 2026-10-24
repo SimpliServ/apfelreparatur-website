@@ -1,0 +1,234 @@
+---
+import { Icon } from "astro-iconset/components";
+import Base from "../layouts/Base.astro";
+import Tile from "../components/Tile.astro";
+import PlusCards from "../components/PlusCards.astro";
+import Steps from "../components/Steps.astro";
+import FAQ from "../components/FAQ.astro";
+import Closing from "../components/Closing.astro";
+import { homeFaq, steps, whyCards } from "../lib/copy";
+import { faqLd, localBusinessLd } from "../lib/seo";
+import { business } from "../lib/business";
+import { getLocations } from "../lib/mobinil";
+
+const locations = await getLocations();
+
+const chapters = [
+	["/iphone", "ph:device-mobile", "iPhone"],
+	["/ipad", "ph:device-tablet", "iPad"],
+	["/mac", "ph:laptop", "Mac"],
+	["/datenrettung", "ph:database", "Datenrettung"],
+	["/datenrettung#uebertragung", "ph:arrows-left-right", "Datenübertragung"],
+	["/reparatur-anfragen", "ph:wrench", "Anfragen"],
+] as const;
+---
+
+<Base
+	title="iPhone Reparatur Wien mit Original Apple Teilen – Apfelreparatur"
+	description="iPhone, iPad und Mac Reparatur in Wien: Display, Rückglas und Akku mit Original Apple Teilen, Datenrettung und Datenübertragung. Ohne Termin, Preis vorab."
+	jsonLd={[...localBusinessLd(locations), faqLd(homeFaq)]}
+>
+	<nav class="chapters" aria-label="Geräte und Leistungen">
+		<ul role="list" class="rise">
+			{
+				chapters.map(([href, icon, label]) => (
+					<li>
+						<a href={href}>
+							<Icon name={icon} aria-hidden="true" />
+							<span>{label}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+
+	<Tile
+		heading="h1"
+		dark
+		eager
+		photo="hero"
+		eyebrow="iPhone Reparatur in Wien"
+		title="Wie am ersten Tag."
+		sub={'Premium Reparaturen mit Original Apple Teilen.<a class="fn" href="#fn-1">1</a>'}
+		primary={{ href: "/reparatur-anfragen", label: "Reparatur anfragen" }}
+		secondary={{ href: "/iphone", label: "Mehr erfahren" }}
+	/>
+
+	<div class="grid">
+		<Tile
+			half
+			dark
+			photo="display"
+			title="Display."
+			sub="Gesprungen? Bald wieder makellos."
+			primary={{ href: "/reparatur-anfragen?geraet=iphone&anliegen=display", label: "Anfragen" }}
+			secondary={{ href: "/iphone#display", label: "Mehr erfahren" }}
+		/>
+		<Tile
+			half
+			dark
+			photo="rueckglas"
+			title="Rückglas."
+			sub="Die Rückseite, wieder aus einem Guss."
+			primary={{ href: "/reparatur-anfragen?geraet=iphone&anliegen=rueckglas", label: "Anfragen" }}
+			secondary={{ href: "/iphone#rueckglas", label: "Mehr erfahren" }}
+		/>
+		<Tile
+			half
+			dark
+			photo="akku"
+			title="Akku."
+			sub="Wieder 100 % Batteriezustand."
+			primary={{ href: "/reparatur-anfragen?geraet=iphone&anliegen=akku", label: "Anfragen" }}
+			secondary={{ href: "/iphone#akku", label: "Mehr erfahren" }}
+		/>
+		<Tile
+			half
+			photo="daten"
+			title="Datenrettung."
+			sub="Fotos, Nachrichten, Dateien. Zurückgeholt."
+			primary={{ href: "/reparatur-anfragen?anliegen=datenrettung", label: "Anfragen" }}
+			secondary={{ href: "/datenrettung", label: "Mehr erfahren" }}
+		/>
+		<Tile
+			half
+			photo="ipad"
+			title="iPad."
+			sub="Glas, Display und Akku. Wie neu."
+			primary={{ href: "/reparatur-anfragen?geraet=ipad", label: "Anfragen" }}
+			secondary={{ href: "/ipad", label: "Mehr erfahren" }}
+		/>
+		<Tile
+			half
+			dark
+			photo="mac-hero"
+			title="Mac."
+			sub="MacBook Air, MacBook Pro und iMac."
+			primary={{ href: "/reparatur-anfragen?geraet=mac", label: "Anfragen" }}
+			secondary={{ href: "/mac", label: "Mehr erfahren" }}
+		/>
+	</div>
+
+	<PlusCards id="warum" title="Warum Apfelreparatur." link={{ href: "/#garantie", label: "Garantie und Bedingungen ›" }} cards={whyCards} />
+
+	<Steps id="ablauf" title="So einfach geht’s." items={steps} />
+
+	<section class="workshop on-dark" id="garantie">
+		<div class="wrap workshop__copy" data-reveal>
+			<p class="t-eyebrow muted">Unsere Arbeitsweise</p>
+			<h2 class="t-display sd-text">Präzision in jedem Detail.</h2>
+			<p class="t-lead workshop__lead">
+				Jede Reparatur beginnt mit einer gründlichen Diagnose. Wir tauschen nur, was wirklich defekt ist, testen jede Funktion vor der Übergabe
+				und geben {business.warrantyMonths} Monate Garantie auf Teile und Arbeit.<a class="fn" href="#fn-3">3</a>
+			</p>
+		</div>
+		<figure class="workshop__img sd-grow">
+			<img
+				src="/img/schraube-1600.webp"
+				srcset="/img/schraube-800.webp 800w, /img/schraube-1600.webp 1600w, /img/schraube-2400.webp 2400w"
+				sizes="(max-width: 1100px) 100vw, 1100px"
+				width="2400"
+				height="1600"
+				alt="Präzisionsschraubendreher an einem geöffneten Smartphone"
+				loading="lazy"
+				decoding="async"
+			/>
+		</figure>
+	</section>
+
+	<FAQ title="Häufige Fragen." items={homeFaq} />
+
+	<Closing />
+</Base>
+
+<style>
+	.chapters {
+		background: var(--paper);
+		border-bottom: 1px solid #e8e8ed;
+	}
+
+	.chapters ul {
+		display: flex;
+		justify-content: center;
+		gap: clamp(8px, 3vw, 36px);
+		list-style: none;
+		margin: 0 auto;
+		padding: 18px 16px 14px;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	.chapters a {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6px;
+		min-width: 84px;
+		color: var(--ink);
+		font-size: 14px;
+		letter-spacing: -0.01em;
+	}
+
+	.chapters a:hover {
+		color: var(--link);
+		text-decoration: none;
+	}
+
+	.chapters svg {
+		width: 40px;
+		height: 40px;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+		padding: 12px;
+	}
+
+	@media (max-width: 734px) {
+		.grid {
+			grid-template-columns: 1fr;
+			padding: 12px 0;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.chapters ul {
+			justify-content: flex-start;
+			-webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+			mask-image: linear-gradient(90deg, #000 85%, transparent);
+		}
+	}
+
+	.workshop {
+		padding-top: clamp(88px, 12vw, 160px);
+		overflow: hidden;
+		text-align: center;
+	}
+
+	.workshop__copy {
+		max-width: 820px;
+	}
+
+	.workshop__lead {
+		margin: 24px auto 0;
+		max-width: 640px;
+		color: var(--faint);
+	}
+
+	.workshop__lead :global(.fn) {
+		color: var(--faint);
+	}
+
+	.workshop__img {
+		width: min(1100px, 100%);
+		margin: clamp(48px, 7vw, 80px) auto 0;
+	}
+
+	.workshop__img img {
+		width: 100%;
+		border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+	}
+</style>
