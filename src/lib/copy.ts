@@ -7,7 +7,6 @@ import type { PhotoKey } from "./photos";
 export const whyCards: PlusCard[] = [
 	{
 		icon: "ph:seal-check",
-		color: "#8a5cf5",
 		pre: "Repariert mit",
 		hl: "Original Apple Teilen.",
 		detailTitle: "Original Apple Teile. Keine Kompromisse.",
@@ -18,7 +17,6 @@ export const whyCards: PlusCard[] = [
 	},
 	{
 		icon: "ph:receipt",
-		color: "#f56300",
 		pre: "Ein",
 		hl: "fixer Preis",
 		post: "vor jeder Reparatur.",
@@ -30,7 +28,6 @@ export const whyCards: PlusCard[] = [
 	},
 	{
 		icon: "ph:shield-check",
-		color: "#0a9fb5",
 		hl: `${business.warrantyMonths} Monate Garantie`,
 		post: "auf Teile und Arbeit.",
 		detailTitle: "Garantie, auf die Sie sich verlassen können.",
@@ -44,7 +41,6 @@ export const whyCards: PlusCard[] = [
 export const dataCards: PlusCard[] = [
 	{
 		icon: "ph:lock-simple",
-		color: "#8a5cf5",
 		pre: "Ihre Daten bleiben",
 		hl: "privat.",
 		detailTitle: "Diskretion ist Teil der Reparatur.",
@@ -55,7 +51,6 @@ export const dataCards: PlusCard[] = [
 	},
 	{
 		icon: "ph:cpu",
-		color: "#f56300",
 		pre: "Diagnose auf",
 		hl: "jedem Detail.",
 		detailTitle: "Wir finden den Fehler. Nicht nur das Symptom.",
@@ -65,7 +60,6 @@ export const dataCards: PlusCard[] = [
 	},
 	{
 		icon: "ph:arrows-left-right",
-		color: "#0a9fb5",
 		pre: "Vom alten aufs neue Gerät.",
 		hl: "Vollständig.",
 		detailTitle: "Alles da. Vom ersten Moment an.",

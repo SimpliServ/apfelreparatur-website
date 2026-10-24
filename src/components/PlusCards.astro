@@ -3,7 +3,6 @@ import { Icon } from "astro-iconset/components";
 
 export type PlusCard = {
 	icon: string;
-	color: string;
 	pre?: string;
 	hl: string;
 	post?: string;
@@ -30,8 +29,8 @@ const { id, title, link, cards, gray = true } = Astro.props;
 		<ul class="pc__grid" role="list">
 			{
 				cards.map((c, i) => (
-					<li class="pc__card" style={`--c:${c.color};--i:${i}`} data-reveal>
-						<Icon name={c.icon} class="pc__icon" aria-hidden="true" />
+					<li class="pc__card" style={`--i:${i}`} data-reveal>
+						<span class="pc__badge"><Icon name={c.icon} aria-hidden="true" /></span>
 						<p class="pc__text">
 							{c.pre && <>{c.pre} </>}
 							<span class="pc__hl">{c.hl}</span>
@@ -46,7 +45,7 @@ const { id, title, link, cards, gray = true } = Astro.props;
 								<button type="button" class="pc__close" data-close aria-label="Schließen">
 									<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="18" /><path d="M12.5 12.5l11 11M23.5 12.5l-11 11" /></svg>
 								</button>
-								<Icon name={c.icon} class="pc__icon" aria-hidden="true" />
+								<span class="pc__badge"><Icon name={c.icon} aria-hidden="true" /></span>
 								<h3 id={`${id}-d${i}-h`} class="t-section pc__modal-title">{c.detailTitle}</h3>
 								{c.detail.map((p) => <p class="t-lead">{p}</p>)}
 							</div>
@@ -108,11 +107,25 @@ const { id, title, link, cards, gray = true } = Astro.props;
 		background: var(--gray);
 	}
 
-	.pc__icon {
-		width: 40px;
-		height: 40px;
-		color: var(--c, var(--ink));
-		margin-bottom: 26px;
+	.pc__badge {
+		display: grid;
+		place-items: center;
+		width: 56px;
+		height: 56px;
+		margin-bottom: 28px;
+		border-radius: 16px;
+		background: var(--accent-soft);
+		color: var(--accent);
+		transition: transform 0.6s var(--ease-out);
+	}
+
+	.pc__badge svg {
+		width: 30px;
+		height: 30px;
+	}
+
+	.pc__card:hover .pc__badge {
+		transform: scale(1.06);
 	}
 
 	.pc__text {
@@ -120,11 +133,11 @@ const { id, title, link, cards, gray = true } = Astro.props;
 		line-height: 1.14286;
 		font-weight: 600;
 		letter-spacing: 0.007em;
-		max-width: 15ch;
+		max-width: 16ch;
 	}
 
 	.pc__hl {
-		color: var(--c);
+		color: var(--accent);
 	}
 
 	.pc__plus,
@@ -153,8 +166,8 @@ const { id, title, link, cards, gray = true } = Astro.props;
 		transition: fill 0.2s var(--ease);
 	}
 
-	.pc__plus:hover circle {
-		fill: #000;
+	.pc__card:hover .pc__plus circle {
+		fill: var(--accent);
 	}
 
 	.pc__plus svg {
@@ -227,7 +240,6 @@ const { id, title, link, cards, gray = true } = Astro.props;
 	.pc__modal-title {
 		max-width: 18ch;
 		margin-bottom: 28px;
-		color: var(--c);
 	}
 
 	.pc__modal .t-lead {
