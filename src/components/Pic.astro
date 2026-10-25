@@ -10,11 +10,13 @@ interface Props {
 }
 const { name, alt, sizes = "100vw", class: cls, eager = false } = Astro.props;
 const p = photos[name];
+const q = "v" in p ? `?v=${p.v}` : "";
+const src = (w: number) => `/img/${name}-${w}.webp${q}`;
 ---
 
 <img
-	src={`/img/${name}-1600.webp`}
-	srcset={`/img/${name}-800.webp 800w, /img/${name}-1200.webp 1200w, /img/${name}-1600.webp 1600w, /img/${name}-2400.webp 2400w`}
+	src={src(1600)}
+	srcset={`${src(800)} 800w, ${src(1200)} 1200w, ${src(1600)} 1600w, ${src(2400)} 2400w`}
 	sizes={sizes}
 	width={p.w}
 	height={p.h}

@@ -19,7 +19,7 @@ export function localBusinessLd(locations: Location[] = []): object[] {
 			name: `${business.brand} ${l.name}`,
 			description: `iPhone, iPad und Mac Reparatur ohne Termin: ${l.venue}.`,
 			url: `${SITE}/kontakt`,
-			image: `${SITE}/img/hero-1600.webp`,
+			image: `${SITE}/img/hero-1600.webp?v=2`,
 			email: business.email,
 			telephone: l.phone,
 			parentOrganization: { "@id": `${SITE}/#business` },
