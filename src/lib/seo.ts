@@ -44,7 +44,7 @@ export function organizationLd() {
 		name: business.brand,
 		url: SITE,
 		logo: `${SITE}/icon-512.png`,
-		image: `${SITE}/og/default.jpg?v=4`,
+		image: `${SITE}/og/default.jpg?v=5`,
 		description: "Unabhängiger Reparaturbetrieb für iPhone, iPad und Mac in Wien, mit Original Apple Teilen, Datenrettung und Datenübertragung.",
 		email: business.email,
 		telephone: intl(business.hotline),
