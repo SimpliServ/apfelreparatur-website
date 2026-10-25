@@ -6,7 +6,7 @@ import Pic from "./Pic.astro";
 import PlusCards from "./PlusCards.astro";
 import FAQ from "./FAQ.astro";
 import Closing from "./Closing.astro";
-import { devices, services, type DeviceKey, type ServiceKey } from "../lib/content";
+import { de, devices, services, type DeviceKey, type ServiceKey } from "../lib/content";
 import { deviceFaq, repairPhoto, whyCards } from "../lib/copy";
 import { breadcrumbLd, faqLd, localBusinessLd, serviceLd } from "../lib/seo";
 import { getModels } from "../lib/mobinil";
@@ -62,7 +62,7 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 		</figure>
 	</header>
 
-	<PlusCards id="warum" title={`Ihr ${d.name}. In besten Händen.`} cards={whyCards} />
+	<PlusCards id="warum" title={`${de(d.name).ihr} ${d.name}. In besten Händen.`} cards={whyCards} />
 
 	{
 		d.repairs.map((r, i) => (
@@ -117,7 +117,7 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 
 	<FAQ title={`Fragen zur ${dn} Reparatur.`} items={faq} />
 
-	<Closing title={`Ihr ${d.name}. Bald wieder wie neu.`} href={`/reparatur-anfragen?geraet=${d.key}`} />
+	<Closing title={`${de(d.name).ihr} ${d.name}. Bald wieder wie neu.`} href={`/reparatur-anfragen?geraet=${d.key}`} />
 </Base>
 
 <style>

@@ -6,7 +6,7 @@ import Pic from "../../components/Pic.astro";
 import Steps from "../../components/Steps.astro";
 import FAQ from "../../components/FAQ.astro";
 import Closing from "../../components/Closing.astro";
-import { devices } from "../../lib/content";
+import { de, devices } from "../../lib/content";
 import { repairPhoto } from "../../lib/copy";
 import { findRepairPage, repairPages } from "../../lib/repair-pages";
 import { getModels } from "../../lib/mobinil";
@@ -130,7 +130,7 @@ const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
 		)
 	}
 
-	<Closing title={`Ihr ${dn}. Bald wieder wie neu.`} href={anfrage} />
+	<Closing title={`${de(dn).ihr} ${dn}. Bald wieder wie neu.`} href={anfrage} />
 </Base>
 
 <style>

@@ -14,12 +14,14 @@ const deviceOptions = [
 	["iphone", "iPhone", "ph:device-mobile"],
 	["ipad", "iPad", "ph:device-tablet"],
 	["mac", "Mac", "ph:laptop"],
+	["apple-watch", "Apple Watch", "ph:watch"],
 	["andere", "Anderes", "ph:devices"],
 ] as const;
 const issueOptions: Record<string, string[]> = {
 	iphone: ["display", "rueckglas", "akku", "kamera", "ladebuchse", "datenrettung", "datenuebertragung", "sonstiges"],
 	ipad: ["display", "akku", "ladebuchse", "datenrettung", "datenuebertragung", "sonstiges"],
 	mac: ["display", "akku", "tastatur", "datenrettung", "datenuebertragung", "sonstiges"],
+	"apple-watch": ["display", "akku", "sonstiges"],
 	andere: ["display", "akku", "datenrettung", "datenuebertragung", "sonstiges"],
 };
 const allIssues = Object.keys(inquiry.issues);

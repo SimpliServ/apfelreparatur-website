@@ -1,7 +1,7 @@
 import type { PlusCard } from "../components/PlusCards.astro";
 import type { QA } from "../components/FAQ.astro";
 import { business } from "./business";
-import type { Device, DeviceKey, ServiceKey } from "./content";
+import { de, type Device, type DeviceKey, type ServiceKey } from "./content";
 import type { PhotoKey } from "./photos";
 
 export const whyCards: PlusCard[] = [
@@ -98,6 +98,7 @@ const photoFor: Partial<Record<ServiceKey, PhotoKey>> = {
 
 export function repairPhoto(device: DeviceKey, service: ServiceKey): PhotoKey {
 	if (device === "ipad" && service === "display") return "ipad";
+	if (device === "apple-watch") return service === "akku" ? "watch-akku" : "watch-display";
 	if (device === "mac" && service === "display") return "mac-hero";
 	if (device === "mac" && service === "akku") return "werkstatt";
 	return photoFor[service] ?? "werkstatt";
@@ -105,12 +106,13 @@ export function repairPhoto(device: DeviceKey, service: ServiceKey): PhotoKey {
 
 export function deviceFaq(d: Device): QA[] {
 	const n = d.name;
+	const g = de(n);
 	return [
-		{ q: `Wo lasse ich mein ${n} in Wien reparieren?`, a: `An unseren Standorten in Wien und Umgebung, unter anderem am Wiener Hauptbahnhof. Kommen Sie ohne Termin vorbei oder stellen Sie vorab online eine Anfrage. Sie bringen Ihr ${n} vorbei und holen es repariert wieder ab.` },
+		{ q: `Wo lasse ich ${g.mein} ${n} in Wien reparieren?`, a: `An unseren Standorten in Wien und Umgebung, unter anderem am Wiener Hauptbahnhof. Kommen Sie ohne Termin vorbei oder stellen Sie vorab online eine Anfrage. Sie bringen ${g.ihr} ${n} vorbei und holen ${g.es} repariert wieder ab.` },
 		{ q: `Was kostet eine ${n} Reparatur?`, a: `Der Preis hängt von Modell und Schaden ab. Den Preis nennen wir Ihnen vor der Reparatur. Repariert wird erst nach Ihrer Zustimmung.` },
 		{ q: `Wie lange dauert die Reparatur?`, a: `Ist das Teil lagernd, ist ein Display- oder Akkutausch oft in rund einer Stunde erledigt. Bei aufwendigeren Reparaturen nennen wir Ihnen die Dauer mit dem Kostenvoranschlag.` },
 		{ q: `Werden Original Apple Teile verbaut?`, a: `Ja, sofern Apple das Teil für Ihr Modell bereitstellt. Ansonsten besprechen wir die Alternative vorab mit Ihnen.` },
-		{ q: `Bleiben meine Daten erhalten?`, a: `Bei Hardware-Reparaturen wie Display oder Akku bleiben Ihre Daten auf dem ${n}. Ein aktuelles Backup empfehlen wir trotzdem.` },
+		{ q: `Bleiben meine Daten erhalten?`, a: `Bei Hardware-Reparaturen wie Display oder Akku bleiben Ihre Daten auf ${g.dem} ${n}. Ein aktuelles Backup empfehlen wir trotzdem.` },
 		{ q: `Welche Garantie bekomme ich?`, a: `${business.warrantyMonths} Monate auf getauschte Teile und unsere Arbeit. Ihre gesetzlichen Gewährleistungsrechte bleiben bestehen.` },
 	];
 }

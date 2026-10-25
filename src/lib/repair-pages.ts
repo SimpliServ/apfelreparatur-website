@@ -2,7 +2,7 @@
 // Claims follow AGENTS.md: no prices, no fixed durations, no board-level work.
 import type { QA } from "../components/FAQ.astro";
 import { business } from "./business";
-import { devices, type DeviceKey, type ServiceKey } from "./content";
+import { de, devices, type DeviceKey, type ServiceKey } from "./content";
 
 type Copy = {
 	slug: string;
@@ -22,13 +22,13 @@ const termin = (n: string, label: string): QA => ({
 	q: `Brauche ich für die ${n} ${label} einen Termin?`,
 	a: "Nein. Kommen Sie ohne Termin an einen unserer Standorte in Wien und Umgebung, zum Beispiel am Wiener Hauptbahnhof. Vorab können Sie online eine Anfrage stellen.",
 });
-// iPad parts are not advertised as Original Apple (see content.ts), so copy only claims them for iPhone and Mac.
-const original = (n: string) => (n === "iPad" ? "" : ", mit Original Apple Teilen");
+// iPad and Apple Watch parts are not advertised as Original Apple (see content.ts), so copy only claims them for iPhone and Mac.
+const original = (n: string) => (n === "iPad" || n === "Apple Watch" ? "" : ", mit Original Apple Teilen");
 
 const common = (n: string, work: string) =>
 	[
 		step("Vorbeikommen.", "Ohne Termin an einen unserer Standorte in Wien und Umgebung, oder vorab online anfragen.", 0),
-		step("Diagnose und Preis.", `Wir prüfen Ihr ${n} und nennen Ihnen den Preis. Repariert wird erst nach Ihrer Zustimmung.`, 1),
+		step("Diagnose und Preis.", `Wir prüfen ${de(n).ihr} ${n} und nennen Ihnen den Preis. Repariert wird erst nach Ihrer Zustimmung.`, 1),
 		step("Reparatur.", work, 2),
 		step("Test und Übergabe.", `Wir testen jede Funktion. Auf Teil und Arbeit gibt es ${business.warrantyMonths} Monate Garantie.`, 3),
 	];
@@ -39,18 +39,18 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		label: "Display Reparatur",
 		title: (n) => `${n} Display Reparatur Wien: Display tauschen`,
 		desc: (n) => `${n} Display tauschen in Wien: Glas gesprungen, Streifen oder ${n === "MacBook" ? "Flecken im Bild" : "Touch defekt"}? Wir ersetzen das Display${original(n)}. Ohne Termin, Preis vorab.`,
-		sub: (n) => `Gesprungenes Glas, Streifen oder schwarzes Bild? Wir tauschen das Display Ihres ${n}${original(n)}.`,
+		sub: (n) => `Gesprungenes Glas, Streifen oder schwarzes Bild? Wir tauschen das Display ${de(n).ihres} ${n}${original(n)}.`,
 		signs: [
 			{ icon: "ph:device-mobile", title: "Glas gesprungen", text: "Risse oder Splitter im Displayglas." },
 			{ icon: "ph:warning-circle", title: "Streifen oder Flecken", text: "Linien, dunkle Stellen oder flackerndes Bild." },
 			{ icon: "ph:fingerprint", title: "Touch reagiert nicht", text: "Eingaben werden nicht oder falsch erkannt.", skip: "MacBook" },
-			{ icon: "ph:laptop", title: "Druckstellen am Display", text: "Abdrücke der Tastatur oder helle Flecken im Bild.", skip: "iPhone iPad" },
+			{ icon: "ph:laptop", title: "Druckstellen am Display", text: "Abdrücke der Tastatur oder helle Flecken im Bild.", skip: "iPhone iPad Apple Watch" },
 			{ icon: "ph:x", title: "Schwarzes Bild", text: "Das Gerät läuft, aber das Display bleibt dunkel." },
 		],
 		steps: (n) => common(n, "Wir tauschen das Displaymodul, setzen es staubfrei ein und prüfen Helligkeit, Farben und Touch."),
 		faq: (n) => [
 			{ q: `Was kostet eine ${n} Display Reparatur in Wien?`, a: `Das hängt vom Modell ab. Den genauen Preis nennen wir Ihnen vor der Reparatur, repariert wird erst nach Ihrer Zustimmung.` },
-			{ q: `Wie lange dauert der Displaytausch beim ${n}?`, a: "Ist das Display lagernd, ist der Tausch oft in rund einer Stunde erledigt. Sonst nennen wir Ihnen die Dauer vorab." },
+			{ q: `Wie lange dauert der Displaytausch ${de(n).beim} ${n}?`, a: "Ist das Display lagernd, ist der Tausch oft in rund einer Stunde erledigt. Sonst nennen wir Ihnen die Dauer vorab." },
 			{ q: "Bleiben meine Daten beim Displaytausch erhalten?", a: "Ja, beim Displaytausch bleiben Ihre Daten auf dem Gerät. Ein aktuelles Backup empfehlen wir trotzdem." },
 			{ q: "Verwenden Sie ein Original Apple Display?", a: "Ja, sofern Apple das Display für Ihr Modell bereitstellt. Sonst besprechen wir die Alternative vorher mit Ihnen." },
 			n === "iPhone"
@@ -65,7 +65,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		label: "Akku tauschen",
 		title: (n) => `${n} Akku tauschen in Wien: Akkutausch`,
 		desc: (n) => `${n} Akku tauschen in Wien: kurze Laufzeit, plötzliches Ausschalten oder „Service“-Meldung? Neuer Akku${original(n)}. Ohne Termin, Preis vorab.`,
-		sub: (n) => (n === "iPad" ? `Hält der Akku Ihres iPad nicht mehr durch? Wir tauschen ihn gegen einen neuen Akku mit voller Kapazität.` : `Hält der Akku Ihres ${n} nicht mehr durch? Wir tauschen ihn, mit Original Apple Teilen, wo Apple sie bereitstellt.`),
+		sub: (n) => (n === "iPad" || n === "Apple Watch" ? `Hält der Akku ${de(n).ihres} ${n} nicht mehr durch? Wir tauschen ihn gegen einen neuen Akku mit voller Kapazität.` : `Hält der Akku Ihres ${n} nicht mehr durch? Wir tauschen ihn, mit Original Apple Teilen, wo Apple sie bereitstellt.`),
 		signs: [
 			{ icon: "ph:battery-full", title: "Kurze Laufzeit", text: "Der Akku hält keinen Tag mehr durch." },
 			{ icon: "ph:warning-circle", title: "„Service“ empfohlen", text: "Das System meldet einen verschlissenen Akku." },
@@ -76,7 +76,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		faq: (n) => [
 			{ q: `Was kostet ein ${n} Akkutausch in Wien?`, a: "Das hängt vom Modell ab. Den genauen Preis nennen wir Ihnen vor dem Tausch." },
 			{ q: "Wann sollte ich den Akku tauschen?", a: "Wenn die maximale Kapazität deutlich gesunken ist, das System einen Service empfiehlt oder das Gerät unerwartet ausgeht." },
-			{ q: `Wie lange dauert ein Akkutausch beim ${n}?`, a: "Ist der Akku lagernd, oft rund eine Stunde. Sonst nennen wir Ihnen die Dauer vorab." },
+			{ q: `Wie lange dauert ein Akkutausch ${de(n).beim} ${n}?`, a: "Ist der Akku lagernd, oft rund eine Stunde. Sonst nennen wir Ihnen die Dauer vorab." },
 			...(n === "iPhone"
 				? [{ q: "Wo sehe ich den Batteriezustand meines iPhone?", a: "Unter Einstellungen › Batterie › Batteriezustand. Liegt die maximale Kapazität deutlich unter 80 % oder empfiehlt iOS einen Service, lohnt sich ein neuer Akku." }]
 				: n === "MacBook"

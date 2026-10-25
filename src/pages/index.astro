@@ -27,6 +27,7 @@ const chapters = [
 	["/iphone", "ph:device-mobile", "iPhone"],
 	["/ipad", "ph:device-tablet", "iPad"],
 	["/mac", "ph:laptop", "Mac"],
+	["/apple-watch", "ph:watch", "Watch"],
 	["/datenrettung", "ph:database", "Datenrettung"],
 	["/datenrettung#uebertragung", "ph:arrows-left-right", "Datenübertragung"],
 	["/reparatur-anfragen", "ph:wrench", "Anfragen"],
@@ -114,6 +115,15 @@ const chapters = [
 			secondary={{ href: "/mac", label: "Mehr erfahren" }}
 		/>
 	</div>
+
+	<Tile
+		photo="watch"
+		eyebrow="Apple Watch Reparatur"
+		title="Apple Watch."
+		sub="Display und Akku. Wieder bereit für jeden Tag."
+		primary={{ href: "/reparatur-anfragen?geraet=apple-watch", label: "Anfragen" }}
+		secondary={{ href: "/apple-watch", label: "Mehr erfahren" }}
+	/>
 
 	<PlusCards id="warum" title="Warum Apfelreparatur." link={{ href: "/#garantie", label: "Garantie und Bedingungen ›" }} cards={whyCards} />
 

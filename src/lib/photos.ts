@@ -1,5 +1,5 @@
 // Pexels photos (free licence, credited in the Impressum). Sizes are the 2400w export.
-// retouched: hero/display/rueckglas/mac-hero moved onto --gray with AI editing (rueckglas cracks added). ai: fully generated.
+// retouched: hero/display/rueckglas/mac-hero/watch* moved onto --gray with AI editing (rueckglas/watch-display cracks added, watch-akku restaged on a charger). ai: fully generated.
 // v: bump when a photo's files change (URLs keep their name, assets are cached 30 days).
 // seamless: background is exactly --gray, so tiles show the whole shot without a fade.
 export const photos = {
@@ -8,6 +8,9 @@ export const photos = {
 	ipad: { w: 2400, h: 1600, alt: "Hand mit Eingabestift an einem Tablet auf einem weißen Schreibtisch", by: "cottonbro studio", id: 3944397 },
 	mac: { w: 2400, h: 1350, alt: "Geöffneter Laptop mit sichtbarer Platine auf einer Werkstattmatte", by: "Found GHI", id: 34514242 },
 	"mac-hero": { w: 2400, h: 1530, alt: "MacBook Air in der Frontansicht auf hellem Hintergrund", by: "Tuur Tisseghem", id: 812264, retouched: true, seamless: true, v: 2 },
+	watch: { w: 2400, h: 1530, alt: "Apple Watch mit schwarzem Sportarmband auf hellem Hintergrund", by: "Torsten Dettlaff", id: 437037, retouched: true, seamless: true },
+	"watch-display": { w: 2400, h: 1530, alt: "Apple Watch mit gesprungenem Display auf hellem Hintergrund", by: "Torsten Dettlaff", id: 437037, retouched: true, seamless: true },
+	"watch-akku": { w: 2400, h: 1530, alt: "Apple Watch auf einem Ladepuck mit Ladeanzeige", by: "Torsten Dettlaff", id: 437037, retouched: true, seamless: true },
 	display: { w: 2400, h: 1530, alt: "iPhone mit gesprungenem Display auf hellem Hintergrund", by: "ClickerHappy", id: 1388947, retouched: true, seamless: true, v: 2 },
 	rueckglas: { w: 2400, h: 1530, alt: "iPhone mit gesprungenem Rückglas auf hellem Hintergrund", by: "Tuur Tisseghem", id: 818043, retouched: true, seamless: true, v: 2 },
 	akku: { w: 2400, h: 1530, alt: "Geöffnetes Smartphone mit sichtbarem Akku und Schraubendreher", by: "KI-generiert", id: "ki-akku", ai: true, seamless: true, v: 2 },

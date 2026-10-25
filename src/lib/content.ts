@@ -1,4 +1,4 @@
-export type DeviceKey = "iphone" | "ipad" | "mac";
+export type DeviceKey = "iphone" | "ipad" | "mac" | "apple-watch";
 export type ServiceKey = "display" | "rueckglas" | "akku" | "datenrettung" | "datenuebertragung" | "kamera" | "ladebuchse" | "tastatur" | "sonstiges";
 
 export const services: Record<ServiceKey, { label: string; short: string; icon: string }> = {
@@ -12,6 +12,12 @@ export const services: Record<ServiceKey, { label: string; short: string; icon: 
 	tastatur: { label: "Tastatur & Trackpad", short: "Klemmende Tasten, Trackpad ohne Klick.", icon: "ph:laptop" },
 	sonstiges: { label: "Etwas anderes", short: "Beschreiben Sie einfach, was nicht stimmt.", icon: "ph:wrench" },
 };
+
+// Apple Watch is feminine ("Ihre Apple Watch"), the other devices neuter.
+export const de = (n: string) =>
+	n === "Apple Watch"
+		? { ihr: "Ihre", ihres: "Ihrer", mein: "meine", dem: "der", beim: "bei der", es: "sie" }
+		: { ihr: "Ihr", ihres: "Ihres", mein: "mein", dem: "dem", beim: "beim", es: "es" };
 
 type Repair = { key: ServiceKey; title: string; text: string; points: string[] };
 
@@ -74,6 +80,20 @@ export const devices: Record<DeviceKey, Device> = {
 			{ key: "akku", title: "Akku. Wieder unterwegs.", text: "Meldet macOS „Service empfohlen“, ist es Zeit. Ein neuer Akku bringt Laufzeit und Ruhe zurück.", points: ["Original Apple Akku", "Zustand danach wieder „Normal“", "Fachgerechtes Recycling"] },
 			{ key: "tastatur", title: "Tastatur und Trackpad. Wieder präzise.", text: "Klemmende Tasten, Flüssigkeitsschaden oder ein Trackpad ohne Klick. Wir reinigen, reparieren oder tauschen.", points: ["Einzelne Tasten oder ganze Tastatur", "Flüssigkeitsschäden", "Trackpad-Klick und Gesten geprüft"] },
 			{ key: "datenrettung", title: "SSD und Daten. Nichts geht verloren.", text: "Startet Ihr Mac nicht mehr, holen wir Ihre Dateien, wenn es technisch möglich ist, und übertragen sie auf Wunsch auf ein neues Gerät.", points: ["Diagnose vor jeder Arbeit", "Vertraulicher Umgang mit Ihren Daten", "Übergabe auf Datenträger oder neuen Mac"] },
+		],
+	},
+	"apple-watch": {
+		key: "apple-watch",
+		name: "Apple Watch",
+		headline: "Apple Watch Reparatur.",
+		sub: "Display und Akku. Mit der Sorgfalt, die eine Apple Watch verdient.",
+		tile: "Gesprungenes Display oder schwacher Akku. Wieder bereit für jeden Tag.",
+		image: "watch",
+		imageAlt: "Apple Watch mit schwarzem Sportarmband auf hellem Hintergrund",
+		models: ["Apple Watch Ultra 3", "Apple Watch Ultra 2", "Apple Watch Ultra", "Apple Watch Series 11", "Apple Watch Series 10", "Apple Watch Series 9", "Apple Watch Series 8", "Apple Watch Series 7", "Apple Watch SE (3. Generation)", "Apple Watch SE (2. Generation)", "Apple Watch SE", "Apple Watch Series 6", "Apple Watch Series 5", "Apple Watch Series 4", "Ältere Apple Watch"],
+		repairs: [
+			{ key: "display", title: "Display. Wieder klar.", text: "Ein Sprung im Glas oder ein Touchscreen, der nicht mehr reagiert: Wir tauschen das Display und verkleben die Uhr wieder sorgfältig.", points: ["Neu verklebt und verschlossen", "Touch und Helligkeit getestet", "Ihre Daten bleiben erhalten"] },
+			{ key: "akku", title: "Akku. Wieder durch den Tag.", text: "Hält Ihre Apple Watch nicht mehr bis zum Abend durch? Ein neuer Akku bringt die Laufzeit zurück.", points: ["Hochwertiger Akku mit voller Kapazität", "Kabelloses Laden geprüft", "Alter Akku wird fachgerecht recycelt"] },
 		],
 	},
 };

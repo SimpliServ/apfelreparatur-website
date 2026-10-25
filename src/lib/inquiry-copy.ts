@@ -8,7 +8,7 @@ export const inquiry = {
 		SPAM: "Anfrage abgelehnt.",
 		UNAVAILABLE: "Die Anfrage konnte gerade nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie uns eine E-Mail.",
 	} as Record<string, string>,
-	devices: { iphone: "iPhone", ipad: "iPad", mac: "Mac", andere: "Anderes Gerät" } as Record<string, string>,
+	devices: { iphone: "iPhone", ipad: "iPad", mac: "Mac", "apple-watch": "Apple Watch", andere: "Anderes Gerät" } as Record<string, string>,
 	issues: {
 		display: "Display",
 		rueckglas: "Rückglas",
