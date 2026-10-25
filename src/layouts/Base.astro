@@ -27,7 +27,7 @@ const siteTitle = settings.data?.title?.trim() || business.brand;
 const fullTitle = title ? (title.includes(siteTitle) ? title : `${title} – ${siteTitle}`) : siteTitle;
 const origin = (Astro.site?.origin ?? Astro.url.origin).replace(/\/$/, "");
 // ?v busts cached link previews after `npm run og`.
-const ogImage = image ?? `${origin}/og/${og}.jpg?v=3`;
+const ogImage = image ?? `${origin}/og/${og}.jpg?v=4`;
 const canonicalUrl = canonical ?? `${origin}${Astro.url.pathname}`;
 const indexable = !robots?.includes("noindex");
 const pageCtx = createPublicPageContext({
