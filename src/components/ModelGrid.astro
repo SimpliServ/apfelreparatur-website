@@ -9,14 +9,16 @@ interface Props {
 	grouped?: boolean;
 	/** Model search above the grid. */
 	search?: string;
+	/** Show only this many rows until "Alle anzeigen" (needs JS; without it everything stays visible). */
+	rows?: number;
 }
-const { models, grouped = false, search } = Astro.props;
+const { models, grouped = false, search, rows } = Astro.props;
 const series = grouped ? bySeries(models).map((g) => g.name) : [];
 const price = (m: Model) => fromPrice(m, "display") ?? fromPrice(m, "akku");
 const what = (m: Model) => (fromPrice(m, "display") !== null ? "Display ab" : "Batterie ab");
 ---
 
-<div class="mgrid" data-mgrid>
+<div class="mgrid" data-mgrid data-rows={rows}>
 	{
 		search && (
 			<label class="mgrid__search">
@@ -55,6 +57,15 @@ const what = (m: Model) => (fromPrice(m, "display") !== null ? "Display ab" : "B
 			))
 		}
 	</ul>
+	{
+		rows && (
+			<div class="mgrid__more" hidden data-mgrid-more>
+				<button type="button" class="btn btn--ghost" aria-expanded="false" data-mgrid-toggle>
+					Alle {models.length} Modelle anzeigen
+				</button>
+			</div>
+		)
+	}
 	{search && <p class="mgrid__empty muted" hidden data-mgrid-empty>Kein Modell gefunden. Fragen Sie uns einfach, wir reparieren auch ältere Geräte.</p>}
 </div>
 
@@ -63,17 +74,47 @@ const what = (m: Model) => (fromPrice(m, "display") !== null ? "Display ab" : "B
 		const q = root.querySelector<HTMLInputElement>("[data-mgrid-q]");
 		const pills = root.querySelector<HTMLElement>("[data-mgrid-pills]");
 		const empty = root.querySelector<HTMLElement>("[data-mgrid-empty]");
+		const list = root.querySelector<HTMLElement>(".mgrid__list")!;
+		const more = root.querySelector<HTMLElement>("[data-mgrid-more]");
+		const toggle = root.querySelector<HTMLButtonElement>("[data-mgrid-toggle]");
+		const rows = Number(root.dataset.rows) || 0;
+		const label = toggle?.textContent?.trim() ?? "";
 		let series = "";
+		let open = false;
 		const apply = () => {
 			const words = (q?.value ?? "").toLowerCase().split(/\s+/).filter(Boolean);
-			let any = false;
+			// A search or series filter always shows every match; only the unfiltered list is cut to `rows` rows.
+			const filtered = !!series || words.length > 0;
+			const cols = getComputedStyle(list).gridTemplateColumns.split(" ").filter(Boolean).length || 1;
+			const limit = rows && !open && !filtered ? rows * cols : Infinity;
+			let shown = 0;
 			for (const li of root.querySelectorAll<HTMLElement>("[data-mgrid-item]")) {
 				const hit = (!series || li.dataset.series === series) && words.every((w) => (li.dataset.q ?? "").includes(w));
-				li.hidden = !hit;
-				any ||= hit;
+				li.hidden = !hit || shown >= limit;
+				if (hit) shown++;
 			}
-			if (empty) empty.hidden = any;
+			if (empty) empty.hidden = shown > 0;
+			if (more && toggle) {
+				more.hidden = filtered || (!open && shown <= limit);
+				toggle.textContent = open ? "Weniger anzeigen" : label;
+				toggle.setAttribute("aria-expanded", String(open));
+			}
 		};
+		toggle?.addEventListener("click", () => {
+			open = !open;
+			if (!open) root.scrollIntoView({ block: "start", behavior: "smooth" });
+			apply();
+		});
+		if (rows) {
+			let width = 0;
+			// Only width changes the column count; reacting to height would loop (apply changes the height).
+			new ResizeObserver(([e]) => {
+				if (Math.round(e.contentRect.width) === width) return;
+				width = Math.round(e.contentRect.width);
+				apply();
+			}).observe(list);
+			apply();
+		}
 		q?.addEventListener("input", () => {
 			if (q.value && series) pills?.querySelector<HTMLButtonElement>('[data-series=""]')?.click();
 			apply();
@@ -238,12 +279,30 @@ const what = (m: Model) => (fromPrice(m, "display") !== null ? "Display ab" : "B
 		font-size: 14px;
 	}
 
+	.mgrid__more {
+		margin-top: clamp(28px, 3vw, 40px);
+		text-align: center;
+	}
+
 	.mgrid__empty {
 		margin-top: 24px;
 		text-align: center;
 	}
 
 	@media (max-width: 734px) {
+		.mgrid__pills {
+			flex-wrap: nowrap;
+			justify-content: flex-start;
+			margin-inline: calc(-1 * var(--gutter));
+			padding-inline: var(--gutter);
+			overflow-x: auto;
+			scrollbar-width: none;
+		}
+
+		.mgrid__pills button {
+			flex: none;
+		}
+
 		.mgrid__list {
 			grid-template-columns: repeat(2, 1fr);
 			gap: 12px;
