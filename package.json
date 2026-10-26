@@ -11,7 +11,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "astro build && wrangler deploy && node scripts/indexnow.mjs",
+    "deploy": "sh scripts/deploy.sh",
     "typecheck": "astro check",
     "logs": "wrangler tail apfelreparatur-website --format pretty",
     "og": "node scripts/og/render.mjs",
