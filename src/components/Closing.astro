@@ -1,6 +1,5 @@
 ---
-import { Icon } from "astro-iconset/components";
-import { business, telHref, whatsappHref } from "../lib/business";
+import { business } from "../lib/business";
 
 interface Props {
 	title?: string;
@@ -21,11 +20,6 @@ const {
 		<div class="btn-row">
 			<a class="btn btn--lg" href={href}>Reparatur anfragen</a>
 		</div>
-		<p class="closing__direct">
-			Oder direkt:
-			<a href={telHref(business.hotline)}><Icon name="ph:phone-fill" aria-hidden="true" />{business.hotline}</a><span class="closing__free">gratis</span>
-			<a href={whatsappHref} target="_blank" rel="noopener"><Icon name="ph:whatsapp-logo" class="closing__wa" aria-hidden="true" />WhatsApp</a>
-		</p>
 	</div>
 </section>
 
@@ -33,40 +27,5 @@ const {
 	.closing__text {
 		margin: 16px auto 32px;
 		max-width: 34ch;
-	}
-
-	.closing__direct {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: center;
-		gap: 8px 22px;
-		margin-top: 24px;
-		font-size: 17px;
-		color: var(--muted);
-	}
-
-	.closing__direct a {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		font-weight: 600;
-		font-variant-numeric: tabular-nums;
-		text-decoration: underline;
-		text-underline-offset: 3px;
-	}
-
-	.closing__free {
-		margin-left: -16px;
-		font-size: 14px;
-	}
-
-	.closing__direct :global(svg) {
-		width: 20px;
-		height: 20px;
-	}
-
-	.closing__direct :global(.closing__wa) {
-		color: var(--wa);
 	}
 </style>
