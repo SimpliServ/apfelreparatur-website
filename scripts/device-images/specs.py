@@ -145,9 +145,13 @@ for slug, t, case, band, design in [
 ]:
     add(slug, watch(t, case, band, design), "watch")
 
+# Phones/tablets to redo: the MobiNil image of iphone-8 shows an iPhone X, 11-ipad-pro-5-2024 shares its picture with ipad-11-m4-2024.
+add("iphone-8", f"Apple iPhone 8 smartphone in Gold, rear view, upright, perfectly straight and centered. Design: glass back, single round rear camera lens with True Tone flash in the top-left corner, aluminium frame with rounded edges, thick top and bottom bezels on the front (not visible). {S}", "phone")
+add("11-ipad-pro-5-2024", f"Apple iPad Pro 11-inch (M4, 2024) tablet in Silver aluminium, rear view, upright portrait orientation, perfectly straight and centered. Design: very thin flat aluminium back, single rear camera module with one lens, LiDAR and flash in the top-left corner, Smart Connector dots at the bottom edge. {S}", "phone")
+
 for i, (slug, m) in enumerate(M.items()):
     m["prompt"] = m["prompt"].replace("{wall}", WALL[i % len(WALL)])
-    m["size"] = "1024x1024" if m["kind"] == "watch" else "1536x1024"
+    m["size"] = "1024x1024" if m["kind"] == "watch" else "1024x1536" if m["kind"] == "phone" else "1536x1024"
 
 json.dump(M, open("/tmp/apfel-dev-img/specs.json", "w"), indent=1, ensure_ascii=False)
 print(len(M))
