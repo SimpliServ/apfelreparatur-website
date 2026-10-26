@@ -2,6 +2,7 @@
 import LegalLayout from "../components/LegalLayout.astro";
 import { business } from "../lib/business";
 import { photos } from "../lib/photos";
+import { loadModels, modelPath, useHints } from "../lib/devices";
 
 const b = business;
 const rows: [string, string][] = [
@@ -17,6 +18,17 @@ const rows: [string, string][] = [
 	["Kammer", b.chamber],
 ];
 const credits = Object.values(photos).filter((p, i, all) => all.findIndex((x) => x.id === p.id) === i);
+// Device photos under CC licences need author, licence, source and changes; thumbnails link here, model pages also show them below the photo.
+const catalogue = await loadModels().catch(() => ({ models: [], cacheHint: undefined }));
+useHints(Astro, catalogue.cacheHint);
+const deviceCredits = catalogue.models
+	.map((m) => {
+		const cap = typeof m.image?.meta?.caption === "string" ? m.image.meta.caption : "";
+		if (!cap || /\bCC0\b/.test(cap)) return null;
+		const links = [...cap.matchAll(/https?:\/\/\S+/g)].map((x) => x[0]);
+		return { title: m.title, path: modelPath(m), text: cap.replace(/https?:\/\/\S+/g, "").replace(/[\s·]+$/, "").trim(), source: links.find((u) => !u.includes("creativecommons.org")), license: links.find((u) => u.includes("creativecommons.org")) };
+	})
+	.filter((x) => !!x);
 ---
 
 <LegalLayout title="Impressum" slug="impressum" description="Impressum und Offenlegung von Apfelreparatur, unabhängiger Reparaturbetrieb für iPhone, iPad und Mac in Wien.">
@@ -66,7 +78,7 @@ const credits = Object.values(photos).filter((p, i, all) => all.findIndex((x) =>
 	</p>
 
 	<h2>Urheberrecht und Bildnachweise</h2>
-	<p>Texte und Gestaltung dieser Website sind urheberrechtlich geschützt. Fotos stammen von Pexels und werden gemäß der Pexels-Lizenz verwendet; einige Produktbilder sind KI-generiert. Abgebildete Personen und Räume sind Symbolbilder, nicht unsere Werkstatt.</p>
+	<p>Texte und Gestaltung dieser Website sind urheberrechtlich geschützt. Fotos stammen von Pexels und werden gemäß der Pexels-Lizenz verwendet; einige Produktbilder sind KI-generiert (siehe Gerätebilder). Abgebildete Personen und Räume sind Symbolbilder, nicht unsere Werkstatt.</p>
 	<ul>
 		{
 			credits.map((p) => (
@@ -76,6 +88,34 @@ const credits = Object.values(photos).filter((p, i, all) => all.findIndex((x) =>
 						<>
 							{" / "}
 							<a href={`https://www.pexels.com/photo/${p.id}/`} rel="noopener">Pexels</a>
+						</>
+					)}
+				</li>
+			))
+		}
+	</ul>
+
+	<h3>Gerätebilder</h3>
+	<p>
+		Die Gerätebilder auf den Modellseiten stammen von Wikimedia Commons und werden unter den jeweils genannten Creative-Commons-Lizenzen verwendet. Wir haben sie
+		freigestellt und teils retuschiert; bearbeitete Fassungen von Bildern unter CC BY-SA stehen unter derselben Lizenz. Bilder unter CC0 sind gemeinfrei und hier nicht
+		einzeln aufgeführt. Die Produktillustrationen der Mac-Modelle sind eigene, KI-generierte Darstellungen.
+	</p>
+	<ul>
+		{
+			deviceCredits.map((c) => (
+				<li>
+					<a href={c.path}>{c.title}</a>: {c.text}
+					{c.source && (
+						<>
+							{" · "}
+							<a href={c.source} rel="noopener">Original</a>
+						</>
+					)}
+					{c.license && (
+						<>
+							{" · "}
+							<a href={c.license} rel="license noopener">Lizenz</a>
 						</>
 					)}
 				</li>

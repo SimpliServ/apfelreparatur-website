@@ -5,7 +5,7 @@ import { devices } from "../lib/content";
 import { inquiry } from "../lib/inquiry-copy";
 import { sendToPlugin } from "../lib/send";
 import { getModels } from "../lib/mobinil";
-import { hint, loadModels, modelPath } from "../lib/devices";
+import { euro, fromPrice, loadModels } from "../lib/devices";
 import { business } from "../lib/business";
 import { breadcrumbLd } from "../lib/seo";
 
@@ -47,9 +47,14 @@ if (Astro.request.method === "POST") {
 
 const live = await Promise.all(Object.values(devices).map(async (d) => [d.key, (await getModels(d.key)).map((m) => m.title)] as const));
 const models = Object.fromEntries(live);
-// Price hint under the model field: title -> [model page, "Display ab …"].
+// Prices shown in the issue pills once the model field names a catalogue model: title -> { issue: "ab 89,99 €" }.
+const ISSUE_REPAIR: Record<string, string> = { display: "display", rueckglas: "backcover", akku: "akku", kamera: "kamera", ladebuchse: "ladebuchse", datenrettung: "datenrettung", datenuebertragung: "datenuebertragung" };
 const catalogue = (await loadModels().catch(() => ({ models: [] }))).models;
-const prices = Object.fromEntries(catalogue.map((m) => [m.title.toLowerCase(), [modelPath(m), hint(m)]]));
+const prices = Object.fromEntries(
+	catalogue
+		.map((m) => [m.title.toLowerCase(), Object.fromEntries(Object.entries(ISSUE_REPAIR).flatMap(([issue, repair]) => { const p = fromPrice(m, repair); return p === null ? [] : [[issue, `ab ${euro(p)}`]]; }))] as const)
+		.filter(([, p]) => Object.keys(p).length),
+);
 const visible = issueOptions[values.device] ?? allIssues;
 ---
 
@@ -108,10 +113,6 @@ const visible = issueOptions[values.device] ?? allIssues;
 							<div class="field field--full">
 								<input id="model" name="model" list="models" value={values.model ?? ""} placeholder=" " autocomplete="off" maxlength="80" />
 								<label for="model">Modell (optional)</label>
-								<p class="model-hint" hidden data-model-hint data-prices={JSON.stringify(prices)}>
-									<span data-model-hint-text></span>
-									<a href="#" target="_blank" data-model-hint-link>Alle Preise ansehen</a>
-								</p>
 								<datalist id="models" data-models={JSON.stringify(models)}>
 									{(models[values.device as keyof typeof models] ?? []).map((m) => <option value={m} />)}
 								</datalist>
@@ -124,12 +125,13 @@ const visible = issueOptions[values.device] ?? allIssues;
 							<span>Anliegen.</span> <span class="muted">Was ist passiert?</span>
 						</h2>
 						<div class="row__body">
-							<div class="choices choices--issues" data-issues={JSON.stringify(issueOptions)}>
+							<div class="choices choices--issues" data-issues={JSON.stringify(issueOptions)} data-prices={JSON.stringify(prices)}>
 								{allIssues.map((key) => (
 									<label class="choice choice--pill" hidden={!visible.includes(key)} data-issue={key}>
 										<input type="checkbox" name="issues" value={key} checked={issues.includes(key)} />
 										<span class="choice__box">
 											<span class="choice__label">{inquiry.issues[key]}</span>
+											<span class="choice__price" hidden data-issue-price></span>
 										</span>
 									</label>
 								))}
@@ -218,18 +220,20 @@ const visible = issueOptions[values.device] ?? allIssues;
 		};
 		form.addEventListener("change", (e) => (e.target as HTMLInputElement).name === "device" && sync());
 
-		const box = form.querySelector<HTMLElement>("[data-model-hint]")!;
-		const priceMap = JSON.parse(box.dataset.prices!) as Record<string, [string, string]>;
+		const priceMap = JSON.parse(form.querySelector<HTMLElement>("[data-prices]")!.dataset.prices!) as Record<string, Record<string, string>>;
 		const model = form.elements.namedItem("model") as HTMLInputElement;
-		const showHint = () => {
-			const hit = priceMap[model.value.trim().toLowerCase()];
-			box.hidden = !hit;
-			if (!hit) return;
-			box.querySelector("[data-model-hint-text]")!.textContent = `${model.value.trim()}: ${hit[1]}.`;
-			box.querySelector<HTMLAnchorElement>("[data-model-hint-link]")!.href = hit[0] + "#preise";
+		const showPrices = () => {
+			const hit = priceMap[model.value.trim().toLowerCase()] ?? {};
+			form.querySelectorAll<HTMLElement>("[data-issue]").forEach((el) => {
+				const tag = el.querySelector<HTMLElement>("[data-issue-price]")!;
+				const p = hit[el.dataset.issue!];
+				tag.hidden = !p;
+				tag.textContent = p ?? "";
+			});
 		};
-		model.addEventListener("input", showHint);
-		showHint();
+		model.addEventListener("input", showPrices);
+		form.addEventListener("change", (e) => (e.target as HTMLInputElement).name === "device" && showPrices());
+		showPrices();
 
 		form.addEventListener("submit", (e) => {
 			const msgs: string[] = [];
@@ -384,6 +388,22 @@ const visible = issueOptions[values.device] ?? allIssues;
 		border-radius: 980px;
 	}
 
+	.choice--pill .choice__box:has(.choice__price:not([hidden])) {
+		flex-direction: row;
+		gap: 8px;
+	}
+
+	.choice__price {
+		color: var(--muted);
+		font-size: 13px;
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+	}
+
+	.choice input:checked + .choice__box .choice__price {
+		color: var(--accent);
+	}
+
 	.choice--pill .choice__label {
 		font-size: 15px;
 		font-weight: 500;
@@ -406,22 +426,6 @@ const visible = issueOptions[values.device] ?? allIssues;
 	.choices--device .field,
 	.field--area {
 		margin-top: 14px;
-	}
-
-	.model-hint {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px 12px;
-		margin-top: 10px;
-		padding: 12px 16px;
-		border-radius: 12px;
-		background: var(--accent-soft);
-		color: var(--ink);
-		font-size: 15px;
-	}
-
-	.model-hint a {
-		text-decoration: underline;
 	}
 
 	.choices--device .field {
