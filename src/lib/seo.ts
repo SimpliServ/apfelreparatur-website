@@ -2,6 +2,7 @@ import { business, type Location } from "./business";
 import type { QA } from "../components/FAQ.astro";
 import { deviceList } from "./content";
 import { repairPages } from "./repair-pages";
+import { photos } from "./photos";
 
 export const SITE = "https://apfelreparatur.at";
 const clean = <T extends object>(o: T) => JSON.parse(JSON.stringify(o)) as T;
@@ -19,7 +20,7 @@ export function localBusinessLd(locations: Location[] = []): object[] {
 			name: `${business.brand} ${l.name}`,
 			description: `iPhone, iPad und Mac Reparatur ohne Termin: ${l.venue}.`,
 			url: `${SITE}/kontakt`,
-			image: `${SITE}/img/hero-1600.webp?v=2`,
+			image: `${SITE}/img/hero-1600.webp?v=${photos.hero.v}`,
 			email: business.email,
 			telephone: l.phone,
 			parentOrganization: { "@id": `${SITE}/#business` },

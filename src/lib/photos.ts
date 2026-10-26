@@ -3,7 +3,11 @@
 // v: bump when a photo's files change (URLs keep their name, assets are cached 30 days).
 // seamless: background is exactly --gray, so tiles show the whole shot without a fade.
 export const photos = {
-	hero: { w: 2400, h: 1530, alt: "Goldenes iPhone auf hellem Hintergrund", by: "webber Amir", id: 28919442, retouched: true, seamless: true, v: 2 },
+	// hero: composite of real photos (mac-hero, hero-iphone rectified upright, hero-watch, this iPad Air with screen replaced); AI only added shadows, device pixels are the originals.
+	hero: { w: 2400, h: 1530, alt: "MacBook, iPad, iPhone und Apple Watch auf hellem Hintergrund", by: "Luis Quintero", id: 13570171, retouched: true, seamless: true, v: 6 },
+	// credit only: parts of the hero composite, no files of their own.
+	"hero-iphone": { w: 2400, h: 1530, alt: "Goldenes iPhone auf hellem Hintergrund", by: "webber Amir", id: 28919442, retouched: true },
+	"hero-watch": { w: 2400, h: 3600, alt: "Apple Watch mit hellem Sportarmband", by: "Deise Elen", id: 31406903, retouched: true },
 	iphone: { w: 2400, h: 1600, alt: "Geöffnetes Smartphone mit Einzelteilen auf einer blauen Werkstattmatte", by: "Fotografia Lui Vlad", id: 31862953, retouched: true },
 	ipad: { w: 2400, h: 1600, alt: "Hand mit Eingabestift an einem Tablet auf einem weißen Schreibtisch", by: "cottonbro studio", id: 3944397 },
 	mac: { w: 2400, h: 1350, alt: "Geöffneter Laptop mit sichtbarer Platine auf einer Werkstattmatte", by: "Found GHI", id: 34514242 },
