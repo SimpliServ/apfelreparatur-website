@@ -7,4 +7,4 @@ one real colour + own wallpaper colour per model so every device page has a dist
     node upload.mjs http://localhost:4330 <PAT>   # media + Preisliste plugin update (local)
     python3 ../../scripts/device-images-to-prod.py <slugs> # prod while it has no admin account (from the repo root)
 
-Never generate images with an OpenAI key (owner rule 2026-10-26: it drained the shared account). The OpenAI client was removed; ask the owner which image tool to use and plug it into run.py.
+Never generate images with an OpenAI or Gemini key (owner rule 2026-10-26: it drained the shared accounts). The OpenAI client was removed; ask the owner which image tool to use and plug it into run.py.
