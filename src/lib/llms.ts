@@ -41,7 +41,7 @@ export function llmsTxt(locations: Location[]): string {
 		...rep,
 		"",
 		"## Anfrage",
-		`- [Reparatur anfragen](${SITE}/reparatur-anfragen): Formular mit Gerät, Anliegen, Name, E-Mail, optional Telefon und Modell. Vorauswahl per URL: \`?geraet=iphone|ipad|mac&anliegen=display|rueckglas|akku|kamera|ladebuchse|tastatur|datenrettung|datenuebertragung\`. Das Formular ist als WebMCP-Tool \`request_repair\` annotiert.`,
+		`- [Reparatur anfragen](${SITE}/reparatur-anfragen): Formular mit Gerät, Anliegen, Name, E-Mail, optional Telefon und Modell. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&anliegen=display|rueckglas|akku|kamera|ladebuchse|tastatur|datenrettung|datenuebertragung\`. Das Formular ist als WebMCP-Tool \`request_repair\` annotiert.`,
 		`- [Standorte und Öffnungszeiten](${SITE}/kontakt)`,
 		"",
 		"## Optional",

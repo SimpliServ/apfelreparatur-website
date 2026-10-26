@@ -1,4 +1,5 @@
-// Landing pages per device × repair (/iphone/display-reparatur …), the main targets for "<Gerät> <Reparatur> Wien" searches.
+// Landing pages per device × repair (/iphone/display-reparatur …). Titles lead with the symptom ("Display kaputt?") and avoid
+// MobiNil's wording ("Display tauschen", "Akku tauschen", "Ladebuchse reparieren"): both sites are Mobi GmbH, so they target different searches.
 // Claims follow AGENTS.md: no prices, no fixed durations, no board-level work.
 import type { QA } from "../components/FAQ.astro";
 import { business } from "./business";
@@ -37,8 +38,8 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 	display: {
 		slug: "display-reparatur",
 		label: "Display Reparatur",
-		title: (n) => `${n} Display Reparatur Wien: Display tauschen`,
-		desc: (n) => `${n} Display tauschen in Wien: Glas gesprungen, Streifen oder ${n === "MacBook" ? "Flecken im Bild" : "Touch defekt"}? Wir ersetzen das Display${original(n)}. Ohne Termin, Preis vorab.`,
+		title: (n) => `${n} Display kaputt? Glasbruch Reparatur Wien`,
+		desc: (n) => `${n} Display kaputt in Wien: Glas gesprungen, Streifen oder ${n === "MacBook" ? "Flecken im Bild" : "Touch defekt"}? Wir ersetzen das Display${original(n)}. Ohne Termin, Preis vorab.`,
 		sub: (n) => `Gesprungenes Glas, Streifen oder schwarzes Bild? Wir tauschen das Display ${de(n).ihres} ${n}${original(n)}.`,
 		signs: [
 			{ icon: "ph:device-mobile", title: "Glas gesprungen", text: "Risse oder Splitter im Displayglas." },
@@ -61,10 +62,10 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		],
 	},
 	akku: {
-		slug: "akku-tauschen",
-		label: "Akku tauschen",
-		title: (n) => `${n} Akku tauschen in Wien: Akkutausch`,
-		desc: (n) => `${n} Akku tauschen in Wien: kurze Laufzeit, plötzliches Ausschalten oder „Service“-Meldung? Neuer Akku${original(n)}. Ohne Termin, Preis vorab.`,
+		slug: "batterietausch",
+		label: "Batterietausch",
+		title: (n) => `${n} Akku schwach? Batterietausch in Wien`,
+		desc: (n) => `${n} Akku schwach in Wien: kurze Laufzeit, plötzliches Ausschalten oder „Service“-Meldung? Wir wechseln die Batterie${original(n)}. Ohne Termin, Preis vorab.`,
 		sub: (n) => (n === "iPad" || n === "Apple Watch" ? `Hält der Akku ${de(n).ihres} ${n} nicht mehr durch? Wir tauschen ihn gegen einen neuen Akku mit voller Kapazität.` : `Hält der Akku Ihres ${n} nicht mehr durch? Wir tauschen ihn, mit Original Apple Teilen, wo Apple sie bereitstellt.`),
 		signs: [
 			{ icon: "ph:battery-full", title: "Kurze Laufzeit", text: "Der Akku hält keinen Tag mehr durch." },
@@ -83,13 +84,13 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 					? [{ q: "Wo sehe ich den Batteriezustand meines MacBook?", a: "In den Systemeinstellungen unter Batterie › Batteriezustand. Steht dort „Service empfohlen“, ist es Zeit für einen neuen Akku." }]
 					: []),
 			{ q: "Was passiert mit dem alten Akku?", a: "Wir entsorgen ihn fachgerecht über das Recycling für Altbatterien." },
-			termin(n, "Akkutausch"),
+			termin(n, "Batterietausch"),
 		],
 	},
 	rueckglas: {
 		slug: "rueckglas-reparatur",
 		label: "Rückglas Reparatur",
-		title: (n) => `${n} Rückglas & Backcover Reparatur Wien`,
+		title: (n) => `${n} Rückglas kaputt? Backcover Reparatur Wien`,
 		desc: (n) => `${n} Rückglas Reparatur in Wien: gesprungene Rückseite (Backcover) passgenau ersetzt, MagSafe und kabelloses Laden geprüft. Ohne Termin, Preis vorab.`,
 		sub: (n) => `Rückseite gesprungen? Wir ersetzen das Rückglas (Backcover) Ihres ${n} passgenau, damit Splitter und Feuchtigkeit draußen bleiben.`,
 		signs: [
@@ -111,7 +112,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 	kamera: {
 		slug: "kamera-reparatur",
 		label: "Kamera Reparatur",
-		title: (n) => `${n} Kamera Reparatur Wien: Glas & Modul`,
+		title: (n) => `${n} Kamera unscharf? Kameraglas Reparatur Wien`,
 		desc: (n) => `${n} Kamera Reparatur in Wien: unscharfe Fotos, Flecken im Bild oder gesprungenes Kameraglas. Wir tauschen nur, was nötig ist. Ohne Termin, Preis vorab.`,
 		sub: (n) => `Unscharfe Fotos oder gesprungenes Kameraglas? Wir prüfen und reparieren die Kamera Ihres ${n}.`,
 		signs: [
@@ -129,10 +130,10 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		],
 	},
 	ladebuchse: {
-		slug: "ladebuchse-reparatur",
-		label: "Ladebuchse Reparatur",
-		title: (n) => `${n} lädt nicht? Ladebuchse Reparatur Wien`,
-		desc: (n) => `${n} lädt nicht mehr oder nur mit Wackeln? Ladebuchse Reparatur in Wien: Reinigung oder Tausch, Laden und Daten geprüft. Ohne Termin, Preis vorab.`,
+		slug: "ladeanschluss-reparatur",
+		label: "Ladeanschluss Reparatur",
+		title: (n) => `${n} lädt nicht? Ladeanschluss Reparatur Wien`,
+		desc: (n) => `${n} lädt nicht mehr oder nur mit Wackeln? Ladeanschluss Reparatur in Wien: Reinigung oder Tausch, Laden und Daten geprüft. Ohne Termin, Preis vorab.`,
 		sub: (n) => `Lädt Ihr ${n} nur noch mit Wackeln oder gar nicht? Oft reicht eine Reinigung, sonst tauschen wir den Anschluss.`,
 		signs: [
 			{ icon: "ph:plug", title: "Lädt nur in einem Winkel", text: "Das Kabel muss gehalten werden." },
@@ -142,16 +143,16 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		],
 		steps: (n) => common(n, "Wir reinigen den Anschluss professionell oder tauschen das Bauteil und prüfen Laden und Daten."),
 		faq: (n) => [
-			{ q: `Was kostet eine ${n} Ladebuchse Reparatur?`, a: "Eine Reinigung ist günstiger als ein Tausch. Was nötig ist und was es kostet, sagen wir Ihnen nach der Prüfung." },
-			{ q: `Mein ${n} lädt nicht. Liegt es an der Ladebuchse?`, a: "Oft sitzen Fusseln oder Schmutz im Anschluss, manchmal liegt es an Kabel oder Netzteil. Wir prüfen das und sagen Ihnen, was wirklich nötig ist." },
+			{ q: `Was kostet eine ${n} Ladeanschluss Reparatur?`, a: "Eine Reinigung ist günstiger als ein Tausch. Was nötig ist und was es kostet, sagen wir Ihnen nach der Prüfung." },
+			{ q: `Mein ${n} lädt nicht. Liegt es am Ladeanschluss?`, a: "Oft sitzen Fusseln oder Schmutz im Anschluss, manchmal liegt es an Kabel oder Netzteil. Wir prüfen das und sagen Ihnen, was wirklich nötig ist." },
 			{ q: "Kann ich den Anschluss selbst reinigen?", a: "Lieber nicht mit spitzen Gegenständen, die Kontakte sind empfindlich. Wir reinigen ihn sicher." },
-			termin(n, "Ladebuchse Reparatur"),
+			termin(n, "Ladeanschluss Reparatur"),
 		],
 	},
 	tastatur: {
 		slug: "tastatur-reparatur",
 		label: "Tastatur Reparatur",
-		title: (n) => `${n} Tastatur & Trackpad Reparatur Wien`,
+		title: (n) => `${n} Tasten klemmen? Tastatur & Trackpad Wien`,
 		desc: (n) => `${n} Tastatur Reparatur in Wien: klemmende Tasten, Flüssigkeitsschaden oder Trackpad ohne Klick. Einzelne Tasten oder komplett. Preis vorab.`,
 		sub: (n) => `Klemmende Tasten, Flüssigkeitsschaden oder ein Trackpad ohne Klick? Wir reparieren Tastatur und Trackpad Ihres ${n}.`,
 		signs: [

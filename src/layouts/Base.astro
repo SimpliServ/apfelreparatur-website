@@ -24,7 +24,9 @@ const settings = await getSiteSettingsWithCacheHint();
 if (Astro.cache?.enabled) Astro.cache.set(settings.cacheHint);
 
 const siteTitle = settings.data?.title?.trim() || business.brand;
-const fullTitle = title ? (title.includes(siteTitle) ? title : `${title} – ${siteTitle}`) : siteTitle;
+// Google cuts titles around 60–65 chars; long page titles drop the brand suffix instead of losing their keywords.
+const branded = title && !title.includes(siteTitle) ? `${title} – ${siteTitle}` : title;
+const fullTitle = !title ? siteTitle : branded!.length <= 65 ? branded! : title;
 const origin = (Astro.site?.origin ?? Astro.url.origin).replace(/\/$/, "");
 // ?v busts cached link previews after `npm run og`.
 const ogImage = image ?? `${origin}/og/${og}.jpg?v=5`;

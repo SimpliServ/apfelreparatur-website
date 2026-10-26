@@ -1,0 +1,66 @@
+---
+import type { Location } from "../lib/business";
+
+interface Props {
+	store: Location;
+}
+const { store: l } = Astro.props;
+---
+
+<li class="card card--gray scard">
+	<p class="scard__venue">{l.venue}</p>
+	<p class="muted">
+		{l.street}
+		<br />
+		{l.zip} {l.city}
+	</p>
+	<dl class="scard__hours">
+		{
+			l.hours.map(([d, h]) => (
+				<>
+					<dt>{d}</dt>
+					<dd>{h}</dd>
+				</>
+			))
+		}
+	</dl>
+	<div class="scard__links">
+		{l.phone && <a href={`tel:${l.phone.replace(/\s/g, "")}`}>{l.phone}</a>}
+		<a href={`https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}`} rel="noopener" target="_blank">Route planen</a>
+	</div>
+</li>
+
+<style>
+	.scard {
+		padding: 28px;
+	}
+
+	.scard__venue {
+		font-size: 19px;
+		font-weight: 600;
+		margin-bottom: 6px;
+	}
+
+	.scard__hours {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 4px 16px;
+		margin: 18px 0;
+		font-size: 15px;
+	}
+
+	.scard__hours dt {
+		color: var(--muted);
+	}
+
+	.scard__hours dd {
+		margin: 0;
+	}
+
+	.scard__links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 20px;
+		font-size: 15px;
+	}
+</style>

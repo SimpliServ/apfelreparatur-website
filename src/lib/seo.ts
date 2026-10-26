@@ -119,15 +119,3 @@ export function breadcrumbLd(crumbs: [string, string][]) {
 		itemListElement: crumbs.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE + path })),
 	};
 }
-
-export function websiteLd() {
-	return {
-		"@context": "https://schema.org",
-		"@type": "WebSite",
-		"@id": `${SITE}/#website`,
-		name: business.brand,
-		url: SITE,
-		inLanguage: "de-AT",
-		publisher: { "@id": `${SITE}/#business` },
-	};
-}

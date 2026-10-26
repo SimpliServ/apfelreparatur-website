@@ -3,17 +3,36 @@ import { Icon } from "astro-iconset/components";
 import Base from "../layouts/Base.astro";
 import { business } from "../lib/business";
 import { getLocations } from "../lib/mobinil";
-import { breadcrumbLd, localBusinessLd } from "../lib/seo";
+import { breadcrumbLd, faqLd, localBusinessLd } from "../lib/seo";
+import StoreCard from "../components/StoreCard.astro";
+import FAQ from "../components/FAQ.astro";
+import type { QA } from "../components/FAQ.astro";
 
 const locations = await getLocations();
 const groups = [...new Set(locations.map((l) => l.name))].map((name) => [name, locations.filter((l) => l.name === name)] as const);
+const DAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+// Hours labels look like "Mo – Fr", "Sa" or "Mo, Mi"; day is 0 = Monday.
+const opensOn = (l: (typeof locations)[number], day: number) =>
+	l.hours.some(([label]) =>
+		label.split(", ").some((part) => {
+			const [from, to = from] = part.split(" – ").map((d) => DAYS.indexOf(d.trim()));
+			return from <= day && day <= to;
+		}),
+	);
+const sunday = locations.filter((l) => opensOn(l, 6));
+const faq: QA[] = [
+	{ q: "Brauche ich einen Termin?", a: "Nein. Kommen Sie einfach an einen unserer Standorte, ein Termin ist nicht nötig. Vorab können Sie online eine Anfrage stellen." },
+	{ q: "Haben Sie am Wochenende geöffnet?", a: `Ja, ${locations.every((l) => opensOn(l, 5)) ? "alle Standorte haben" : "viele Filialen haben"} am Samstag geöffnet${sunday.length ? `, ${[...new Set(sunday.map((l) => l.name))].join(" und ")} auch am Sonntag` : ""}. Die genauen Zeiten stehen bei jeder Filiale.` },
+	{ q: "Welcher Standort ist für mich der richtige?", a: "Alle Standorte reparieren iPhone, iPad, Mac und Apple Watch. Wählen Sie einfach den, der für Sie am besten liegt." },
+	{ q: "Kann ich anrufen, bevor ich komme?", a: `Gerne. Die gratis Service-Hotline ${business.hotline} oder die Nummer der Filiale. Oder Sie stellen online eine Anfrage.` },
+];
 ---
 
 <Base
 	og="kontakt"
-	title="Standorte – iPhone Reparatur Wien ohne Termin"
+	title="Standorte – Apple Reparatur Wien ohne Termin"
 	description="Apfelreparatur in Wien und Umgebung: Wien Hauptbahnhof, Shopping City Süd und G3 Gerasdorf. Ohne Termin vorbeikommen, Öffnungszeiten und Telefonnummern."
-	jsonLd={[...localBusinessLd(locations), breadcrumbLd([["Start", "/"], ["Kontakt", "/kontakt"]])]}
+	jsonLd={[...localBusinessLd(locations), faqLd(faq), breadcrumbLd([["Start", "/"], ["Kontakt und Standorte", "/kontakt"]])]}
 >
 	<header class="khead">
 		<div class="wrap wrap--xl rise">
@@ -39,30 +58,7 @@ const groups = [...new Set(locations.map((l) => l.name))].map((name) => [name, l
 							{name}
 						</h2>
 						<ul class="kgrid" role="list">
-							{list!.map((l) => (
-								<li class="card card--gray">
-									<p class="kcard__venue">{l.venue}</p>
-									<p class="muted">
-										{l.street}
-										<br />
-										{l.zip} {l.city}
-									</p>
-									<dl class="kcard__hours">
-										{l.hours.map(([d, h]) => (
-											<>
-												<dt>{d}</dt>
-												<dd>{h}</dd>
-											</>
-										))}
-									</dl>
-									<div class="kcard__links">
-										{l.phone && <a href={`tel:${l.phone.replace(/\s/g, "")}`}>{l.phone}</a>}
-										<a href={`https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}`} rel="noopener" target="_blank">
-											Route planen
-										</a>
-									</div>
-								</li>
-							))}
+							{list!.map((l) => <StoreCard store={l} />)}
 						</ul>
 					</div>
 				))
@@ -79,6 +75,8 @@ const groups = [...new Set(locations.map((l) => l.name))].map((name) => [name, l
 			</div>
 		</div>
 	</section>
+
+	<FAQ title="Fragen zu den Standorten." items={faq} />
 </Base>
 
 <style>
@@ -157,39 +155,6 @@ const groups = [...new Set(locations.map((l) => l.name))].map((name) => [name, l
 		list-style: none;
 		margin: 0;
 		padding: 0;
-	}
-
-	.kgrid .card {
-		padding: 28px;
-	}
-
-	.kcard__venue {
-		font-size: 19px;
-		font-weight: 600;
-		margin-bottom: 6px;
-	}
-
-	.kcard__hours {
-		display: grid;
-		grid-template-columns: auto 1fr;
-		gap: 4px 16px;
-		margin: 18px 0;
-		font-size: 15px;
-	}
-
-	.kcard__hours dt {
-		color: var(--muted);
-	}
-
-	.kcard__hours dd {
-		margin: 0;
-	}
-
-	.kcard__links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px 20px;
-		font-size: 15px;
 	}
 
 	.kmail {

@@ -1,0 +1,91 @@
+---
+import { deviceList } from "../lib/content";
+import { repairPages } from "../lib/repair-pages";
+
+interface Props {
+	title: string;
+	id?: string;
+}
+const { title, id = "dir" } = Astro.props;
+const directory = [
+	...deviceList.map((d) => {
+		const dn = d.key === "mac" ? "MacBook" : d.name;
+		return { title: `${dn} Reparatur`, href: `/${d.key}`, links: repairPages.filter((p) => p.device === d.key).map((p) => [p.path, `${dn} ${p.copy.label}`] as const) };
+	}),
+	{ title: "Daten", href: "/datenrettung", links: [["/datenrettung", "Datenrettung für iPhone, iPad und Mac"], ["/datenrettung#uebertragung", "Datenübertragung aufs neue Gerät"]] as const },
+];
+---
+
+<section class="dir section on-gray" id={id} aria-labelledby={`${id}-h`}>
+	<div class="wrap wrap--xl">
+		<div class="dir__intro" data-reveal>
+			<h2 id={`${id}-h`} class="t-section">{title}</h2>
+			<p class="t-lead muted"><slot /></p>
+		</div>
+		<div class="dir__cols">
+			{
+				directory.map((col, i) => (
+					<div data-reveal style={`--i:${i}`}>
+						<h3 class="dir__h">
+							<a href={col.href}>{col.title}</a>
+						</h3>
+						<ul role="list">
+							{col.links.map(([href, label]) => (
+								<li>
+									<a href={href}>{label}</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.dir__intro {
+		max-width: 760px;
+		margin-bottom: clamp(32px, 4vw, 56px);
+	}
+	.dir__intro .t-lead {
+		margin-top: 18px;
+	}
+	.dir__cols {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 32px;
+	}
+	.dir__h {
+		margin-bottom: 12px;
+		font-size: 21px;
+		font-weight: 600;
+	}
+	.dir__h a {
+		color: var(--ink);
+	}
+	.dir ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.dir li {
+		padding: 8px 0;
+		border-bottom: 1px solid var(--line);
+	}
+	@media (max-width: 1100px) {
+		.dir__cols {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	@media (max-width: 760px) {
+		.dir__cols {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+	@media (max-width: 520px) {
+		.dir__cols {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
