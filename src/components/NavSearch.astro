@@ -1,0 +1,233 @@
+---
+// Model search in the global nav (like apple.com): loads /api/modelle.json on first open, links to model pages.
+const quick = [
+	["/iphone#modelle", "Alle iPhone Modelle"],
+	["/ipad#modelle", "Alle iPad Modelle"],
+	["/mac#modelle", "Alle Mac Modelle"],
+	["/apple-watch#modelle", "Alle Apple Watch Modelle"],
+	["/reparatur-anfragen", "Reparatur anfragen"],
+];
+---
+
+<button type="button" class="nsearch__btn" aria-label="Modell suchen" aria-expanded="false" aria-controls="nsearch" data-nsearch-open>
+	<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /></svg>
+</button>
+<div id="nsearch" class="nsearch" hidden data-nsearch>
+	<div class="nsearch__inner">
+		<label class="nsearch__field">
+			<span class="sr-only">Modell suchen</span>
+			<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /></svg>
+			<input type="search" placeholder="Modell suchen, z. B. iPhone 15 oder A2337" autocomplete="off" data-nsearch-q />
+		</label>
+		<p class="nsearch__label" data-nsearch-label>Schnellzugriff</p>
+		<ul class="nsearch__list" role="list" data-nsearch-list>
+			{quick.map(([href, label]) => <li><a href={href}><span>{label}</span></a></li>)}
+		</ul>
+	</div>
+</div>
+<div class="nsearch__curtain" hidden data-nsearch-curtain></div>
+
+<script>
+	type Hit = { t: string; u: string; d: string; h: string; q: string };
+	const panel = document.querySelector<HTMLElement>("[data-nsearch]")!;
+	const curtain = document.querySelector<HTMLElement>("[data-nsearch-curtain]")!;
+	const btn = document.querySelector<HTMLButtonElement>("[data-nsearch-open]")!;
+	const q = panel.querySelector<HTMLInputElement>("[data-nsearch-q]")!;
+	const list = panel.querySelector<HTMLUListElement>("[data-nsearch-list]")!;
+	const label = panel.querySelector<HTMLElement>("[data-nsearch-label]")!;
+	const quick = list.innerHTML;
+	// The nav's backdrop-filter would trap a fixed child inside the 52px bar.
+	document.body.appendChild(curtain);
+	let data: Promise<Hit[]> | null = null;
+	const load = () => (data ??= fetch("/api/modelle.json").then((r) => r.json() as Promise<Hit[]>).catch(() => []));
+	const norm = (s: string) => s.toLowerCase().replace(/\+/g, " plus").replace(/["″]/g, "").replace(/\s+/g, " ").trim();
+	const DEVICE: Record<string, string> = { iphone: "iPhone", ipad: "iPad", mac: "Mac", "apple-watch": "Apple Watch" };
+
+	const set = (open: boolean) => {
+		panel.hidden = !open;
+		curtain.hidden = !open;
+		btn.setAttribute("aria-expanded", String(open));
+		document.documentElement.classList.toggle("nsearch-open", open);
+		if (open) {
+			load();
+			requestAnimationFrame(() => q.focus());
+		}
+	};
+	btn.addEventListener("click", () => set(!!panel.hidden));
+	curtain.addEventListener("click", () => set(false));
+	addEventListener("keydown", (e) => {
+		if (e.key === "Escape" && !panel.hidden) {
+			set(false);
+			btn.focus();
+		}
+	});
+
+	q.addEventListener("input", async () => {
+		const words = norm(q.value).split(" ").filter(Boolean);
+		if (!words.length) {
+			label.textContent = "Schnellzugriff";
+			list.innerHTML = quick;
+			return;
+		}
+		const hits = (await load()).filter((m) => words.every((w) => norm(m.q).includes(w))).slice(0, 8);
+		label.textContent = hits.length ? "Modelle" : "Kein Modell gefunden";
+		list.replaceChildren(
+			...hits.map((m) => {
+				const li = document.createElement("li");
+				const a = Object.assign(document.createElement("a"), { href: m.u });
+				a.appendChild(Object.assign(document.createElement("span"), { textContent: m.t }));
+				a.appendChild(Object.assign(document.createElement("small"), { textContent: `${DEVICE[m.d] ?? ""} · ${m.h}` }));
+				li.appendChild(a);
+				return li;
+			}),
+		);
+		if (!hits.length) list.insertAdjacentHTML("beforeend", '<li><a href="/reparatur-anfragen"><span>Fragen Sie uns einfach</span><small>Wir reparieren auch ältere Modelle</small></a></li>');
+	});
+	q.addEventListener("keydown", (e) => {
+		if (e.key === "Enter") {
+			const first = list.querySelector<HTMLAnchorElement>("a");
+			if (first && q.value.trim()) location.href = first.href;
+		}
+	});
+</script>
+
+<style>
+	.nsearch__btn {
+		display: inline-grid;
+		place-items: center;
+		width: 36px;
+		height: 36px;
+		border: 0;
+		border-radius: 50%;
+		background: none;
+		color: rgba(0, 0, 0, 0.8);
+		cursor: pointer;
+		transition: background-color 0.2s var(--ease);
+	}
+
+	.nsearch__btn:hover {
+		background: rgba(0, 0, 0, 0.05);
+	}
+
+	.nsearch__btn svg,
+	.nsearch__field svg {
+		width: 18px;
+		height: 18px;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+
+	.nsearch {
+		position: absolute;
+		top: var(--nav-h);
+		left: 0;
+		right: 0;
+		z-index: 60;
+		padding: 28px 0 40px;
+		background: #fafafc;
+		box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.18);
+		animation: nsearch-in 0.35s var(--ease-out);
+	}
+
+	.nsearch__inner {
+		width: min(692px, calc(100% - 44px));
+		margin-inline: auto;
+	}
+
+	.nsearch__field {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid var(--line);
+		color: var(--muted);
+	}
+
+	.nsearch__field svg {
+		width: 22px;
+		height: 22px;
+	}
+
+	.nsearch__field input {
+		flex: 1;
+		min-width: 0;
+		border: 0;
+		background: none;
+		color: var(--ink);
+		font-size: clamp(21px, 3vw, 24px);
+		font-weight: 600;
+		outline: none;
+	}
+
+	.nsearch__field input::-webkit-search-cancel-button {
+		-webkit-appearance: none;
+	}
+
+	.nsearch__label {
+		margin: 22px 0 8px;
+		color: var(--muted);
+		font-size: 12px;
+	}
+
+	.nsearch__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.nsearch__list :global(a) {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 8px 10px;
+		margin-inline: -10px;
+		border-radius: 8px;
+		color: var(--ink);
+		font-size: 15px;
+		font-weight: 600;
+	}
+
+	.nsearch__list :global(a:hover),
+	.nsearch__list :global(a:focus-visible) {
+		background: var(--accent-soft);
+		color: var(--accent);
+		text-decoration: none;
+	}
+
+	.nsearch__list :global(small) {
+		flex: none;
+		color: var(--muted);
+		font-size: 13px;
+		font-weight: 400;
+	}
+
+	:global(.nsearch__curtain) {
+		position: fixed;
+		inset: 0;
+		z-index: 45;
+		background: rgba(232, 232, 237, 0.55);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+	}
+
+	:global(.nsearch__curtain[hidden]) {
+		display: none;
+	}
+
+	@keyframes nsearch-in {
+		from {
+			opacity: 0;
+			transform: translateY(-8px);
+		}
+	}
+
+	@media (max-width: 520px) {
+		.nsearch__list :global(a) {
+			flex-direction: column;
+			gap: 2px;
+		}
+	}
+</style>

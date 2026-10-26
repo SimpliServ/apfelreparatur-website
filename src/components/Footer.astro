@@ -1,5 +1,8 @@
 ---
 import { business } from "../lib/business";
+import { loadModels, modelPath, popular } from "../lib/devices";
+
+const top = popular((await loadModels().catch(() => ({ models: [] }))).models);
 
 const columns = [
 	{
@@ -17,15 +20,14 @@ const columns = [
 		],
 	},
 	{
-		title: "Daten",
-		links: [
-			["/datenrettung", "Datenrettung"],
-			["/datenrettung#uebertragung", "Datenübertragung"],
-		],
+		title: "Beliebte Modelle",
+		links: top.map((m) => [modelPath(m), `${m.title} Reparatur`] as [string, string]),
 	},
 	{
 		title: "Service",
 		links: [
+			["/datenrettung", "Datenrettung"],
+			["/datenrettung#uebertragung", "Datenübertragung"],
 			["/reparatur-anfragen", "Reparatur anfragen"],
 			["/#ablauf", "So funktioniert’s"],
 			["/#garantie", "Garantie"],
@@ -41,7 +43,7 @@ const columns = [
 			["/vertrag-widerrufen", "Vertrag widerrufen"],
 		],
 	},
-] as const;
+];
 const year = new Date().getFullYear();
 ---
 

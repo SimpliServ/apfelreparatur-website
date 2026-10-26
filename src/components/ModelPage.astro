@@ -1,0 +1,724 @@
+---
+import { Icon } from "astro-iconset/components";
+import { Image } from "emdash/ui";
+import Base from "../layouts/Base.astro";
+import LocalNav from "./LocalNav.astro";
+import Pic from "./Pic.astro";
+import ModelGrid from "./ModelGrid.astro";
+import FAQ from "./FAQ.astro";
+import Closing from "./Closing.astro";
+import { business } from "../lib/business";
+import { devices } from "../lib/content";
+import { BASE_REPAIRS, DEVICE_OF, euro, imgSrc, modelPath, priceGroups, type Model } from "../lib/devices";
+import { headline, LABOUR_FEE, modelDescription, modelFaq, modelSub, modelTitle } from "../lib/model-copy";
+import { repairPages } from "../lib/repair-pages";
+import { breadcrumbLd, faqLd, modelServiceLd, organizationLd, SITE } from "../lib/seo";
+import { qualityLabels, repairLabels } from "../i18n/ui";
+
+interface Props {
+	model: Model;
+	siblings: Model[];
+	entry?: { id: string } | null;
+}
+const { model: m, siblings, entry } = Astro.props;
+const key = DEVICE_OF[m.category];
+const d = devices[key];
+const path = modelPath(m);
+const SERVICES = new Set(["wasserschaden", "software-fehler", "software-update", "fehleranalyse", "datenrettung", "datenuebertragung"]);
+const all = priceGroups(m);
+const groups = all.filter((g) => !SERVICES.has(g.repair));
+const services = all.filter((g) => SERVICES.has(g.repair)).flatMap((g) => g.rows.map((r) => ({ ...r, label: g.label })));
+const priced = all.length > 0;
+// Repairs we do on this kind of device but have no price for yet: listed as "Preis nach Diagnose".
+const open = BASE_REPAIRS[m.category].filter((k) => !all.some((g) => g.repair === k));
+const hasCompat = m.repairs.some((r) => r.quality === "drittanbieter");
+const hasOrig = m.repairs.some((r) => r.quality === "original");
+const heads = headline(m);
+const title = modelTitle(m);
+const description = modelDescription(m);
+const faq = modelFaq(m);
+const anfrage = `/reparatur-anfragen?geraet=${key}&modell=${encodeURIComponent(m.title)}`;
+const img = m.image?.meta?.storageKey || m.image?.src ? m.image : null;
+const caption = typeof img?.meta?.caption === "string" ? img.meta.caption : "";
+const credit = caption && !/\b(?:CC0|Public domain)\b/i.test(caption) ? caption : "";
+const creditText = credit.replace(/https?:\/\/\S+/g, "").trim();
+const creditLinks = [...credit.matchAll(/https?:\/\/\S+/g)].map((x) => x[0]);
+const updated = m.updatedAt ? new Date(m.updatedAt).toLocaleDateString("de-AT", { day: "numeric", month: "long", year: "numeric" }) : "";
+const service = { display: "display", akku: "akku", backcover: "rueckglas", kamera: "kamera", ladebuchse: "ladebuchse", tastatur: "tastatur" } as Record<string, string>;
+const landing = (repair: string) => repairPages.find((p) => p.device === key && p.service === service[repair]);
+const ICON: Record<string, string> = {
+	display: "ph:device-mobile", aussendisplay: "ph:device-mobile", akku: "ph:battery-full", backcover: "ph:cards", kamera: "ph:camera",
+	"selfie-kamera": "ph:device-mobile-camera", "face-id": "ph:user-focus", ladebuchse: "ph:plug", lautsprecher: "ph:speaker-high",
+	"power-button": "ph:power", "home-button": "ph:circle", sim: "ph:sim-card", kopfhoererbuchse: "ph:headphones", tastatur: "ph:keyboard",
+	trackpad: "ph:cursor-click", ssd: "ph:hard-drives", datenrettung: "ph:database", datenuebertragung: "ph:arrows-left-right",
+	wasserschaden: "ph:drop", "software-fehler": "ph:code", "software-update": "ph:arrows-clockwise", fehleranalyse: "ph:stethoscope",
+};
+const partLabel = (q?: string | null) => (q && q !== "standard" ? qualityLabels.de[q] : "");
+const included = [
+	{ icon: "ph:shield-check", title: `${business.warrantyMonths} Monate Garantie`, text: "Auf das getauschte Teil und unsere Arbeit. Zusätzlich zur gesetzlichen Gewährleistung." },
+	{ icon: "ph:receipt", title: "Preis vor der Reparatur", text: "Sie wissen vorher, was es kostet. Repariert wird erst nach Ihrer Zustimmung." },
+	{ icon: "ph:storefront", title: "Ohne Termin", text: "An unseren Standorten in Wien und Umgebung, zum Beispiel am Hauptbahnhof." },
+	{ icon: "ph:lock-simple", title: "Daten bleiben privat", text: "Für die Reparatur brauchen wir keinen Zugriff auf Fotos oder Nachrichten." },
+];
+const offers = m.repairs.map((r) => ({ name: [repairLabels.de[r.repair] ?? r.repair, partLabel(r.quality)].filter(Boolean).join(", "), price: r.price, from: !!r.price_from }));
+const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOrig ? [["#teile", "Original oder kompatibel"] as [string, string]] : []), ["#inklusive", "Inklusive"], ["#faq", "Fragen"]];
+---
+
+<Base
+	og={key}
+	title={title}
+	description={description}
+	content={entry ? { collection: "devices", id: entry.id, slug: m.slug } : undefined}
+	jsonLd={[
+		organizationLd(),
+		modelServiceLd({ name: `${m.title} Reparatur`, description, path, image: img ? SITE + imgSrc(img) : undefined, offers }),
+		faqLd(faq),
+		breadcrumbLd([["Start", "/"], [`${d.name} Reparatur`, `/${key}`], [m.title, path]]),
+	]}
+>
+	<LocalNav title={m.title} links={lnav} cta={{ href: anfrage, label: "Anfragen" }} />
+
+	<header class="mhero">
+		<div class="wrap wrap--xl mhero__grid">
+			<figure class:list={["mhero__media", { "mhero__media--wide": m.category === "mac", "mhero__media--photo": !img }]}>
+				{img ? <Image image={img as never} alt={img.alt || `${m.title}, Rückansicht`} priority placeholder={false} sizes="(max-width: 900px) 70vw, 560px" /> : <Pic name="watch" alt={`${m.title} auf hellem Hintergrund`} eager sizes="(max-width: 900px) 100vw, 620px" />}
+				{
+					creditText && (
+						<figcaption class="mhero__credit">
+							{creditText}{" "}
+							{creditLinks.map((u) => (
+								<a href={u} rel={u.includes("creativecommons.org") ? "license" : undefined}>
+									{u.includes("creativecommons.org") ? "Lizenz" : "Original"}
+								</a>
+							))}
+						</figcaption>
+					)
+				}
+			</figure>
+			<div class="mhero__copy rise">
+				<p class="mhero__eyebrow"><a href={`/${key}`}>{d.name} Reparatur</a>{m.series && m.series !== m.title && <span> · {m.series}</span>}</p>
+				<h1 class="mhero__title">{m.title} Reparatur.</h1>
+				<p class="t-lead mhero__sub">{modelSub(m)}{m.category === "smartphone" && <a class="fn" href="#fn-1">1</a>}</p>
+				{
+					heads.length > 0 ? (
+						<dl class="mhero__prices">
+							{heads.map((h) => (
+								<div>
+									<dt>{h.label}</dt>
+									<dd>{h.value}</dd>
+								</div>
+							))}
+						</dl>
+					) : (
+						m.model_numbers && (
+							<dl class="mhero__prices">
+								<div>
+									<dt>Modellnummer</dt>
+									<dd>{m.model_numbers}</dd>
+								</div>
+							</dl>
+						)
+					)
+				}
+				<div class="btn-row mhero__ctas">
+					<a class="btn btn--lg" href={anfrage}>Reparatur anfragen</a>
+					<a class="btn btn--lg btn--ghost" href="#preise">{priced ? "Alle Preise" : "Reparaturen"}</a>
+				</div>
+				<ul class="mhero__ticks" role="list">
+					<li><Icon name="ph:check" aria-hidden="true" />{business.warrantyMonths} Monate Garantie</li>
+					<li><Icon name="ph:check" aria-hidden="true" />Ohne Termin</li>
+					<li><Icon name="ph:check" aria-hidden="true" />Preis vorab</li>
+				</ul>
+			</div>
+		</div>
+	</header>
+
+	<section id="preise" class="section on-gray" aria-labelledby="preise-h">
+		<div class="wrap wrap--xl">
+			<div class="phead" data-reveal>
+				<h2 id="preise-h" class="t-section">{priced ? `Preise für ${m.category === "watch" ? "Ihre" : "Ihr"} ${m.title}.` : `Was wir ${m.category === "watch" ? "an Ihrer" : "an Ihrem"} ${m.title} reparieren.`}</h2>
+				<p class="t-lead muted">{priced ? `Fixpreise je Reparatur${updated ? `, Stand ${updated}` : ""}.` : "Den Preis nennen wir Ihnen nach der Diagnose, bevor wir reparieren."}</p>
+			</div>
+			<ul class="plist" role="list">
+				{
+					groups.map((g, i) => (
+						<li class="pcard" data-reveal style={`--i:${i % 3}`}>
+							<div class="pcard__head">
+								<Icon name={ICON[g.repair] ?? "ph:wrench"} aria-hidden="true" class="pcard__icon" />
+								<h3>{g.label}</h3>
+							</div>
+							<ul class="pcard__rows" role="list">
+								{g.rows.map((r) => (
+									<li>
+										<span class="pcard__part">
+											{r.quality === "original" ? (
+												<span class="badge badge--orig">
+													<Icon name="ph:seal-check" aria-hidden="true" />
+													Original Apple<a class="fn" href="#fn-1">1</a>
+												</span>
+											) : r.quality === "drittanbieter" ? (
+												<span class="badge">Kompatibles Teil{m.category === "smartphone" && <sup class="fn">**</sup>}</span>
+											) : (
+												<span class="pcard__std">{r.note || "Fixpreis"}</span>
+											)}
+										</span>
+										<span class="pcard__price">
+											{r.price_from && <small>ab </small>}
+											{euro(r.price)}
+											<sup class="fn">*</sup>
+										</span>
+									</li>
+								))}
+							</ul>
+							{landing(g.repair) && (
+								<a class="more pcard__more" href={landing(g.repair)!.path}>
+									{landing(g.repair)!.copy.label} im Detail
+									<Icon name="ph:caret-right" aria-hidden="true" />
+								</a>
+							)}
+						</li>
+					))
+				}
+				{
+					services.length > 0 && (
+						<li class="pcard" data-reveal style={`--i:${groups.length % 3}`}>
+							<div class="pcard__head">
+								<Icon name="ph:stethoscope" aria-hidden="true" class="pcard__icon" />
+								<h3>Service und Diagnose</h3>
+							</div>
+							<ul class="pcard__rows" role="list">
+								{services.map((r) => (
+									<li>
+										<span class="pcard__std pcard__svc">{r.label}</span>
+										<span class="pcard__price pcard__price--sm">
+											{r.price_from && <small>ab </small>}
+											{euro(r.price)}
+											<sup class="fn">*</sup>
+										</span>
+									</li>
+								))}
+							</ul>
+						</li>
+					)
+				}
+				{
+					open.map((k, i) => (
+						<li class="pcard pcard--open" data-reveal style={`--i:${(groups.length + i) % 3}`}>
+							<div class="pcard__head">
+								<Icon name={ICON[k] ?? "ph:wrench"} aria-hidden="true" class="pcard__icon" />
+								<h3>{repairLabels.de[k] ?? k}</h3>
+							</div>
+							<p class="pcard__ask">Preis nach Diagnose</p>
+							{landing(k) ? (
+								<a class="more pcard__more" href={landing(k)!.path}>
+									{landing(k)!.copy.label} im Detail
+									<Icon name="ph:caret-right" aria-hidden="true" />
+								</a>
+							) : (
+								<a class="more pcard__more" href={anfrage}>
+									Anfragen
+									<Icon name="ph:caret-right" aria-hidden="true" />
+								</a>
+							)}
+						</li>
+					))
+				}
+			</ul>
+			<div class="pfoot">
+				{priced && <p><sup>*</sup> Zuzüglich {euro(LABOUR_FEE)} Arbeitspauschale je Reparatur. „ab“-Preise hängen vom genauen Schaden ab, den Endpreis nennen wir Ihnen vor der Reparatur.</p>}
+				{hasCompat && m.category === "smartphone" && <p><sup>**</sup> Bei kompatiblen Teilen kann iOS in den Einstellungen einen Hinweis zum verbauten Teil anzeigen. Die Funktion ist davon nicht betroffen.</p>}
+				{m.notes && <p>{m.notes}</p>}
+			</div>
+		</div>
+	</section>
+
+	{
+		hasCompat && hasOrig && (
+			<section id="teile" class="section" aria-labelledby="teile-h">
+				<div class="wrap wrap--xl">
+					<div class="phead center" data-reveal>
+						<h2 id="teile-h" class="t-section">Original oder kompatibel.<br /><span class="muted">Sie haben die Wahl.</span></h2>
+					</div>
+					<div class="parts">
+						<article class="parts__card parts__card--orig" data-reveal>
+							<p class="parts__tag"><Icon name="ph:seal-check" aria-hidden="true" /> Unsere Empfehlung</p>
+							<h3>Original Apple Teil</h3>
+							<p class="parts__from">Display {euro(m.repairs.find((r) => r.repair === "display" && r.quality === "original")?.price ?? 0)}</p>
+							<ul role="list">
+								<li><Icon name="ph:check" aria-hidden="true" />Gefertigt von Apple für Ihr {m.title}</li>
+								<li><Icon name="ph:check" aria-hidden="true" />Farben, Helligkeit und Touch wie ab Werk</li>
+								<li><Icon name="ph:check" aria-hidden="true" />Volle Akkukapazität beim Batterietausch</li>
+								<li><Icon name="ph:check" aria-hidden="true" />{business.warrantyMonths} Monate Garantie</li>
+							</ul>
+						</article>
+						<article class="parts__card" data-reveal style="--i:1">
+							<p class="parts__tag muted">Die Alternative</p>
+							<h3>Kompatibles Teil</h3>
+							<p class="parts__from">Display {euro(m.repairs.find((r) => r.repair === "display" && r.quality === "drittanbieter")?.price ?? 0)}</p>
+							<ul role="list">
+								<li><Icon name="ph:check" aria-hidden="true" />Deutlich günstiger</li>
+								<li><Icon name="ph:check" aria-hidden="true" />Geprüfte Qualität, vor der Übergabe getestet</li>
+								<li><Icon name="ph:info" aria-hidden="true" />iOS kann einen Hinweis zum Teil anzeigen</li>
+								<li><Icon name="ph:check" aria-hidden="true" />{business.warrantyMonths} Monate Garantie</li>
+							</ul>
+						</article>
+					</div>
+				</div>
+			</section>
+		)
+	}
+
+	<section id="inklusive" class:list={["section", { "on-gray": hasCompat && hasOrig }]} aria-labelledby="inkl-h">
+		<div class="wrap wrap--xl">
+			<h2 id="inkl-h" class="t-section phead" data-reveal>Bei jeder Reparatur inklusive.</h2>
+			<ul class="incl" role="list">
+				{
+					included.map((x, i) => (
+						<li data-reveal style={`--i:${i}`}>
+							<Icon name={x.icon} class="icon-lg" aria-hidden="true" />
+							<h3>{x.title}</h3>
+							<p class="muted">{x.text}</p>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	{
+		siblings.length > 0 && (
+			<section class:list={["section", { "on-gray": !(hasCompat && hasOrig) }]} aria-labelledby="sib-h">
+				<div class="wrap wrap--xl">
+					<div class="sibhead" data-reveal>
+						<h2 id="sib-h" class="t-title">{m.series && m.series !== m.title ? `Weitere Modelle: ${m.series}` : `Weitere ${d.name} Modelle`}</h2>
+						<a class="more" href={`/${key}#modelle`}>
+							Alle {d.name} Modelle <Icon name="ph:caret-right" aria-hidden="true" />
+						</a>
+					</div>
+					<ModelGrid models={siblings} />
+				</div>
+			</section>
+		)
+	}
+
+	<FAQ title={`Fragen zur ${m.title} Reparatur.`} items={faq} />
+
+	<Closing title={`${m.category === "watch" ? "Ihre" : "Ihr"} ${m.title}. Bald wieder wie neu.`} href={anfrage} />
+</Base>
+
+<style>
+	.mhero {
+		padding: clamp(32px, 5vw, 72px) 0 clamp(56px, 7vw, 96px);
+	}
+
+	.mhero__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+		gap: clamp(32px, 6vw, 96px);
+		align-items: center;
+	}
+
+	.mhero__media {
+		position: relative;
+		aspect-ratio: 1;
+		border-radius: var(--radius-lg);
+		background: var(--gray);
+		overflow: hidden;
+	}
+
+	.mhero__media :global(img) {
+		position: absolute;
+		inset: 10% 8% 14%;
+		width: 84%;
+		height: 76%;
+		max-width: none;
+		object-fit: contain;
+		filter: drop-shadow(0 30px 30px rgba(0, 0, 0, 0.12));
+	}
+
+	.mhero__media--wide :global(img) {
+		inset: 10% 6% 14%;
+		width: 88%;
+	}
+
+	.mhero__media--photo :global(img) {
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: none;
+	}
+
+	.mhero__credit {
+		position: absolute;
+		inset: auto 16px 12px;
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.4;
+		text-align: center;
+	}
+
+	.mhero__credit a {
+		margin-left: 6px;
+		color: inherit;
+		text-decoration: underline;
+	}
+
+	.mhero__eyebrow {
+		margin-bottom: 10px;
+		color: var(--muted);
+		font-size: 17px;
+		font-weight: 600;
+	}
+
+	.mhero__eyebrow a {
+		color: var(--accent);
+	}
+
+	.mhero__title {
+		font-size: clamp(36px, 5.4vw, 64px);
+		line-height: 1.0625;
+		font-weight: 600;
+		letter-spacing: -0.015em;
+	}
+
+	.mhero__sub {
+		margin-top: 16px;
+		color: var(--ink-2);
+		max-width: 34ch;
+	}
+
+	.mhero__prices {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 14px 36px;
+		margin: 32px 0 0;
+		padding: 24px 0 0;
+		border-top: 1px solid var(--line);
+	}
+
+	.mhero__prices dt {
+		color: var(--muted);
+		font-size: 14px;
+	}
+
+	.mhero__prices dd {
+		margin: 2px 0 0;
+		font-size: clamp(21px, 2.2vw, 28px);
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.mhero__ctas {
+		justify-content: flex-start;
+		margin-top: 32px;
+	}
+
+	.mhero__ticks {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px 22px;
+		margin: 22px 0 0;
+		padding: 0;
+		list-style: none;
+		color: var(--ink-2);
+		font-size: 14px;
+	}
+
+	.mhero__ticks li {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.mhero__ticks svg {
+		width: 14px;
+		height: 14px;
+		color: var(--ok);
+	}
+
+	.phead {
+		max-width: 760px;
+		margin-bottom: clamp(32px, 4vw, 56px);
+	}
+
+	.phead.center {
+		margin-inline: auto;
+	}
+
+	.phead .t-lead {
+		margin-top: 12px;
+	}
+
+	.plist {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 20px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.pcard {
+		display: flex;
+		flex-direction: column;
+		padding: 28px 28px 24px;
+		border-radius: var(--radius-lg);
+		background: var(--paper);
+	}
+
+	.pcard__head {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 14px;
+	}
+
+	.pcard__head h3 {
+		font-size: 21px;
+		font-weight: 600;
+	}
+
+	.pcard :global(.pcard__icon) {
+		flex: none;
+		width: 28px;
+		height: 28px;
+		color: var(--accent);
+	}
+
+	.pcard__rows {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.pcard__rows li {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 12px 0;
+		border-top: 1px solid var(--line);
+	}
+
+	.badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		padding: 4px 10px;
+		border-radius: 980px;
+		background: var(--gray);
+		color: var(--ink-2);
+		font-size: 13px;
+		font-weight: 500;
+		white-space: nowrap;
+	}
+
+	.badge--orig {
+		background: var(--accent-soft);
+		color: var(--accent);
+	}
+
+	.badge svg {
+		width: 14px;
+		height: 14px;
+	}
+
+	.pcard__std {
+		color: var(--muted);
+		font-size: 14px;
+	}
+
+	.pcard__price {
+		font-size: 21px;
+		font-weight: 600;
+		white-space: nowrap;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.pcard__svc {
+		color: var(--ink);
+		font-size: 15px;
+	}
+
+	.pcard__price--sm {
+		font-size: 17px;
+	}
+
+	.pcard__price small {
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--muted);
+	}
+
+	.pcard__price .fn {
+		color: var(--muted);
+	}
+
+	.pcard__more {
+		margin-top: auto;
+		padding-top: 26px;
+		font-size: 15px;
+	}
+
+	.pcard__ask {
+		padding: 12px 0;
+		border-top: 1px solid var(--line);
+		color: var(--ink-2);
+		font-size: 17px;
+		font-weight: 500;
+	}
+
+	.pfoot {
+		max-width: 820px;
+		margin-top: 28px;
+		color: var(--muted);
+		font-size: 12px;
+		line-height: 1.5;
+	}
+
+	.pfoot p + p {
+		margin-top: 6px;
+	}
+
+	.parts {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 20px;
+		max-width: 980px;
+		margin: 0 auto;
+	}
+
+	.parts__card {
+		padding: clamp(28px, 4vw, 48px);
+		border-radius: var(--radius-lg);
+		background: var(--gray);
+	}
+
+	.parts__card--orig {
+		background: var(--accent-soft);
+		box-shadow: inset 0 0 0 2px var(--accent);
+	}
+
+	.parts__tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		color: var(--accent);
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.parts__tag svg {
+		width: 16px;
+		height: 16px;
+	}
+
+	.parts__card h3 {
+		margin-top: 10px;
+		font-size: clamp(24px, 3vw, 32px);
+		font-weight: 600;
+	}
+
+	.parts__from {
+		margin-top: 6px;
+		color: var(--ink-2);
+		font-size: 17px;
+	}
+
+	.parts__card ul {
+		list-style: none;
+		margin: 24px 0 0;
+		padding: 0;
+	}
+
+	.parts__card li {
+		display: flex;
+		gap: 10px;
+		align-items: baseline;
+		padding: 10px 0;
+		border-top: 1px solid rgba(0, 0, 0, 0.08);
+	}
+
+	.parts__card li svg {
+		flex: none;
+		width: 16px;
+		height: 16px;
+		color: var(--accent);
+		transform: translateY(2px);
+	}
+
+	.incl {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: clamp(20px, 3vw, 40px);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.incl :global(svg) {
+		color: var(--accent);
+	}
+
+	.incl h3 {
+		margin: 18px 0 6px;
+		font-size: 19px;
+		font-weight: 600;
+	}
+
+	.sibhead {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 8px 24px;
+		margin-bottom: 28px;
+	}
+
+	@media (max-width: 1000px) {
+		.plist {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.incl {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.mhero__grid {
+			grid-template-columns: 1fr;
+		}
+
+		.mhero__media {
+			aspect-ratio: 4 / 3;
+		}
+
+	}
+
+	@media (max-width: 640px) {
+		.mhero__prices {
+			gap: 12px 20px;
+		}
+
+		.mhero__prices dd {
+			font-size: 19px;
+		}
+
+		.plist,
+		.parts,
+		.incl {
+			grid-template-columns: 1fr;
+		}
+
+		.mhero__ctas {
+			flex-direction: column;
+		}
+
+		.mhero__ctas .btn {
+			width: 100%;
+		}
+	}
+</style>

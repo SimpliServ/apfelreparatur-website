@@ -4,6 +4,8 @@ import { dataCards, deviceFaq, homeFaq, steps, whyCards } from "./copy";
 import { deviceList, services, type DeviceKey } from "./content";
 import { repairPages } from "./repair-pages";
 import { SITE } from "./seo";
+import { CATEGORY, euro, modelPath, priceGroups, type Model } from "./devices";
+import { qualityLabels } from "../i18n/ui";
 import type { PlusCard } from "../components/PlusCards.astro";
 
 const dn = (key: DeviceKey, name: string) => (key === "mac" ? "MacBook" : name);
@@ -17,7 +19,7 @@ const summary = `> Unabhängige Reparatur für iPhone, iPad und Mac in Wien und 
 const facts = (locations: Location[]) => [
 	`- Standorte: ${[...new Set(locations.map((l) => l.name))].join(", ")} (Details: ${SITE}/kontakt)`,
 	"- Termin: nicht nötig, einfach vorbeikommen. Online-Anfrage optional.",
-	"- Preise: werden nach der Diagnose vor der Reparatur genannt; repariert wird erst nach Zustimmung. Keine Preise auf der Website.",
+	"- Preise: iPhone und iPad zum Fixpreis je Modell (Preisliste unten bzw. auf der Modellseite), zuzüglich 19,99 € Arbeitspauschale je Reparatur. Mac und Apple Watch: Preis nach der Diagnose, vor der Reparatur. Repariert wird erst nach Zustimmung.",
 	"- Dauer: ist das Teil lagernd, ist ein Display- oder Akkutausch oft in rund einer Stunde erledigt.",
 	`- Garantie: ${business.warrantyMonths} Monate auf getauschte Teile und Arbeit, gesetzliche Gewährleistung bleibt bestehen.`,
 	`- Kontakt: ${business.email}, gratis Service-Hotline ${business.hotline}`,
@@ -54,7 +56,13 @@ export function llmsTxt(locations: Location[]): string {
 	].join("\n");
 }
 
-export function llmsFullTxt(locations: Location[]): string {
+const priceLine = (m: Model) =>
+	`- [${m.title}](${SITE}${modelPath(m)})${m.model_numbers ? ` (${m.model_numbers})` : ""}: ` +
+	(m.repairs.length
+		? priceGroups(m).map((g) => `${g.label} ${g.rows.map((r) => `${r.price_from ? "ab " : ""}${euro(r.price)}${r.quality && r.quality !== "standard" ? ` (${qualityLabels.de[r.quality]})` : ""}`).join(" / ")}`).join(", ")
+		: "Preis nach Diagnose");
+
+export function llmsFullTxt(locations: Location[], models: Model[] = []): string {
 	const qa = (q: string, a: string) => `**${q}**\n${a}\n`;
 	const out = [
 		`# ${business.brand}: iPhone, iPad und Mac Reparatur in Wien`,
@@ -84,7 +92,8 @@ export function llmsFullTxt(locations: Location[]): string {
 			if (page) out.push(`- Mehr: ${SITE}${page.path}`);
 			out.push("");
 		}
-		out.push(`Modelle: ${d.models.join(", ")}.`, "", `### Häufige Fragen zur ${d.name} Reparatur`, "", ...deviceFaq(d).map((f) => qa(f.q, f.a)));
+		const own = models.filter((m) => m.category === CATEGORY[d.key]);
+		out.push(own.length ? `### Modelle und Preise\n\n${own.map(priceLine).join("\n")}\n` : `Modelle: ${d.models.join(", ")}.`, "", `### Häufige Fragen zur ${d.name} Reparatur`, "", ...deviceFaq(d).map((f) => qa(f.q, f.a)));
 	}
 	out.push("## Reparaturen im Detail", "");
 	for (const p of repairPages) {

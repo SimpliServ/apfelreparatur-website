@@ -10,7 +10,7 @@ const { title, id = "dir" } = Astro.props;
 const directory = [
 	...deviceList.map((d) => {
 		const dn = d.key === "mac" ? "MacBook" : d.name;
-		return { title: `${dn} Reparatur`, href: `/${d.key}`, links: repairPages.filter((p) => p.device === d.key).map((p) => [p.path, `${dn} ${p.copy.label}`] as const) };
+		return { title: `${dn} Reparatur`, href: `/${d.key}`, links: [...repairPages.filter((p) => p.device === d.key).map((p) => [p.path, `${dn} ${p.copy.label}`] as const), [`/${d.key}#modelle`, `Alle ${d.name} Modelle`] as const] };
 	}),
 	{ title: "Daten", href: "/datenrettung", links: [["/datenrettung", "Datenrettung für iPhone, iPad und Mac"], ["/datenrettung#uebertragung", "Datenübertragung aufs neue Gerät"]] as const },
 ];

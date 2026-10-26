@@ -1,5 +1,8 @@
 ---
+import { Icon } from "astro-iconset/components";
 import Wordmark from "./Wordmark.astro";
+import NavSearch from "./NavSearch.astro";
+import { business, telHref, whatsappHref } from "../lib/business";
 
 const links = [
 	["/iphone", "iPhone"],
@@ -11,6 +14,8 @@ const links = [
 	["/kontakt", "Kontakt"],
 ] as const;
 const path = Astro.url.pathname;
+// Model and repair pages (/iphone/…) keep their device section highlighted.
+const current = (href: string) => (path === href ? "page" : href.length > 2 && !href.includes("#") && path.startsWith(href + "/") ? "true" : undefined);
 ---
 
 <header class="gnav" data-gnav>
@@ -20,13 +25,17 @@ const path = Astro.url.pathname;
 			{
 				links.map(([href, label]) => (
 					<li>
-						<a href={href} aria-current={path === href ? "page" : undefined}>
+						<a href={href} aria-current={current(href)}>
 							{label}
 						</a>
 					</li>
 				))
 			}
 		</ul>
+		<NavSearch />
+		<a href={telHref(business.hotline)} class="gnav__call" aria-label={`Gratis Service-Hotline ${business.hotline}`}>
+			<Icon name="ph:phone-fill" aria-hidden="true" /><span class="gnav__call-num">{business.hotline}</span>
+		</a>
 		<a href="/reparatur-anfragen" class="gnav__cta"><span class="gnav__cta-long">Reparatur </span>anfragen</a>
 		<button type="button" class="gnav__toggle" aria-expanded="false" aria-controls="gnav-menu" aria-label="Menü öffnen" data-gnav-toggle>
 			<span></span><span></span>
@@ -36,6 +45,10 @@ const path = Astro.url.pathname;
 		<ul role="list">
 			{links.map(([href, label], i) => <li style={`--i:${i}`}><a href={href}>{label}</a></li>)}
 			<li style={`--i:${links.length}`}><a href="/reparatur-anfragen">Reparatur anfragen</a></li>
+			<li style={`--i:${links.length + 1}`} class="gnav__menu-contact">
+				<a href={telHref(business.hotline)}><Icon name="ph:phone-fill" aria-hidden="true" />{business.hotline}</a>
+				<a href={whatsappHref} target="_blank" rel="noopener"><Icon name="ph:whatsapp-logo" class="gnav__menu-wa" aria-hidden="true" />WhatsApp</a>
+			</li>
 		</ul>
 	</div>
 </header>
@@ -107,13 +120,44 @@ const path = Astro.url.pathname;
 	}
 
 	.gnav__links a:hover,
-	.gnav__links a[aria-current="page"] {
+	.gnav__links a[aria-current] {
 		color: var(--ink);
 		text-decoration: none;
 	}
 
-	.gnav__links a[aria-current="page"] {
+	.gnav__links a[aria-current] {
 		font-weight: 600;
+	}
+
+	.gnav__call {
+		display: inline-flex;
+		align-items: center;
+		flex: none;
+		gap: 6px;
+		height: 32px;
+		border-radius: 980px;
+		font-size: 14px;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+		transition: background-color 0.2s var(--ease);
+	}
+
+	.gnav__call {
+		padding: 0 12px 0 10px;
+		color: var(--accent);
+		background: var(--accent-soft);
+	}
+
+	.gnav__call:hover {
+		text-decoration: none;
+		background: #dce6fb;
+	}
+
+	.gnav__call :global(svg) {
+		width: 17px;
+		height: 17px;
+		flex: none;
 	}
 
 	.gnav__cta {
@@ -182,6 +226,38 @@ const path = Astro.url.pathname;
 		text-transform: none;
 	}
 
+	@media (max-width: 1199px) {
+		.gnav__call {
+			width: 32px;
+			padding: 0;
+			justify-content: center;
+		}
+
+		.gnav__call-num {
+			display: none;
+		}
+
+		.gnav__links a {
+			padding: 0 9px;
+			white-space: nowrap;
+		}
+	}
+
+	@media (max-width: 939px) {
+		.gnav__links a {
+			padding: 0 7px;
+			font-size: 13px;
+		}
+
+		.gnav__cta-long {
+			display: none;
+		}
+
+		.gnav__cta {
+			text-transform: capitalize;
+		}
+	}
+
 	@media (max-width: 420px) {
 		.gnav__cta-long {
 			display: none;
@@ -203,6 +279,37 @@ const path = Astro.url.pathname;
 
 		.gnav__cta {
 			margin-right: 4px;
+		}
+
+		.gnav__call {
+			display: none;
+		}
+
+		.gnav__menu-contact {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px 28px;
+			margin-top: 20px;
+			padding-top: 20px;
+			border-top: 1px solid var(--line);
+		}
+
+		.gnav__menu .gnav__menu-contact a {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			font-size: 21px;
+			font-variant-numeric: tabular-nums;
+		}
+
+		.gnav__menu-contact :global(svg) {
+			width: 24px;
+			height: 24px;
+			color: var(--accent);
+		}
+
+		.gnav__menu-contact :global(.gnav__menu-wa) {
+			color: var(--wa);
 		}
 
 		.gnav__toggle {

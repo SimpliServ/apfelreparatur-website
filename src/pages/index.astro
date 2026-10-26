@@ -11,9 +11,14 @@ import { homeFaq, steps, whyCards } from "../lib/copy";
 import { faqLd, localBusinessLd } from "../lib/seo";
 import { business } from "../lib/business";
 import { getLocations } from "../lib/mobinil";
+import ModelGrid from "../components/ModelGrid.astro";
+import { loadModels, popular, useHints } from "../lib/devices";
 
 const locations = await getLocations();
 const places = [...new Set(locations.map((l) => l.name))];
+const catalogue = await loadModels().catch(() => ({ models: [], cacheHint: undefined }));
+useHints(Astro, catalogue.cacheHint);
+const top = popular(catalogue.models);
 
 const chapters = [
 	["/iphone", "ph:device-mobile", "iPhone"],
@@ -116,6 +121,29 @@ const chapters = [
 		primary={{ href: "/reparatur-anfragen?geraet=apple-watch", label: "Anfragen" }}
 		secondary={{ href: "/apple-watch", label: "Mehr erfahren" }}
 	/>
+
+	{
+		top.length > 0 && (
+			<section id="preise" class="prices section" aria-labelledby="preise-h">
+				<div class="wrap wrap--xl">
+					<div class="center prices__head" data-reveal>
+						<h2 id="preise-h" class="t-section">Preise für Ihr Modell.</h2>
+						<p class="t-lead muted">Fixpreise für jedes iPhone und iPad, wahlweise mit Original Apple Teilen.<a class="fn" href="#fn-1">1</a> Wählen Sie Ihr Modell für alle Reparaturen.</p>
+					</div>
+					<ModelGrid models={top} />
+					<ul class="prices__all" role="list">
+						{[["/iphone#modelle", "Alle iPhone Modelle"], ["/ipad#modelle", "Alle iPad Modelle"], ["/mac#modelle", "Alle Mac Modelle"], ["/apple-watch#modelle", "Alle Apple Watch Modelle"]].map(([href, label]) => (
+							<li>
+								<a class="more" href={href}>
+									{label} <Icon name="ph:caret-right" aria-hidden="true" />
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</section>
+		)
+	}
 
 	<PlusCards id="warum" title="Warum Apfelreparatur." link={{ href: "/#garantie", label: "Garantie und Bedingungen ›" }} cards={whyCards} />
 
@@ -241,5 +269,33 @@ const chapters = [
 	.workshop__img img {
 		width: 100%;
 		border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+	}
+
+	.prices__head {
+		max-width: 760px;
+		margin: 0 auto clamp(32px, 4vw, 48px);
+	}
+
+	.prices__head .t-lead {
+		margin-top: 12px;
+	}
+
+	@media (min-width: 735px) {
+		.prices :global(.mgrid__list) {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			max-width: 1040px;
+			margin-inline: auto;
+		}
+	}
+
+	.prices__all {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 12px 32px;
+		margin: clamp(32px, 4vw, 48px) 0 0;
+		padding: 0;
+		list-style: none;
+		font-size: 17px;
 	}
 </style>

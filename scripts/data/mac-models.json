@@ -1,0 +1,706 @@
+{
+ "macbook-air": [
+  {
+   "name": "MacBook Air 13″",
+   "models": [
+    {
+     "name": "MacBook Air 13″ (M5, 2026)",
+     "year": "2026",
+     "numbers": [
+      "A3449"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (M4, 2025)",
+     "year": "2025",
+     "numbers": [
+      "A3240"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (M3, 2024)",
+     "year": "2024",
+     "numbers": [
+      "A3113"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (M2, 2022)",
+     "year": "2022",
+     "numbers": [
+      "A2681"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (M1, 2020)",
+     "year": "2020",
+     "numbers": [
+      "A2337"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (Retina, 2020)",
+     "year": "2020",
+     "numbers": [
+      "A2179"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (Retina, 2019)",
+     "year": "2019",
+     "numbers": [
+      "A1932"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (Retina, 2018)",
+     "year": "2018",
+     "numbers": [
+      "A1932"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "MacBook Air 15″",
+   "models": [
+    {
+     "name": "MacBook Air 15″ (M5, 2026)",
+     "year": "2026",
+     "numbers": [
+      "A3448"
+     ]
+    },
+    {
+     "name": "MacBook Air 15″ (M4, 2025)",
+     "year": "2025",
+     "numbers": [
+      "A3241"
+     ]
+    },
+    {
+     "name": "MacBook Air 15″ (M3, 2024)",
+     "year": "2024",
+     "numbers": [
+      "A3114"
+     ]
+    },
+    {
+     "name": "MacBook Air 15″ (M2, 2023)",
+     "year": "2023",
+     "numbers": [
+      "A2941"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "MacBook Air 11″/13″ (bis 2017)",
+   "models": [
+    {
+     "name": "MacBook Air 13″ (2017)",
+     "year": "2017",
+     "numbers": [
+      "A1466"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (Anfang 2015)",
+     "year": "2015",
+     "numbers": [
+      "A1466"
+     ]
+    },
+    {
+     "name": "MacBook Air 11″ (Anfang 2015)",
+     "year": "2015",
+     "numbers": [
+      "A1465"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (Anfang 2014)",
+     "year": "2014",
+     "numbers": [
+      "A1466"
+     ]
+    },
+    {
+     "name": "MacBook Air 11″ (Anfang 2014)",
+     "year": "2014",
+     "numbers": [
+      "A1465"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (Mitte 2013)",
+     "year": "2013",
+     "numbers": [
+      "A1466"
+     ]
+    },
+    {
+     "name": "MacBook Air 11″ (Mitte 2013)",
+     "year": "2013",
+     "numbers": [
+      "A1465"
+     ]
+    },
+    {
+     "name": "MacBook Air 13″ (Mitte 2012)",
+     "year": "2012",
+     "numbers": [
+      "A1466"
+     ]
+    },
+    {
+     "name": "MacBook Air 11″ (Mitte 2012)",
+     "year": "2012",
+     "numbers": [
+      "A1465"
+     ]
+    }
+   ]
+  }
+ ],
+ "macbook-pro": [
+  {
+   "name": "MacBook Pro Retina",
+   "models": [
+    {
+     "name": "MacBook Pro 15″ Retina (Mitte 2015)",
+     "year": "2015",
+     "numbers": [
+      "A1398"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ Retina (Anfang 2015)",
+     "year": "2015",
+     "numbers": [
+      "A1502"
+     ]
+    },
+    {
+     "name": "MacBook Pro 15″ Retina (Mitte 2014)",
+     "year": "2014",
+     "numbers": [
+      "A1398"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ Retina (Mitte 2014)",
+     "year": "2014",
+     "numbers": [
+      "A1502"
+     ]
+    },
+    {
+     "name": "MacBook Pro 15″ Retina (Ende 2013)",
+     "year": "2013",
+     "numbers": [
+      "A1398"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ Retina (Ende 2013)",
+     "year": "2013",
+     "numbers": [
+      "A1502"
+     ]
+    },
+    {
+     "name": "MacBook Pro 15″ Retina (Anfang 2013)",
+     "year": "2013",
+     "numbers": [
+      "A1398"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ Retina (Anfang 2013)",
+     "year": "2013",
+     "numbers": [
+      "A1425"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ Retina (Ende 2012)",
+     "year": "2012",
+     "numbers": [
+      "A1425"
+     ]
+    },
+    {
+     "name": "MacBook Pro 15″ Retina (Mitte 2012)",
+     "year": "2012",
+     "numbers": [
+      "A1398"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "MacBook Pro 13″",
+   "models": [
+    {
+     "name": "MacBook Pro 13″ (M2, 2022)",
+     "year": "2022",
+     "numbers": [
+      "A2338"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (M1, 2020)",
+     "year": "2020",
+     "numbers": [
+      "A2338"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (2020, 4 Thunderbolt-3-Anschlüsse)",
+     "year": "2020",
+     "numbers": [
+      "A2251"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (2020, 2 Thunderbolt-3-Anschlüsse)",
+     "year": "2020",
+     "numbers": [
+      "A2289"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (2019, 4 Thunderbolt-3-Anschlüsse)",
+     "year": "2019",
+     "numbers": [
+      "A1989"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (2019, 2 Thunderbolt-3-Anschlüsse)",
+     "year": "2019",
+     "numbers": [
+      "A2159"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (2018, 4 Thunderbolt-3-Anschlüsse)",
+     "year": "2018",
+     "numbers": [
+      "A1989"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (2017, 4 Thunderbolt-3-Anschlüsse)",
+     "year": "2017",
+     "numbers": [
+      "A1706"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (2017, 2 Thunderbolt-3-Anschlüsse)",
+     "year": "2017",
+     "numbers": [
+      "A1708"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (2016, 4 Thunderbolt-3-Anschlüsse)",
+     "year": "2016",
+     "numbers": [
+      "A1706"
+     ]
+    },
+    {
+     "name": "MacBook Pro 13″ (2016, 2 Thunderbolt-3-Anschlüsse)",
+     "year": "2016",
+     "numbers": [
+      "A1708"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "MacBook Pro 14″",
+   "models": [
+    {
+     "name": "MacBook Pro 14″ (M5 Pro/M5 Max, 2026)",
+     "year": "2026",
+     "numbers": [
+      "A3426",
+      "A3427"
+     ]
+    },
+    {
+     "name": "MacBook Pro 14″ (M5, 2025)",
+     "year": "2025",
+     "numbers": [
+      "A3434"
+     ]
+    },
+    {
+     "name": "MacBook Pro 14″ (M4 Pro/M4 Max, 2024)",
+     "year": "2024",
+     "numbers": [
+      "A3401",
+      "A3185"
+     ]
+    },
+    {
+     "name": "MacBook Pro 14″ (M4, 2024)",
+     "year": "2024",
+     "numbers": [
+      "A3112"
+     ]
+    },
+    {
+     "name": "MacBook Pro 14″ (M3 Pro/M3 Max, Nov. 2023)",
+     "year": "2023",
+     "numbers": [
+      "A2992"
+     ]
+    },
+    {
+     "name": "MacBook Pro 14″ (M3, Nov. 2023)",
+     "year": "2023",
+     "numbers": [
+      "A2918"
+     ]
+    },
+    {
+     "name": "MacBook Pro 14″ (M2 Pro/M2 Max, 2023)",
+     "year": "2023",
+     "numbers": [
+      "A2779"
+     ]
+    },
+    {
+     "name": "MacBook Pro 14″ (M1 Pro/M1 Max, 2021)",
+     "year": "2021",
+     "numbers": [
+      "A2442"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "MacBook Pro 15″",
+   "models": [
+    {
+     "name": "MacBook Pro 15″ (2019)",
+     "year": "2019",
+     "numbers": [
+      "A1990"
+     ]
+    },
+    {
+     "name": "MacBook Pro 15″ (2018)",
+     "year": "2018",
+     "numbers": [
+      "A1990"
+     ]
+    },
+    {
+     "name": "MacBook Pro 15″ (2017)",
+     "year": "2017",
+     "numbers": [
+      "A1707"
+     ]
+    },
+    {
+     "name": "MacBook Pro 15″ (2016)",
+     "year": "2016",
+     "numbers": [
+      "A1707"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "MacBook Pro 16″",
+   "models": [
+    {
+     "name": "MacBook Pro 16″ (M5 Pro/M5 Max, 2026)",
+     "year": "2026",
+     "numbers": [
+      "A3428",
+      "A3429"
+     ]
+    },
+    {
+     "name": "MacBook Pro 16″ (M4 Pro/M4 Max, 2024)",
+     "year": "2024",
+     "numbers": [
+      "A3403",
+      "A3186"
+     ]
+    },
+    {
+     "name": "MacBook Pro 16″ (M3 Pro/M3 Max, Nov. 2023)",
+     "year": "2023",
+     "numbers": [
+      "A2991"
+     ]
+    },
+    {
+     "name": "MacBook Pro 16″ (M2 Pro/M2 Max, 2023)",
+     "year": "2023",
+     "numbers": [
+      "A2780"
+     ]
+    },
+    {
+     "name": "MacBook Pro 16″ (M1 Pro/M1 Max, 2021)",
+     "year": "2021",
+     "numbers": [
+      "A2485"
+     ]
+    },
+    {
+     "name": "MacBook Pro 16″ (2019)",
+     "year": "2019",
+     "numbers": [
+      "A2141"
+     ]
+    }
+   ]
+  }
+ ],
+ "macbook": [
+  {
+   "name": "MacBook Retina 12″",
+   "models": [
+    {
+     "name": "MacBook Retina 12″ (2017)",
+     "year": "2017",
+     "numbers": [
+      "A1534"
+     ]
+    },
+    {
+     "name": "MacBook Retina 12″ (Anfang 2016)",
+     "year": "2016",
+     "numbers": [
+      "A1534"
+     ]
+    },
+    {
+     "name": "MacBook Retina 12″ (Anfang 2015)",
+     "year": "2015",
+     "numbers": [
+      "A1534"
+     ]
+    }
+   ]
+  }
+ ],
+ "macbook-neo": [
+  {
+   "name": "MacBook Neo 13″",
+   "models": [
+    {
+     "name": "MacBook Neo 13″ (A18 Pro, 2026)",
+     "year": "2026",
+     "numbers": [
+      "A3404"
+     ]
+    }
+   ]
+  }
+ ],
+ "imac": [
+  {
+   "name": "iMac 21,5″",
+   "models": [
+    {
+     "name": "iMac 21,5″ (2017)",
+     "year": "2017",
+     "numbers": [
+      "A1418"
+     ]
+    },
+    {
+     "name": "iMac 21,5″ (Ende 2015)",
+     "year": "2015",
+     "numbers": [
+      "A1418"
+     ]
+    },
+    {
+     "name": "iMac 21,5″ (Mitte 2014)",
+     "year": "2014",
+     "numbers": [
+      "A1418"
+     ]
+    },
+    {
+     "name": "iMac 21,5″ (Ende 2013)",
+     "year": "2013",
+     "numbers": [
+      "A1418"
+     ]
+    },
+    {
+     "name": "iMac 21,5″ (Ende 2012)",
+     "year": "2012",
+     "numbers": [
+      "A1418"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "iMac 21,5″ 4K",
+   "models": [
+    {
+     "name": "iMac 21,5″ Retina 4K (2019)",
+     "year": "2019",
+     "numbers": [
+      "A2116"
+     ]
+    },
+    {
+     "name": "iMac 21,5″ Retina 4K (2017)",
+     "year": "2017",
+     "numbers": [
+      "A1418"
+     ]
+    },
+    {
+     "name": "iMac 21,5″ Retina 4K (Ende 2015)",
+     "year": "2015",
+     "numbers": [
+      "A1418"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "iMac 24″",
+   "models": [
+    {
+     "name": "iMac 24″ (M4, 2024, 4 Anschlüsse)",
+     "year": "2024",
+     "numbers": [
+      "A3137"
+     ]
+    },
+    {
+     "name": "iMac 24″ (M4, 2024, 2 Anschlüsse)",
+     "year": "2024",
+     "numbers": [
+      "A3247"
+     ]
+    },
+    {
+     "name": "iMac 24″ (M3, 2023, 4 Anschlüsse)",
+     "year": "2023",
+     "numbers": [
+      "A2873"
+     ]
+    },
+    {
+     "name": "iMac 24″ (M3, 2023, 2 Anschlüsse)",
+     "year": "2023",
+     "numbers": [
+      "A2874"
+     ]
+    },
+    {
+     "name": "iMac 24″ (M1, 2021, 4 Anschlüsse)",
+     "year": "2021",
+     "numbers": [
+      "A2438"
+     ]
+    },
+    {
+     "name": "iMac 24″ (M1, 2021, 2 Anschlüsse)",
+     "year": "2021",
+     "numbers": [
+      "A2439"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "iMac 27″ 5K",
+   "models": [
+    {
+     "name": "iMac 27″ Retina 5K (2020)",
+     "year": "2020",
+     "numbers": [
+      "A2115"
+     ]
+    },
+    {
+     "name": "iMac 27″ Retina 5K (2019)",
+     "year": "2019",
+     "numbers": [
+      "A2115"
+     ]
+    },
+    {
+     "name": "iMac 27″ Retina 5K (2017)",
+     "year": "2017",
+     "numbers": [
+      "A1419"
+     ]
+    },
+    {
+     "name": "iMac 27″ Retina 5K (Ende 2015)",
+     "year": "2015",
+     "numbers": [
+      "A1419"
+     ]
+    },
+    {
+     "name": "iMac 27″ Retina 5K (Mitte 2015)",
+     "year": "2015",
+     "numbers": [
+      "A1419"
+     ]
+    },
+    {
+     "name": "iMac 27″ Retina 5K (Ende 2014)",
+     "year": "2014",
+     "numbers": [
+      "A1419"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "iMac 27″ (ohne Retina)",
+   "models": [
+    {
+     "name": "iMac 27″ (Ende 2013)",
+     "year": "2013",
+     "numbers": [
+      "A1419"
+     ]
+    },
+    {
+     "name": "iMac 27″ (Ende 2012)",
+     "year": "2012",
+     "numbers": [
+      "A1419"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "iMac Pro 27″ 5K",
+   "image": "imac-pro",
+   "models": [
+    {
+     "name": "iMac Pro 27″ 5K (2017)",
+     "year": "2017",
+     "numbers": [
+      "A1862"
+     ]
+    }
+   ]
+  }
+ ]
+}

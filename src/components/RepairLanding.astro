@@ -1,19 +1,22 @@
 ---
 import { Icon } from "astro-iconset/components";
-import Base from "../../layouts/Base.astro";
-import LocalNav from "../../components/LocalNav.astro";
-import Pic from "../../components/Pic.astro";
-import Steps from "../../components/Steps.astro";
-import FAQ from "../../components/FAQ.astro";
-import Closing from "../../components/Closing.astro";
-import { de, devices } from "../../lib/content";
-import { repairPhoto } from "../../lib/copy";
-import { findRepairPage, repairPages } from "../../lib/repair-pages";
-import { getModels } from "../../lib/mobinil";
-import { breadcrumbLd, faqLd, organizationLd, serviceLd } from "../../lib/seo";
+import Base from "../layouts/Base.astro";
+import LocalNav from "../components/LocalNav.astro";
+import Pic from "../components/Pic.astro";
+import Steps from "../components/Steps.astro";
+import FAQ from "../components/FAQ.astro";
+import Closing from "../components/Closing.astro";
+import ModelGrid from "./ModelGrid.astro";
+import { de, devices } from "../lib/content";
+import { repairPhoto } from "../lib/copy";
+import { repairPages, type RepairPage } from "../lib/repair-pages";
+import { euro, loadModels, modelPath, REPAIR_OF, useHints } from "../lib/devices";
+import { breadcrumbLd, faqLd, organizationLd, serviceLd } from "../lib/seo";
 
-const page = findRepairPage(Astro.params.device ?? "", Astro.params.repair ?? "");
-if (!page) return Astro.rewrite("/404");
+interface Props {
+	page: RepairPage;
+}
+const { page } = Astro.props;
 
 const d = devices[page.device];
 const repair = d.repairs.find((r) => r.key === page.service)!;
@@ -22,7 +25,15 @@ const c = page.copy;
 const dn = d.key === "mac" ? "MacBook" : d.name;
 const name = `${dn} ${c.label}`;
 const faq = c.faq(dn);
-const models = (await getModels(page.device)).map((m) => m.title);
+const { models: all, cacheHint } = await loadModels(page.device);
+useHints(Astro, cacheHint);
+const rk = REPAIR_OF[page.service] ?? page.service;
+const cell = (rows: { repair: string; quality?: string | null; price: number; price_from?: boolean | null }[], q?: string) => {
+	const r = rows.filter((x) => x.repair === rk && (!q || x.quality === q)).sort((a, b) => a.price - b.price)[0];
+	return r ? (r.price_from ? "ab " : "") + euro(r.price) : "";
+};
+const priced = all.filter((m) => m.repairs.some((r) => r.repair === rk));
+const split = priced.some((m) => m.repairs.some((r) => r.repair === rk && r.quality === "drittanbieter"));
 const description = c.desc(dn);
 const siblings = repairPages.filter((p) => p.device === page.device && p.path !== page.path);
 const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
@@ -94,13 +105,51 @@ const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
 
 	<Steps id="ablauf" title="So läuft die Reparatur." items={c.steps(dn)} />
 
-	<section id="modelle" class="models section on-dark" aria-labelledby="models-h">
-		<div class="wrap center" data-reveal>
-			<h2 id="models-h" class="t-section">{c.label} für jedes {dn}.</h2>
-			<p class="t-lead muted models__lead">Wir reparieren aktuelle und ältere Modelle, unter anderem:</p>
-			<ul class="models__list" role="list">
-				{models.map((m) => <li>{m}</li>)}
-			</ul>
+	<section id="modelle" class="section on-gray" aria-labelledby="models-h">
+		<div class="wrap wrap--xl">
+			<div class="mhead" data-reveal>
+				<h2 id="models-h" class="t-section">{priced.length ? `${c.label}: Preise für jedes ${dn}.` : `${c.label} für jedes ${dn}.`}</h2>
+				<p class="t-lead muted">{priced.length ? "Fixpreise je Modell. Wählen Sie Ihr Modell für alle Reparaturen und Details." : "Wählen Sie Ihr Modell. Den Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur."}</p>
+			</div>
+			{
+				priced.length > 0 ? (
+					<div class="ptable" data-reveal>
+						<table>
+							<thead>
+								<tr>
+									<th scope="col">Modell</th>
+									{split ? (
+										<>
+											<th scope="col">Original Apple<a class="fn" href="#fn-1">1</a></th>
+											<th scope="col">Kompatibel</th>
+										</>
+									) : (
+										<th scope="col">Preis</th>
+									)}
+								</tr>
+							</thead>
+							<tbody>
+								{priced.map((m) => (
+									<tr>
+										<th scope="row"><a href={modelPath(m)}>{m.title}</a></th>
+										{split ? (
+											<>
+												<td>{cell(m.repairs, "original") || "–"}</td>
+												<td>{cell(m.repairs, "drittanbieter") || "–"}</td>
+											</>
+										) : (
+											<td>{cell(m.repairs)}</td>
+										)}
+									</tr>
+								))}
+							</tbody>
+						</table>
+						<p class="ptable__note muted">Zuzüglich 19,99 € Arbeitspauschale je Reparatur. Ihr Modell fehlt? <a href={anfrage}>Fragen Sie uns</a>.</p>
+					</div>
+				) : (
+					<ModelGrid models={all} grouped />
+				)
+			}
 		</div>
 	</section>
 
@@ -223,27 +272,69 @@ const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
 		color: var(--accent);
 	}
 
-	.models__lead {
-		margin: 16px auto 36px;
+	.mhead {
+		max-width: 760px;
+		margin-bottom: clamp(28px, 4vw, 48px);
 	}
 
-	.models__list {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 10px;
-		max-width: 900px;
-		margin: 0 auto;
-		padding: 0;
-		list-style: none;
+	.mhead .t-lead {
+		margin-top: 12px;
 	}
 
-	.models__list li {
-		padding: 8px 16px;
-		border-radius: 980px;
-		background: #1d1d1f;
-		color: #f5f5f7;
+	.ptable {
+		max-width: 920px;
+		padding: clamp(8px, 2vw, 16px) clamp(16px, 3vw, 36px) clamp(20px, 3vw, 32px);
+		border-radius: var(--radius-lg);
+		background: var(--paper);
+	}
+
+	.ptable table {
+		width: 100%;
+		border-collapse: collapse;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.ptable :is(th, td) {
+		padding: 14px 8px;
+		border-bottom: 1px solid var(--line);
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	.ptable :is(th, td):first-child {
+		text-align: left;
+		white-space: normal;
+	}
+
+	.ptable thead th {
+		color: var(--muted);
 		font-size: 14px;
+		font-weight: 500;
+	}
+
+	.ptable tbody th {
+		font-weight: 500;
+	}
+
+	.ptable tbody th a {
+		color: var(--ink);
+	}
+
+	.ptable tbody th a:hover {
+		color: var(--accent);
+	}
+
+	.ptable td {
+		font-weight: 600;
+	}
+
+	.ptable tbody tr:last-child :is(th, td) {
+		border-bottom: 0;
+	}
+
+	.ptable__note {
+		margin-top: 14px;
+		font-size: 12px;
 	}
 
 	.more-rep ul {

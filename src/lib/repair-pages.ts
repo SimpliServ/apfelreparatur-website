@@ -1,6 +1,6 @@
 // Landing pages per device × repair (/iphone/display-reparatur …). Titles lead with the symptom ("Display kaputt?") and avoid
 // MobiNil's wording ("Display tauschen", "Akku tauschen", "Ladebuchse reparieren"): both sites are Mobi GmbH, so they target different searches.
-// Claims follow AGENTS.md: no prices, no fixed durations, no board-level work.
+// Claims follow AGENTS.md: prices only from the CMS price list, no fixed durations, no board-level work.
 import type { QA } from "../components/FAQ.astro";
 import { business } from "./business";
 import { de, devices, type DeviceKey, type ServiceKey } from "./content";
@@ -26,6 +26,12 @@ const termin = (n: string, label: string): QA => ({
 // iPad and Apple Watch parts are not advertised as Original Apple (see content.ts), so copy only claims them for iPhone and Mac.
 const original = (n: string) => (n === "iPad" || n === "Apple Watch" ? "" : ", mit Original Apple Teilen");
 
+// iPhone and iPad have fixed prices per model (CMS price list); Mac and Watch are priced after diagnosis.
+const priceAnswer = (n: string) =>
+	n === "iPhone" || n === "iPad"
+		? `Das hängt vom Modell ab. Die Fixpreise für jedes ${n} Modell stehen in der Preistabelle auf dieser Seite, dazu kommt die Arbeitspauschale von 19,99 €. Repariert wird erst nach Ihrer Zustimmung.`
+		: "Das hängt vom Modell und vom Schaden ab. Den genauen Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur. Repariert wird erst nach Ihrer Zustimmung.";
+
 const common = (n: string, work: string) =>
 	[
 		step("Vorbeikommen.", "Ohne Termin an einen unserer Standorte in Wien und Umgebung, oder vorab online anfragen.", 0),
@@ -50,7 +56,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		],
 		steps: (n) => common(n, "Wir tauschen das Displaymodul, setzen es staubfrei ein und prüfen Helligkeit, Farben und Touch."),
 		faq: (n) => [
-			{ q: `Was kostet eine ${n} Display Reparatur in Wien?`, a: `Das hängt vom Modell ab. Den genauen Preis nennen wir Ihnen vor der Reparatur, repariert wird erst nach Ihrer Zustimmung.` },
+			{ q: `Was kostet eine ${n} Display Reparatur in Wien?`, a: priceAnswer(n) },
 			{ q: `Wie lange dauert der Displaytausch ${de(n).beim} ${n}?`, a: "Ist das Display lagernd, ist der Tausch oft in rund einer Stunde erledigt. Sonst nennen wir Ihnen die Dauer vorab." },
 			{ q: "Bleiben meine Daten beim Displaytausch erhalten?", a: "Ja, beim Displaytausch bleiben Ihre Daten auf dem Gerät. Ein aktuelles Backup empfehlen wir trotzdem." },
 			{ q: "Verwenden Sie ein Original Apple Display?", a: "Ja, sofern Apple das Display für Ihr Modell bereitstellt. Sonst besprechen wir die Alternative vorher mit Ihnen." },
@@ -75,7 +81,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		],
 		steps: (n) => common(n, "Wir entnehmen den alten Akku sicher, setzen den neuen ein und prüfen Ladung und Kapazität."),
 		faq: (n) => [
-			{ q: `Was kostet ein ${n} Akkutausch in Wien?`, a: "Das hängt vom Modell ab. Den genauen Preis nennen wir Ihnen vor dem Tausch." },
+			{ q: `Was kostet ein ${n} Akkutausch in Wien?`, a: priceAnswer(n) },
 			{ q: "Wann sollte ich den Akku tauschen?", a: "Wenn die maximale Kapazität deutlich gesunken ist, das System einen Service empfiehlt oder das Gerät unerwartet ausgeht." },
 			{ q: `Wie lange dauert ein Akkutausch ${de(n).beim} ${n}?`, a: "Ist der Akku lagernd, oft rund eine Stunde. Sonst nennen wir Ihnen die Dauer vorab." },
 			...(n === "iPhone"
@@ -101,7 +107,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		],
 		steps: (n) => common(n, "Wir ersetzen das Rückglas passgenau und prüfen kabelloses Laden und Kamera."),
 		faq: (n) => [
-			{ q: `Was kostet eine ${n} Rückglas Reparatur in Wien?`, a: "Das hängt vom Modell ab. Den Preis nennen wir Ihnen vor der Reparatur." },
+			{ q: `Was kostet eine ${n} Rückglas Reparatur in Wien?`, a: priceAnswer(n) },
 			{ q: "Funktioniert kabelloses Laden danach noch?", a: "Ja. Wir prüfen kabelloses Laden und MagSafe nach der Reparatur." },
 			{ q: "Ist ein gesprungenes Rückglas gefährlich?", a: "Splitter können verletzen, und durch Risse kann Feuchtigkeit eindringen. Eine Reparatur schützt das Gerät." },
 			{ q: "Ist Rückglas dasselbe wie das Backcover?", a: `Ja, gemeint ist die gläserne Rückseite Ihres ${n}. Wir ersetzen sie passgenau und in der Originalfarbe.` },

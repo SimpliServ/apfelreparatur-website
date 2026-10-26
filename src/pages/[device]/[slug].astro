@@ -1,0 +1,30 @@
+---
+import RepairLanding from "../../components/RepairLanding.astro";
+import ModelPage from "../../components/ModelPage.astro";
+import { findRepairPage } from "../../lib/repair-pages";
+import { devices, type DeviceKey } from "../../lib/content";
+import { loadModel, loadModels, useHints } from "../../lib/devices";
+
+// /<gerät>/<reparatur> landing pages and /<gerät>/<modell> model pages share this route.
+const device = Astro.params.device ?? "";
+const slug = Astro.params.slug ?? "";
+const page = findRepairPage(device, slug);
+let model = null, entry = null, siblings: Awaited<ReturnType<typeof loadModels>>["models"] = [];
+if (!page && device in devices) {
+	const r = await loadModel(device as DeviceKey, slug);
+	model = r.model;
+	entry = r.entry;
+	if (model) {
+		const all = await loadModels(device as DeviceKey);
+		useHints(Astro, r.cacheHint, all.cacheHint);
+		const same = all.models.filter((m) => m.series === model!.series && m.slug !== model!.slug);
+		// Short series: fill up with the neighbours in catalogue order.
+		const i = all.models.findIndex((m) => m.slug === model!.slug);
+		const near = all.models.filter((m, j) => m.slug !== model!.slug && !same.includes(m) && Math.abs(j - i) <= 6);
+		siblings = [...same, ...near].slice(0, 8);
+	}
+}
+if (!page && !model) return Astro.rewrite("/404");
+---
+
+{page ? <RepairLanding page={page} /> : <ModelPage model={model!} entry={entry ? { id: (entry as { data: { id: string } }).data?.id ?? (entry as { id: string }).id } : null} siblings={siblings} />}

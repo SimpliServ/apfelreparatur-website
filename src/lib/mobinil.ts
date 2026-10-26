@@ -1,7 +1,8 @@
-// Live data from the operator's main site (public JSON API). Every call falls back to the static snapshot, so the site
+// Store data from the operator's main site (public JSON API). Every call falls back to the static snapshot, so the site
 // never breaks when that API is slow or down. Responses never carry the source brand, URLs or e-mail addresses.
 import { fallbackLocations, type Location } from "./business";
 import { devices as staticDevices, type DeviceKey } from "./content";
+import { loadModels } from "./devices";
 
 const API = "https://www.mobinil.at/api/v1";
 const TTL = 600_000;
@@ -83,16 +84,12 @@ export async function getLocations(): Promise<Location[]> {
 	});
 }
 
-// ---- Devices (model names only, no prices) ----
+// ---- Devices ----
 
-type ApiDevice = { slug: string; title: string; brand: string; category: string };
 export type Model = { slug: string; title: string };
 
-const CATEGORY: Partial<Record<DeviceKey, string>> = { iphone: "smartphone", ipad: "tablet" };
-
+/** Model names from the CMS catalogue (Admin → Preisliste), static list as fallback. */
 export async function getModels(device: DeviceKey): Promise<Model[]> {
-	const category = CATEGORY[device];
-	const data = category ? await getJson<{ devices: ApiDevice[] }>("/geraete.json") : null;
-	const list = data?.devices?.filter((d) => d.brand === "apple" && d.category === category).map((d) => ({ slug: d.slug, title: d.title })) ?? [];
+	const list = await loadModels(device).then((r) => r.models.map((m) => ({ slug: m.slug, title: m.title }))).catch(() => []);
 	return list.length ? list : staticDevices[device].models.map((title) => ({ slug: "", title }));
 }

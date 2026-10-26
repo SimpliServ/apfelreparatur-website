@@ -5,6 +5,28 @@
 
 import type { BylineSummary, ContentBylineCredit, TaxonomyTerm, PortableTextBlock } from "emdash";
 
+export interface Device {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  brand: "apple";
+  category: "smartphone" | "tablet" | "mac" | "watch";
+  series?: string;
+  sort?: number;
+  image?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
+  model_numbers?: string;
+  search_terms?: string;
+  repairs?: { "repair": "display" | "aussendisplay" | "akku" | "selfie-kamera" | "kamera" | "backcover" | "ladebuchse" | "lautsprecher" | "face-id" | "power-button" | "home-button" | "sim" | "kopfhoererbuchse" | "tastatur" | "trackpad" | "ssd" | "datenrettung" | "datenuebertragung" | "wasserschaden" | "software-fehler" | "software-update" | "fehleranalyse"; "quality"?: "standard" | "original" | "drittanbieter" | null; "price": number; "price_from"?: boolean | null; "note"?: string | null }[];
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
 export interface Page {
   id: string;
   slug: string | null;
@@ -21,6 +43,7 @@ export interface Page {
 
 declare module "emdash" {
   interface EmDashCollections {
+    devices: Device;
     pages: Page;
   }
 }

@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-iconset/components";
 import Base from "../layouts/Base.astro";
-import { business } from "../lib/business";
+import { business, telHref, whatsappHref } from "../lib/business";
 import { getLocations } from "../lib/mobinil";
 import { breadcrumbLd, faqLd, localBusinessLd } from "../lib/seo";
 import StoreCard from "../components/StoreCard.astro";
@@ -24,7 +24,7 @@ const faq: QA[] = [
 	{ q: "Brauche ich einen Termin?", a: "Nein. Kommen Sie einfach an einen unserer Standorte, ein Termin ist nicht nötig. Vorab können Sie online eine Anfrage stellen." },
 	{ q: "Haben Sie am Wochenende geöffnet?", a: `Ja, ${locations.every((l) => opensOn(l, 5)) ? "alle Standorte haben" : "viele Filialen haben"} am Samstag geöffnet${sunday.length ? `, ${[...new Set(sunday.map((l) => l.name))].join(" und ")} auch am Sonntag` : ""}. Die genauen Zeiten stehen bei jeder Filiale.` },
 	{ q: "Welcher Standort ist für mich der richtige?", a: "Alle Standorte reparieren iPhone, iPad, Mac und Apple Watch. Wählen Sie einfach den, der für Sie am besten liegt." },
-	{ q: "Kann ich anrufen, bevor ich komme?", a: `Gerne. Die gratis Service-Hotline ${business.hotline} oder die Nummer der Filiale. Oder Sie stellen online eine Anfrage.` },
+	{ q: "Kann ich anrufen, bevor ich komme?", a: `Gerne. Die gratis Service-Hotline ${business.hotline}, die Nummer der Filiale oder WhatsApp unter ${business.whatsapp}. Oder Sie stellen online eine Anfrage.` },
 ];
 ---
 
@@ -38,13 +38,22 @@ const faq: QA[] = [
 		<div class="wrap wrap--xl rise">
 			<h1 class="t-display">Kontakt und Standorte.</h1>
 			<p class="t-hero-sub muted khead__sub">Kommen Sie einfach vorbei, ein Termin ist nicht nötig. In Wien und Umgebung, auch am Wochenende.</p>
-			<a class="hotline" href={`tel:${business.hotline.replace(/\s/g, "")}`}>
-				<Icon name="ph:phone" aria-hidden="true" />
-				<span>
-					<span class="hotline__label">Gratis Service-Hotline</span>
-					<span class="hotline__num">{business.hotline}</span>
-				</span>
-			</a>
+			<div class="hotlines">
+				<a class="hotline" href={telHref(business.hotline)}>
+					<Icon name="ph:phone" aria-hidden="true" />
+					<span>
+						<span class="hotline__label">Gratis Service-Hotline</span>
+						<span class="hotline__num">{business.hotline}</span>
+					</span>
+				</a>
+				<a class="hotline hotline--wa" href={whatsappHref} target="_blank" rel="noopener">
+					<Icon name="ph:whatsapp-logo" aria-hidden="true" />
+					<span>
+						<span class="hotline__label">Schreiben Sie uns auf WhatsApp</span>
+						<span class="hotline__num">{business.whatsapp}</span>
+					</span>
+				</a>
+			</div>
 		</div>
 	</header>
 
@@ -89,11 +98,21 @@ const faq: QA[] = [
 		margin-top: 16px;
 	}
 
+	.hotlines {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 32px;
+	}
+
+	.hotline.hotline--wa > :global(svg) {
+		background: var(--wa);
+	}
+
 	.hotline {
 		display: inline-flex;
 		align-items: center;
 		gap: 16px;
-		margin-top: 32px;
 		padding: 16px 28px 16px 20px;
 		border-radius: var(--radius);
 		background: var(--gray);

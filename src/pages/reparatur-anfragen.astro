@@ -5,6 +5,7 @@ import { devices } from "../lib/content";
 import { inquiry } from "../lib/inquiry-copy";
 import { sendToPlugin } from "../lib/send";
 import { getModels } from "../lib/mobinil";
+import { hint, loadModels, modelPath } from "../lib/devices";
 import { business } from "../lib/business";
 import { breadcrumbLd } from "../lib/seo";
 
@@ -28,6 +29,7 @@ const allIssues = Object.keys(inquiry.issues);
 
 let values: Record<string, string> = {
 	device: Astro.url.searchParams.get("geraet") ?? "",
+	model: (Astro.url.searchParams.get("modell") ?? "").slice(0, 80),
 	contact: "email",
 };
 let issues: string[] = (Astro.url.searchParams.get("anliegen") ?? "").split(",").filter((k) => allIssues.includes(k));
@@ -45,6 +47,9 @@ if (Astro.request.method === "POST") {
 
 const live = await Promise.all(Object.values(devices).map(async (d) => [d.key, (await getModels(d.key)).map((m) => m.title)] as const));
 const models = Object.fromEntries(live);
+// Price hint under the model field: title -> [model page, "Display ab …"].
+const catalogue = (await loadModels().catch(() => ({ models: [] }))).models;
+const prices = Object.fromEntries(catalogue.map((m) => [m.title.toLowerCase(), [modelPath(m), hint(m)]]));
 const visible = issueOptions[values.device] ?? allIssues;
 ---
 
@@ -103,6 +108,10 @@ const visible = issueOptions[values.device] ?? allIssues;
 							<div class="field field--full">
 								<input id="model" name="model" list="models" value={values.model ?? ""} placeholder=" " autocomplete="off" maxlength="80" />
 								<label for="model">Modell (optional)</label>
+								<p class="model-hint" hidden data-model-hint data-prices={JSON.stringify(prices)}>
+									<span data-model-hint-text></span>
+									<a href="#" target="_blank" data-model-hint-link>Alle Preise ansehen</a>
+								</p>
 								<datalist id="models" data-models={JSON.stringify(models)}>
 									{(models[values.device as keyof typeof models] ?? []).map((m) => <option value={m} />)}
 								</datalist>
@@ -208,6 +217,19 @@ const visible = issueOptions[values.device] ?? allIssues;
 			});
 		};
 		form.addEventListener("change", (e) => (e.target as HTMLInputElement).name === "device" && sync());
+
+		const box = form.querySelector<HTMLElement>("[data-model-hint]")!;
+		const priceMap = JSON.parse(box.dataset.prices!) as Record<string, [string, string]>;
+		const model = form.elements.namedItem("model") as HTMLInputElement;
+		const showHint = () => {
+			const hit = priceMap[model.value.trim().toLowerCase()];
+			box.hidden = !hit;
+			if (!hit) return;
+			box.querySelector("[data-model-hint-text]")!.textContent = `${model.value.trim()}: ${hit[1]}.`;
+			box.querySelector<HTMLAnchorElement>("[data-model-hint-link]")!.href = hit[0] + "#preise";
+		};
+		model.addEventListener("input", showHint);
+		showHint();
 
 		form.addEventListener("submit", (e) => {
 			const msgs: string[] = [];
@@ -384,6 +406,22 @@ const visible = issueOptions[values.device] ?? allIssues;
 	.choices--device .field,
 	.field--area {
 		margin-top: 14px;
+	}
+
+	.model-hint {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 12px;
+		margin-top: 10px;
+		padding: 12px 16px;
+		border-radius: 12px;
+		background: var(--accent-soft);
+		color: var(--ink);
+		font-size: 15px;
+	}
+
+	.model-hint a {
+		text-decoration: underline;
 	}
 
 	.choices--device .field {

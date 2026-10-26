@@ -9,7 +9,8 @@ import Closing from "./Closing.astro";
 import { de, devices, services, type DeviceKey, type ServiceKey } from "../lib/content";
 import { deviceFaq, repairPhoto, whyCards } from "../lib/copy";
 import { breadcrumbLd, faqLd, localBusinessLd, serviceLd } from "../lib/seo";
-import { getModels } from "../lib/mobinil";
+import { loadModels, useHints } from "../lib/devices";
+import ModelGrid from "./ModelGrid.astro";
 import { repairPages } from "../lib/repair-pages";
 
 interface Props {
@@ -23,7 +24,8 @@ const faq = deviceFaq(d);
 const path = `/${d.key}`;
 // People search "MacBook Reparatur", not "Mac Reparatur".
 const dn = d.key === "mac" ? "MacBook" : d.name;
-const models = (await getModels(device)).map((m) => m.title);
+const { models, cacheHint } = await loadModels(device);
+useHints(Astro, cacheHint);
 const detail = (key: ServiceKey): [string, string] | undefined => {
 	if (key === "datenrettung") return ["/datenrettung", `${dn} Datenrettung`];
 	const p = repairPages.find((x) => x.device === device && x.service === key);
@@ -44,7 +46,7 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 >
 	<LocalNav
 		title={`${d.name} Reparatur`}
-		links={d.repairs.map((r) => [`#${r.key}`, services[r.key].label])}
+		links={[["#modelle", "Modelle"], ...d.repairs.map((r) => [`#${r.key}`, services[r.key].label] as [string, string])]}
 		cta={{ href: `/reparatur-anfragen?geraet=${d.key}`, label: "Anfragen" }}
 	/>
 
@@ -54,13 +56,27 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 			<p class="t-hero-sub hero__sub">{d.sub}<a class="fn" href="#fn-1">1</a></p>
 			<div class="btn-row">
 				<a class="btn" href={`/reparatur-anfragen?geraet=${d.key}`}>Reparatur anfragen</a>
-				<a class="btn btn--ghost" href={`#${d.repairs[0].key}`}>Reparaturen ansehen</a>
+				<a class="btn btn--ghost" href="#modelle">Preise nach Modell</a>
 			</div>
 		</div>
 		<figure class="hero__img wrap wrap--xl sd-grow">
 			<Pic name={d.image as never} alt={d.imageAlt} eager sizes="(max-width: 1260px) 100vw, 1260px" />
 		</figure>
 	</header>
+
+	{
+		models.length > 0 && (
+			<section id="modelle" class="section on-gray" aria-labelledby="models-h">
+				<div class="wrap wrap--xl">
+					<div class="center models__head" data-reveal>
+						<h2 id="models-h" class="t-section">Wählen Sie Ihr {d.key === "mac" ? "Mac Modell" : d.name}.</h2>
+						<p class="t-lead muted">{d.key === "iphone" || d.key === "ipad" ? "Alle Preise auf einen Blick, mit Original Apple Teilen oder als günstigere Alternative." : "Jedes Modell mit eigener Seite. Den Preis nennen wir Ihnen nach der Diagnose."}</p>
+					</div>
+					<ModelGrid models={models} grouped search={d.key === "mac" ? "Modell oder Modellnummer suchen" : `${d.name} Modell suchen`} />
+				</div>
+			</section>
+		)
+	}
 
 	<PlusCards id="warum" title={`${de(d.name).ihr} ${d.name}. In besten Händen.`} cards={whyCards} />
 
@@ -103,17 +119,6 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 			</section>
 		))
 	}
-
-	<section class="models section on-dark" aria-labelledby="models-h">
-		<div class="wrap center" data-reveal>
-			<h2 id="models-h" class="t-section">Jedes Modell. Ein Anspruch.</h2>
-			<p class="t-lead muted models__lead">Wir reparieren aktuelle und ältere {d.name} Modelle, unter anderem:</p>
-			<ul class="models__list" role="list">
-				{models.map((m, i) => <li data-reveal style={`--i:${i % 8}`}>{m}</li>)}
-			</ul>
-			<a class="more" href={`/reparatur-anfragen?geraet=${d.key}`}>Ihr Modell ist nicht dabei? Fragen Sie uns <Icon name="ph:caret-right" aria-hidden="true" /></a>
-		</div>
-	</section>
 
 	<FAQ title={`Fragen zur ${dn} Reparatur.`} items={faq} />
 
@@ -225,32 +230,13 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 		object-fit: cover;
 	}
 
-	.models__lead {
-		margin: 16px auto 36px;
+	.models__head {
+		max-width: 760px;
+		margin: 0 auto clamp(28px, 3vw, 40px);
 	}
 
-	.models__list {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 10px;
-		max-width: 900px;
-		margin: 0 auto 36px;
-		padding: 0;
-		list-style: none;
-	}
-
-	.models__list li {
-		padding: 8px 16px;
-		border-radius: 980px;
-		background: color-mix(in srgb, var(--on-night) 11%, var(--night));
-		color: var(--on-night);
-		font-size: 14px;
-	}
-
-	.models .more svg {
-		width: 0.75em;
-		height: 0.75em;
+	.models__head .t-lead {
+		margin-top: 12px;
 	}
 
 	@media (max-width: 734px) {

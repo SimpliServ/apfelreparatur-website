@@ -17,6 +17,8 @@
 	--link: #1d4ed8;
 	--link-dark: #8ab4ff;
 	--ok: #1d8a3a;
+	/* WhatsApp brand green; icons only, too light for white text. */
+	--wa: #25d366;
 	--err: #e30000;
 	--radius: 18px;
 	--radius-lg: 28px;

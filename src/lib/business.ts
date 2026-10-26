@@ -14,6 +14,7 @@ export const business = {
 	email: "office@apfelreparatur.at",
 	// Free service hotline shared with the operator's stores.
 	hotline: "0800 999 197",
+	whatsapp: "+43 664 99022282",
 	vatId: "ATU68056505",
 	registerNo: "FN 397203y",
 	registerCourt: "Landesgericht Wiener Neustadt",
@@ -23,7 +24,7 @@ export const business = {
 	],
 	authority: "Bezirkshauptmannschaft Mödling",
 	chamber: "Wirtschaftskammer Niederösterreich",
-	warrantyMonths: 3,
+	warrantyMonths: 6,
 };
 
 export type Location = {
@@ -109,3 +110,6 @@ export const fallbackLocations: Location[] = [
 
 export const address = `${business.street}, ${business.zip} ${business.city}`;
 export const legalLine = `${business.legalName}, ${address}, ${business.registerNo}, ${business.registerCourt}`;
+
+export const telHref = (n: string) => `tel:${n.replace(/[^\d+]/g, "")}`;
+export const whatsappHref = `https://wa.me/${business.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Hallo, ich habe eine Frage")}`;

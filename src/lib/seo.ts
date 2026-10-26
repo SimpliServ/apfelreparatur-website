@@ -120,3 +120,24 @@ export function breadcrumbLd(crumbs: [string, string][]) {
 		itemListElement: crumbs.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE + path })),
 	};
 }
+
+/** Service with one Offer per priced repair row (model pages). */
+export function modelServiceLd(o: { name: string; description: string; path: string; image?: string; offers: { name: string; price: number; from: boolean }[] }) {
+	return clean({
+		...serviceLd(o.name, o.description, o.path, o.name),
+		image: o.image,
+		hasOfferCatalog: o.offers.length
+			? {
+					"@type": "OfferCatalog",
+					name: `Preise ${o.name}`,
+					itemListElement: o.offers.map((x) => ({
+						"@type": "Offer",
+						name: x.name,
+						priceCurrency: "EUR",
+						...(x.from ? { priceSpecification: { "@type": "PriceSpecification", minPrice: x.price, priceCurrency: "EUR", valueAddedTaxIncluded: true } } : { price: x.price.toFixed(2) }),
+						url: SITE + o.path + "#preise",
+					})),
+				}
+			: undefined,
+	});
+}
