@@ -5,6 +5,7 @@ import LocalNav from "./LocalNav.astro";
 import Pic from "./Pic.astro";
 import PlusCards from "./PlusCards.astro";
 import FAQ from "./FAQ.astro";
+import DeviceGuide from "./DeviceGuide.astro";
 import Closing from "./Closing.astro";
 import { de, devices, imac, services, type DeviceKey, type ServiceKey } from "../lib/content";
 import { deviceFaq, repairPhoto, whyCards } from "../lib/copy";
@@ -12,6 +13,7 @@ import { breadcrumbLd, faqLd, localBusinessLd, serviceLd } from "../lib/seo";
 import { loadModels, useHints } from "../lib/devices";
 import ModelGrid from "./ModelGrid.astro";
 import { repairPages } from "../lib/repair-pages";
+import { guides } from "../lib/device-guide";
 
 interface Props {
 	device: DeviceKey;
@@ -22,7 +24,8 @@ interface Props {
 }
 const { device, line, title, description } = Astro.props;
 const d = line ? imac : devices[device];
-const faq = deviceFaq(d);
+const guide = guides[line ?? device];
+const faq = [...deviceFaq(d), ...guide.faq];
 const path = `/${line ?? d.key}`;
 // People search "MacBook Reparatur", not "Mac Reparatur".
 const dn = !line && d.key === "mac" ? "MacBook" : d.name;
@@ -75,7 +78,7 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 				<div class="wrap wrap--xl">
 					<div class="center models__head" data-reveal>
 						<h2 id="models-h" class="t-section">Wählen Sie Ihr {d.key === "mac" ? `${line ? "iMac" : "Mac"} Modell` : d.name}.</h2>
-						<p class="t-lead muted">{d.key === "iphone" || d.key === "ipad" ? "Alle Preise auf einen Blick, mit Original Apple Teilen oder als günstigere Alternative." : "Jedes Modell mit eigener Seite. Den Preis nennen wir Ihnen nach der Diagnose."}</p>
+						<p class="t-lead muted">{d.key === "iphone" ? "Alle Preise auf einen Blick, mit Original Apple Teilen oder als günstigere Alternative." : d.key === "ipad" ? "Alle Preise auf einen Blick, zum Fixpreis je Modell." : "Jedes Modell mit eigener Seite. Den Preis nennen wir Ihnen nach der Diagnose."}</p>
 					</div>
 					<ModelGrid models={models} grouped rows={2} search={d.key === "mac" ? "Modell oder Modellnummer suchen" : `${d.name} Modell suchen`} />
 				</div>
@@ -125,6 +128,7 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 		))
 	}
 
+	<DeviceGuide guide={guide} yours={`${de(d.name).ihr} ${d.name}`} />
 	<FAQ title={`Fragen zur ${dn} Reparatur.`} items={faq} />
 
 	<Closing title={`${de(d.name).ihr} ${d.name}. Bald wieder wie neu.`} href={`/reparatur-anfragen?geraet=${d.key}`} />

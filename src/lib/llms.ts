@@ -3,6 +3,7 @@ import { business, type Location } from "./business";
 import { dataCards, deviceFaq, homeFaq, steps, whyCards } from "./copy";
 import { deviceList, imac, services, type DeviceKey } from "./content";
 import { repairPages } from "./repair-pages";
+import { guides, richText, type GuideKey } from "./device-guide";
 import { SITE } from "./seo";
 import { CATEGORY, euro, modelPath, priceGroups, type Model } from "./devices";
 import { qualityLabels } from "../i18n/ui";
@@ -10,6 +11,10 @@ import type { PlusCard } from "../components/PlusCards.astro";
 
 const dn = (key: DeviceKey, name: string) => (key === "mac" ? "MacBook" : name);
 const repairName = (p: (typeof repairPages)[number]) => `${dn(p.device, deviceList.find((d) => d.key === p.device)!.name)} ${p.copy.label}`;
+const guideLines = (k: GuideKey) => {
+	const g = guides[k];
+	return [richText(g.intro, SITE), "", ...g.topics.flatMap((t) => [`#### ${t.h}`, "", ...t.p.map((p) => richText(p, SITE)), ""]), "Vorbereitung:", ...g.prep.map((p) => `- ${richText(p, SITE)}`), ""];
+};
 const card = (c: PlusCard) => `- **${[c.pre, c.hl, c.post].filter(Boolean).join(" ")}** ${c.detail.join(" ")}`;
 const store = (l: Location) =>
 	`- **${l.name}** (${l.venue}), ${l.street}, ${l.zip} ${l.city}${l.phone ? `, Tel. ${l.phone}` : ""}. Öffnungszeiten: ${l.hours.map(([d, t]) => `${d} ${t}`).join(", ")}.`;
@@ -94,7 +99,9 @@ export function llmsFullTxt(locations: Location[], models: Model[] = []): string
 			out.push("");
 		}
 		const own = models.filter((m) => m.category === CATEGORY[d.key]);
-		out.push(own.length ? `### Modelle und Preise\n\n${own.map(priceLine).join("\n")}\n` : `Modelle: ${d.models.join(", ")}.`, "", `### Häufige Fragen zur ${d.name} Reparatur`, "", ...deviceFaq(d).map((f) => qa(f.q, f.a)));
+		out.push(own.length ? `### Modelle und Preise\n\n${own.map(priceLine).join("\n")}\n` : `Modelle: ${d.models.join(", ")}.`, "", `### Häufige Fragen zur ${d.name} Reparatur`, "", ...[...deviceFaq(d), ...guides[d.key].faq].map((f) => qa(f.q, f.a)));
+		out.push("", `### Gut zu wissen: ${d.name}`, "", ...guideLines(d.key));
+		if (d.key === "mac") out.push(`## iMac Reparatur Wien`, "", `${SITE}/imac`, "", `${imac.headline} ${imac.sub}`, "", ...guideLines("imac"), "### Häufige Fragen zur iMac Reparatur", "", ...[...deviceFaq(imac), ...guides.imac.faq].map((f) => qa(f.q, f.a)), "");
 	}
 	out.push("## Reparaturen im Detail", "");
 	for (const p of repairPages) {

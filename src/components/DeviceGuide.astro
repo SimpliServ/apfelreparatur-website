@@ -1,0 +1,98 @@
+---
+import { Icon } from "astro-iconset/components";
+import { richHtml, type Guide } from "../lib/device-guide";
+
+interface Props {
+	guide: Guide;
+	/** Device name with article, e.g. "Ihr iPhone". */
+	yours: string;
+}
+const { guide, yours } = Astro.props;
+---
+
+<section id="ratgeber" class="guide section" aria-labelledby="ratgeber-h">
+	<div class="wrap wrap--xl">
+		<div class="guide__head" data-reveal>
+			<h2 id="ratgeber-h" class="t-section">Gut zu wissen.</h2>
+			<p class="t-lead guide__intro" set:html={richHtml(guide.intro)} />
+		</div>
+		<div class="guide__grid">
+			{
+				guide.topics.map((t) => (
+					<article class="guide__item" data-reveal>
+						<h3>{t.h}</h3>
+						{t.p.map((p) => <p set:html={richHtml(p)} />)}
+					</article>
+				))
+			}
+		</div>
+		<div class="guide__prep card card--gray" data-reveal>
+			<h3>So bereiten Sie {yours} vor.</h3>
+			<ul role="list">
+				{
+					guide.prep.map((p) => (
+						<li>
+							<Icon name="ph:check" aria-hidden="true" />
+							<p set:html={richHtml(p)} />
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	.guide__head {
+		max-width: 820px;
+	}
+	.guide__intro {
+		margin-top: 18px;
+		color: var(--ink-2);
+	}
+	.guide__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+		gap: clamp(28px, 4vw, 48px) clamp(32px, 5vw, 64px);
+		margin-top: clamp(40px, 5vw, 64px);
+	}
+	.guide__item h3,
+	.guide__prep h3 {
+		font-size: 21px;
+		line-height: 1.24;
+		font-weight: 600;
+		letter-spacing: 0.01em;
+	}
+	.guide__item p {
+		margin-top: 12px;
+		font-size: 17px;
+		line-height: 1.53;
+		color: var(--ink-2);
+	}
+	.guide__prep {
+		margin-top: clamp(40px, 5vw, 64px);
+		padding: clamp(24px, 4vw, 40px);
+	}
+	.guide__prep ul {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+		gap: 14px 40px;
+		margin: 20px 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.guide__prep li {
+		display: flex;
+		gap: 12px;
+		align-items: baseline;
+		font-size: 17px;
+		line-height: 1.47;
+	}
+	.guide__prep svg {
+		flex: none;
+		width: 16px;
+		height: 16px;
+		color: var(--ok);
+		transform: translateY(2px);
+	}
+</style>
