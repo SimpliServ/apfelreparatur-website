@@ -38,7 +38,7 @@ export const devices: Record<DeviceKey, Device> = {
 		key: "iphone",
 		name: "iPhone",
 		headline: "iPhone Reparatur.",
-		sub: "Mit Original Apple Teilen. Zurück wie am ersten Tag.",
+		sub: "Zurück wie am ersten Tag. Mit Original Apple Teilen.",
 		tile: "Display, Rückglas und Akku. Präzise getauscht, mit Original Apple Teilen.",
 		image: "iphone",
 		imageAlt: "Geöffnetes iPhone mit Einzelteilen auf einer blauen Werkstattmatte",

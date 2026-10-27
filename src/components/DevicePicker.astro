@@ -13,11 +13,11 @@ const { models, id, title } = Astro.props;
 
 // Card photo = a catalogue model shot; Watches have none yet, so they fall back to the Pic photo.
 // fit = [width, left, top] in % of the tile, measured from each shot's product bounds so every
-// device fits the same centred 64 % box. Re-measure when a photo changes.
+// device fits the same centred 64 % box (the flat Mac 80 % wide). Re-measure when a photo changes.
 const devices = [
 	{ href: "/iphone", label: "iPhone", slug: "iphone-17-pro", fit: [33.7, 33.2, 16.7] },
 	{ href: "/ipad", label: "iPad", slug: "ipad-air-11-m3-2025", fit: [52.9, 23.6, 14.9] },
-	{ href: "/mac", label: "Mac", slug: "macbook-air-13-m2-2022", fit: [87.4, 4.5, 19.3] },
+	{ href: "/mac", label: "Mac", slug: "macbook-air-13-m2-2022", fit: [109.3, -6.8, 11.6] },
 	{ href: "/apple-watch", label: "Watch", slug: "", fit: [166.2, -33.7, -8.5] },
 ].map((d) => {
 	const m = models.find((x) => x.slug === d.slug);
