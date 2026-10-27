@@ -8,6 +8,8 @@ const API = "https://www.mobinil.at/api/v1";
 const TTL = 600_000;
 const VIENNA = { lat: 48.2082, lng: 16.3738 };
 const MAX_KM = 40;
+// Owner decision 2026-10-27: SCS Galerie (1. OG, Top 25) is not listed on this site.
+const HIDDEN = /Shopping City Süd – Galerie/i;
 
 type Cached<T> = { at: number; value: T };
 const memo = new Map<string, Cached<unknown>>();
@@ -66,7 +68,7 @@ const group = (name: string) => plain(name).replace(/\s+(–|-)\s+.*$/, "").repl
 
 export async function getLocations(): Promise<Location[]> {
 	const data = await getJson<{ stores: ApiStore[] }>("/filialen.json");
-	const stores = data?.stores?.filter((s) => s.geo && km(VIENNA, s.geo) <= MAX_KM) ?? [];
+	const stores = data?.stores?.filter((s) => s.geo && km(VIENNA, s.geo) <= MAX_KM && !HIDDEN.test(s.name)) ?? [];
 	if (!stores.length) return fallbackLocations;
 	return stores.map((s) => {
 		const [street, ...unit] = s.address.street.split(", ");

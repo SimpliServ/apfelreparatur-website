@@ -10,7 +10,7 @@ import Closing from "./Closing.astro";
 import { business } from "../lib/business";
 import { devices } from "../lib/content";
 import { BASE_REPAIRS, DEVICE_OF, euro, imgSrc, modelPath, priceGroups, type Model } from "../lib/devices";
-import { headline, LABOUR_FEE, modelDescription, modelFaq, modelSub, modelTitle } from "../lib/model-copy";
+import { headline, modelDescription, modelFaq, modelSub, modelTitle } from "../lib/model-copy";
 import { repairPages } from "../lib/repair-pages";
 import { breadcrumbLd, faqLd, modelServiceLd, organizationLd, SITE } from "../lib/seo";
 import { qualityLabels, repairLabels } from "../i18n/ui";
@@ -31,6 +31,7 @@ const services = all.filter((g) => SERVICES.has(g.repair)).flatMap((g) => g.rows
 const priced = all.length > 0;
 // Repairs we do on this kind of device but have no price for yet: listed as "Preis nach Diagnose".
 const open = BASE_REPAIRS[m.category].filter((k) => !all.some((g) => g.repair === k));
+const hasFrom = m.repairs.some((r) => r.price_from);
 const hasCompat = m.repairs.some((r) => r.quality === "drittanbieter");
 const hasOrig = m.repairs.some((r) => r.quality === "original");
 const heads = headline(m);
@@ -165,7 +166,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 										<span class="pcard__price">
 											{r.price_from && <small>ab </small>}
 											{euro(r.price)}
-											<sup class="fn">*</sup>
+											{r.price_from && <sup class="fn">*</sup>}
 										</span>
 									</li>
 								))}
@@ -193,7 +194,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 										<span class="pcard__price pcard__price--sm">
 											{r.price_from && <small>ab </small>}
 											{euro(r.price)}
-											<sup class="fn">*</sup>
+											{r.price_from && <sup class="fn">*</sup>}
 										</span>
 									</li>
 								))}
@@ -225,7 +226,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 				}
 			</ul>
 			<div class="pfoot">
-				{priced && <p><sup>*</sup> Zuzüglich {euro(LABOUR_FEE)} Arbeitspauschale je Reparatur. „ab“-Preise hängen vom genauen Schaden ab, den Endpreis nennen wir Ihnen vor der Reparatur.</p>}
+				{hasFrom && <p><sup>*</sup> „ab“-Preise hängen vom genauen Schaden ab, den Endpreis nennen wir Ihnen vor der Reparatur.</p>}
 				{hasCompat && m.category === "smartphone" && <p><sup>**</sup> Bei kompatiblen Teilen kann iOS in den Einstellungen einen Hinweis zum verbauten Teil anzeigen. Die Funktion ist davon nicht betroffen.</p>}
 				{m.notes && <p>{m.notes}</p>}
 			</div>

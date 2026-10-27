@@ -4,8 +4,6 @@ import type { QA } from "../components/FAQ.astro";
 import { business } from "./business";
 import { euro, fromPrice, type Model } from "./devices";
 
-export const LABOUR_FEE = 19.99;
-
 const price = (m: Model, repair: string, quality?: string) => {
 	const rows = m.repairs.filter((r) => r.repair === repair && (!quality || r.quality === quality));
 	if (!rows.length) return null;
@@ -54,13 +52,13 @@ export function modelFaq(m: Model): QA[] {
 	const out: QA[] = [];
 	const dOrig = price(m, "display", "original"), dComp = price(m, "display", "drittanbieter"), dAny = price(m, "display");
 	if (dOrig && dComp)
-		out.push({ q: `Was kostet ein neues Display für ${article(m)} ${m.title}?`, a: `Mit Original Apple Display ${dOrig}, mit kompatiblem Display ${dComp}. Dazu kommt die Arbeitspauschale von ${euro(LABOUR_FEE)} je Reparatur. Den Preis bestätigen wir Ihnen vor der Reparatur.` });
+		out.push({ q: `Was kostet ein neues Display für ${article(m)} ${m.title}?`, a: `Mit Original Apple Display ${dOrig}, mit kompatiblem Display ${dComp}. Den Preis bestätigen wir Ihnen vor der Reparatur.` });
 	else if (dAny)
-		out.push({ q: `Was kostet ein neues Display für ${article(m)} ${m.title}?`, a: `Der Displaytausch ${bei(m)} kostet ${dAny}, zuzüglich ${euro(LABOUR_FEE)} Arbeitspauschale. Den Preis bestätigen wir Ihnen vor der Reparatur.` });
+		out.push({ q: `Was kostet ein neues Display für ${article(m)} ${m.title}?`, a: `Der Displaytausch ${bei(m)} kostet ${dAny}. Den Preis bestätigen wir Ihnen vor der Reparatur.` });
 	const akku = price(m, "akku");
-	if (akku) out.push({ q: `Was kostet ein Batterietausch ${bei(m)}?`, a: `Eine neue Batterie ${bei(m)} kostet ${akku}${price(m, "akku", "original") && price(m, "akku", "drittanbieter") ? ` (Original Apple ${price(m, "akku", "original")}, kompatibel ${price(m, "akku", "drittanbieter")})` : ""}, zuzüglich ${euro(LABOUR_FEE)} Arbeitspauschale.` });
+	if (akku) out.push({ q: `Was kostet ein Batterietausch ${bei(m)}?`, a: `Eine neue Batterie ${bei(m)} kostet ${akku}${price(m, "akku", "original") && price(m, "akku", "drittanbieter") ? ` (Original Apple ${price(m, "akku", "original")}, kompatibel ${price(m, "akku", "drittanbieter")})` : ""}.` });
 	const back = price(m, "backcover");
-	if (back) out.push({ q: `Was kostet ein neues Rückglas ${bei(m)}?`, a: `Das Rückglas ${bei(m)} ersetzen wir für ${back}, zuzüglich ${euro(LABOUR_FEE)} Arbeitspauschale. Kabelloses Laden prüfen wir danach.` });
+	if (back) out.push({ q: `Was kostet ein neues Rückglas ${bei(m)}?`, a: `Das Rückglas ${bei(m)} ersetzen wir für ${back}. Kabelloses Laden prüfen wir danach.` });
 	if (dOrig && dComp)
 		out.push({ q: "Original Apple Display oder kompatibles Display?", a: `Das Original Apple Display entspricht in Farben, Helligkeit und Touch dem Werkszustand. Das kompatible Display ist günstiger, iOS kann dazu einen Hinweis zum verbauten Teil anzeigen. Auf beide geben wir ${g} Monate Garantie.` });
 	if (!m.repairs.length)

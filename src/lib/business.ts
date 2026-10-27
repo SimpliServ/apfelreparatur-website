@@ -86,16 +86,6 @@ export const fallbackLocations: Location[] = [
 		lng: 16.31712,
 	},
 	{
-		name: "Shopping City Süd",
-		venue: "Westfield Shopping City Süd, Galerie, 1. OG",
-		street: "SCS Galerie 165, Top 25",
-		zip: "2334",
-		city: "Vösendorf",
-		hours: [["Mo – Mi", "09:00 – 19:00"], ["Do – Fr", "09:00 – 20:00"], ["Sa", "09:00 – 18:00"]],
-		lat: 48.10915,
-		lng: 16.31838,
-	},
-	{
 		name: "G3 Gerasdorf",
 		venue: "G3 Shopping Resort, Eingang B",
 		street: "G3 Platz 1, Top E127A",

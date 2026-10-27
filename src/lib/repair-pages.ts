@@ -29,7 +29,7 @@ const original = (n: string) => (n === "iPad" || n === "Apple Watch" ? "" : ", m
 // iPhone and iPad have fixed prices per model (CMS price list); Mac and Watch are priced after diagnosis.
 const priceAnswer = (n: string) =>
 	n === "iPhone" || n === "iPad"
-		? `Das hängt vom Modell ab. Die Fixpreise für jedes ${n} Modell stehen in der Preistabelle auf dieser Seite, dazu kommt die Arbeitspauschale von 19,99 €. Repariert wird erst nach Ihrer Zustimmung.`
+		? `Das hängt vom Modell ab. Die Fixpreise für jedes ${n} Modell stehen in der Preistabelle auf dieser Seite, ohne Arbeitszeit-Zuschlag. Repariert wird erst nach Ihrer Zustimmung.`
 		: "Das hängt vom Modell und vom Schaden ab. Den genauen Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur. Repariert wird erst nach Ihrer Zustimmung.";
 
 const common = (n: string, work: string) =>
