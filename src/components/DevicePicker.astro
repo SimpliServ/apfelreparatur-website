@@ -12,11 +12,13 @@ interface Props {
 const { models, id, title } = Astro.props;
 
 // Card photo = a catalogue model shot; Watches have none yet, so they fall back to the Pic photo.
+// fit = [width, left, top] in % of the tile, measured from each shot's product bounds so every
+// device fits the same centred 64 % box. Re-measure when a photo changes.
 const devices = [
-	{ href: "/iphone", label: "iPhone", slug: "iphone-17-pro" },
-	{ href: "/ipad", label: "iPad", slug: "ipad-air-11-m3-2025" },
-	{ href: "/mac", label: "Mac", slug: "macbook-air-13-m2-2022", wide: true },
-	{ href: "/apple-watch", label: "Watch", slug: "" },
+	{ href: "/iphone", label: "iPhone", slug: "iphone-17-pro", fit: [33.7, 33.2, 16.7] },
+	{ href: "/ipad", label: "iPad", slug: "ipad-air-11-m3-2025", fit: [52.9, 23.6, 14.9] },
+	{ href: "/mac", label: "Mac", slug: "macbook-air-13-m2-2022", fit: [87.4, 4.5, 19.3] },
+	{ href: "/apple-watch", label: "Watch", slug: "", fit: [166.2, -33.7, -8.5] },
 ].map((d) => {
 	const m = models.find((x) => x.slug === d.slug);
 	return { ...d, image: m?.image?.meta?.storageKey || m?.image?.src ? m.image : null };
@@ -31,11 +33,11 @@ const devices = [
 				devices.map((d) => (
 					<li>
 						<a class="pcard" href={d.href}>
-							<span class:list={["pcard__img", { "pcard__img--wide": d.wide }]}>
+							<span class="pcard__img" style={`--w:${d.fit[0]}%;--l:${d.fit[1]}%;--t:${d.fit[2]}%`}>
 								{d.image ? (
 									<Image image={d.image as never} alt="" sizes="(max-width: 734px) 45vw, 280px" placeholder={false} />
 								) : (
-									<Pic name="watch" alt="" sizes="(max-width: 734px) 45vw, 280px" class="pcard__photo" />
+									<Pic name="watch" alt="" sizes="(max-width: 734px) 75vw, 480px" />
 								)}
 							</span>
 							<span class="pcard__label pcard__more">
@@ -111,23 +113,11 @@ const devices = [
 
 	.pcard__img :global(img) {
 		position: absolute;
-		inset: 11% 14%;
-		width: 72%;
-		height: 78%;
-		object-fit: contain;
-	}
-
-	.pcard__img--wide :global(img) {
-		inset: 6% 4%;
-		width: 92%;
-		height: 88%;
-	}
-
-	.pcard__img :global(.pcard__photo) {
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		top: var(--t);
+		left: var(--l);
+		width: var(--w);
+		max-width: none;
+		height: auto;
 	}
 
 	.pcard__label {
