@@ -29,7 +29,6 @@ const faq = [...deviceFaq(d), ...guide.faq];
 const path = `/${line ?? d.key}`;
 // People search "MacBook Reparatur", not "Mac Reparatur".
 const dn = !line && d.key === "mac" ? "MacBook" : d.name;
-const iphone = !line && d.key === "iphone";
 const all = await loadModels(device);
 const models = line ? all.models.filter((m) => m.series.startsWith("iMac")) : all.models;
 useHints(Astro, all.cacheHint);
@@ -63,8 +62,8 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 			<h1 class="t-display hero__title">{dn} Reparatur <span class="hero__city">in Wien.</span></h1>
 			<p class="t-hero-sub hero__sub">{d.sub}<a class="fn" href="#fn-1">1</a></p>
 			<div class="btn-row">
-				<a class="btn" href="/kontakt">{iphone ? "Jetzt Standort finden" : "Ohne Termin vorbeikommen"}</a>
-				<a class="btn btn--ghost" href="#modelle">{iphone ? "Reparaturpreise ansehen" : "Preise nach Modell"}</a>
+				<a class="btn" href="/kontakt">Jetzt Standort finden</a>
+				<a class="btn btn--ghost" href="#modelle">Reparaturpreise ansehen</a>
 			</div>
 		</div>
 		<figure class="hero__img wrap wrap--xl sd-grow">
