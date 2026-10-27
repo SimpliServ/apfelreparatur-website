@@ -5,7 +5,7 @@ Stack: EmDash (Astro SSR) on Cloudflare Workers + D1 + R2. npm, not pnpm.
 
 ## Rules
 
-- **Brand of Mobi GmbH (MobiNil).** Name Mobi GmbH only where legally required (Impressum, Datenschutz, AGB, Widerruf, mail footer). Never "MobiNil", never in marketing copy. Exception (owner 2026-10-27): SCS store cards say "Im MobiNil Shop" (`StoreCard.astro`), because SCS has several phone shops.
+- **Brand of Mobi GmbH (MobiNil).** Name Mobi GmbH only where legally required (Impressum, Datenschutz, AGB, Widerruf, mail footer). Never "MobiNil", never in marketing copy. Exception (owner 2026-10-28): every store card says "Im MobiNil Shop" (`StoreCard.astro`), so walk-ins find the right shop (SCS has several phone shops).
 - **Apple trademarks:** never use the Apple logo or an apple-shaped mark as our own branding/graphics, no Apple renders or copy, no Apple slogans. Keep the trademark/independence disclaimer (Footer, Impressum). Product photos may show the Apple logo on the device (owner decision 2026-10-25).
 - **Claims must match MobiNil reality:** no appointment, price before repair (no "kostenloser KV"). "Original Apple Teile" always with footnote 1, only for iPhone/Mac (iPad + Watch parts are imported without part label). No board-level/soldering/microscope claims (GISA licence excludes Mechatroniker work).
 - **Owner decisions 2026-10-26:** 6 months warranty (`business.warrantyMonths`, also AGB § 8 in the CMS page + `scripts/build-seed.py`). Prices are shown: iPhone/iPad prices = MobiNil + 10 € per row (imported once, then the CMS is the source), NO Arbeitspauschale (owner 2026-10-27: fixed prices, no labour surcharge). Macs and Watches have no prices yet ("Preis nach Diagnose" until staff enter them).
