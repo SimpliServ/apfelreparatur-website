@@ -36,7 +36,6 @@ const priced = all.filter((m) => m.repairs.some((r) => r.repair === rk));
 const split = priced.some((m) => m.repairs.some((r) => r.repair === rk && r.quality === "drittanbieter"));
 const description = c.desc(dn);
 const siblings = repairPages.filter((p) => p.device === page.device && p.path !== page.path);
-const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
 ---
 
 <Base
@@ -50,7 +49,7 @@ const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
 		breadcrumbLd([["Start", "/"], [`${d.name} Reparatur`, `/${d.key}`], [c.label, page.path]]),
 	]}
 >
-	<LocalNav title={name} links={[["#symptome", "Symptome"], ["#ablauf", "Ablauf"], ["#modelle", "Modelle"], ["#faq", "Fragen"]]} cta={{ href: anfrage, label: "Anfragen" }} />
+	<LocalNav title={name} links={[["#symptome", "Symptome"], ["#ablauf", "Ablauf"], ["#modelle", "Modelle"], ["#faq", "Fragen"]]} />
 
 	<header class="hero">
 		<div class="wrap center rise">
@@ -58,7 +57,7 @@ const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
 			<h1 class="t-display hero__title">{name} <span class="hero__city">in Wien.</span></h1>
 			<p class="t-hero-sub hero__sub">{c.sub(dn)}<a class="fn" href="#fn-1">1</a></p>
 			<div class="btn-row">
-				<a class="btn" href={anfrage}>Reparatur anfragen</a>
+				<a class="btn" href="/kontakt">Ohne Termin vorbeikommen</a>
 				<a class="btn btn--ghost" href="/kontakt">Standorte ansehen</a>
 			</div>
 		</div>
@@ -144,7 +143,7 @@ const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
 								))}
 							</tbody>
 						</table>
-						<p class="ptable__note muted">Fixpreise ohne Arbeitszeit-Zuschlag. Ihr Modell fehlt? <a href={anfrage}>Fragen Sie uns</a>.</p>
+						<p class="ptable__note muted">Fixpreise ohne Arbeitszeit-Zuschlag. Ihr Modell fehlt? <a href="/kontakt">Fragen Sie uns</a>.</p>
 					</div>
 				) : (
 					<ModelGrid models={all} grouped />
@@ -179,7 +178,7 @@ const anfrage = `/reparatur-anfragen?geraet=${d.key}&anliegen=${page.service}`;
 		)
 	}
 
-	<Closing title={`${de(dn).ihr} ${dn}. Bald wieder wie neu.`} href={anfrage} />
+	<Closing title={`${de(dn).ihr} ${dn}. Bald wieder wie neu.`} />
 </Base>
 
 <style>

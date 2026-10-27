@@ -38,7 +38,6 @@ const heads = headline(m);
 const title = modelTitle(m);
 const description = modelDescription(m);
 const faq = modelFaq(m);
-const anfrage = `/reparatur-anfragen?geraet=${key}&modell=${encodeURIComponent(m.title)}`;
 const img = m.image?.meta?.storageKey || m.image?.src ? m.image : null;
 const caption = typeof img?.meta?.caption === "string" ? img.meta.caption : "";
 const credit = caption && !/\b(?:CC0|Public domain)\b/i.test(caption) ? caption : "";
@@ -77,7 +76,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 		breadcrumbLd([["Start", "/"], [`${d.name} Reparatur`, `/${key}`], [m.title, path]]),
 	]}
 >
-	<LocalNav title={m.title} links={lnav} cta={{ href: anfrage, label: "Anfragen" }} />
+	<LocalNav title={m.title} links={lnav} />
 
 	<header class="mhero">
 		<div class="wrap wrap--xl mhero__grid">
@@ -122,7 +121,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 					)
 				}
 				<div class="btn-row mhero__ctas">
-					<a class="btn btn--lg" href={anfrage}>Reparatur anfragen</a>
+					<a class="btn btn--lg" href="/kontakt">Ohne Termin vorbeikommen</a>
 					<a class="btn btn--lg btn--ghost" href="#preise">{priced ? "Alle Preise" : "Reparaturen"}</a>
 				</div>
 				<ul class="mhero__ticks" role="list">
@@ -216,8 +215,8 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 									<Icon name="ph:caret-right" aria-hidden="true" />
 								</a>
 							) : (
-								<a class="more pcard__more" href={anfrage}>
-									Anfragen
+								<a class="more pcard__more" href="/kontakt">
+									Vorbeikommen
 									<Icon name="ph:caret-right" aria-hidden="true" />
 								</a>
 							)}
@@ -304,7 +303,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 
 	<FAQ title={`Fragen zur ${m.title} Reparatur.`} items={faq} />
 
-	<Closing title={`${m.category === "watch" ? "Ihre" : "Ihr"} ${m.title}. Bald wieder wie neu.`} href={anfrage} />
+	<Closing title={`${m.category === "watch" ? "Ihre" : "Ihr"} ${m.title}. Bald wieder wie neu.`} />
 </Base>
 
 <style>

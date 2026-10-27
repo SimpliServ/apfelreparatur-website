@@ -5,7 +5,7 @@ const quick = [
 	["/ipad#modelle", "Alle iPad Modelle"],
 	["/mac#modelle", "Alle Mac Modelle"],
 	["/apple-watch#modelle", "Alle Apple Watch Modelle"],
-	["/reparatur-anfragen", "Reparatur anfragen"],
+	["/kontakt", "Standorte ohne Termin"],
 ];
 ---
 
@@ -81,7 +81,7 @@ const quick = [
 				return li;
 			}),
 		);
-		if (!hits.length) list.insertAdjacentHTML("beforeend", '<li><a href="/reparatur-anfragen"><span>Fragen Sie uns einfach</span><small>Wir reparieren auch ältere Modelle</small></a></li>');
+		if (!hits.length) list.insertAdjacentHTML("beforeend", '<li><a href="/kontakt"><span>Fragen Sie uns einfach</span><small>Wir reparieren auch ältere Modelle</small></a></li>');
 	});
 	q.addEventListener("keydown", (e) => {
 		if (e.key === "Enter") {

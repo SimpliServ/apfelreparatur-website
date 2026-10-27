@@ -21,7 +21,7 @@ type Copy = {
 const step = (title: string, text: string, i: number) => ({ n: String(i + 1).padStart(2, "0"), title, text });
 const termin = (n: string, label: string): QA => ({
 	q: `Brauche ich für die ${n} ${label} einen Termin?`,
-	a: "Nein. Kommen Sie ohne Termin an einen unserer Standorte in Wien und Umgebung, zum Beispiel am Wiener Hauptbahnhof. Vorab können Sie online eine Anfrage stellen.",
+	a: "Nein. Kommen Sie ohne Termin an einen unserer Standorte in Wien und Umgebung, zum Beispiel am Wiener Hauptbahnhof.",
 });
 // iPad and Apple Watch parts are not advertised as Original Apple (see content.ts), so copy only claims them for iPhone and Mac.
 const original = (n: string) => (n === "iPad" || n === "Apple Watch" ? "" : ", mit Original Apple Teilen");
@@ -34,7 +34,7 @@ const priceAnswer = (n: string) =>
 
 const common = (n: string, work: string) =>
 	[
-		step("Vorbeikommen.", "Ohne Termin an einen unserer Standorte in Wien und Umgebung, oder vorab online anfragen.", 0),
+		step("Vorbeikommen.", "Ohne Termin an einen unserer Standorte in Wien und Umgebung, auch am Wochenende.", 0),
 		step("Diagnose und Preis.", `Wir prüfen ${de(n).ihr} ${n} und nennen Ihnen den Preis. Repariert wird erst nach Ihrer Zustimmung.`, 1),
 		step("Reparatur.", work, 2),
 		step("Test und Übergabe.", `Wir testen jede Funktion. Auf Teil und Arbeit gibt es ${business.warrantyMonths} Monate Garantie.`, 3),

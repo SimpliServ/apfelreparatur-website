@@ -101,7 +101,7 @@ export function serviceLd(name: string, description: string, path: string, servi
 		url: SITE + path,
 		provider: { "@id": `${SITE}/#business` },
 		areaServed: WIEN,
-		availableChannel: { "@type": "ServiceChannel", serviceUrl: `${SITE}/reparatur-anfragen`, servicePhone: intl(business.hotline) },
+		availableChannel: { "@type": "ServiceChannel", serviceUrl: `${SITE}/kontakt`, servicePhone: intl(business.hotline) },
 	};
 }
 

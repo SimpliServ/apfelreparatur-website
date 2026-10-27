@@ -70,14 +70,14 @@ export const dataCards: PlusCard[] = [
 ];
 
 export const steps = [
-	{ n: "01", title: "Anfragen.", text: "Gerät und Problem im Formular angeben. Wir melden uns mit einer ersten Einschätzung. Sie können auch direkt vorbeikommen." },
-	{ n: "02", title: "Vorbeikommen.", text: "Ohne Termin an einen unserer Standorte in Wien und Umgebung. Ist das Teil lagernd, ist Ihr Gerät oft in rund einer Stunde fertig." },
-	{ n: "03", title: "Preis vorab.", text: "Nach der Diagnose kennen Sie den genauen Preis. Repariert wird erst, wenn Sie zustimmen." },
+	{ n: "01", title: "Vorbeikommen.", text: "Ohne Termin an einen unserer Standorte in Wien und Umgebung, auch am Wochenende." },
+	{ n: "02", title: "Preis vorab.", text: "Wir prüfen Ihr Gerät und nennen den genauen Preis. Repariert wird erst, wenn Sie zustimmen." },
+	{ n: "03", title: "Reparatur.", text: "Ist das Teil lagernd, ist Ihr Gerät oft in rund einer Stunde fertig." },
 	{ n: "04", title: "Wie neu abholen.", text: "Getestet, gereinigt und mit Garantie. Sie zahlen erst bei Abholung." },
 ];
 
 export const homeFaq: QA[] = [
-	{ q: "Wo kann ich mein iPhone in Wien reparieren lassen?", a: "An unseren Standorten in Wien und Umgebung, unter anderem am Wiener Hauptbahnhof. Kommen Sie einfach ohne Termin vorbei oder stellen Sie vorab online eine Anfrage. Ist das Teil lagernd, ist ein Display- oder Akkutausch oft in rund einer Stunde erledigt." },
+	{ q: "Wo kann ich mein iPhone in Wien reparieren lassen?", a: "An unseren Standorten in Wien und Umgebung, unter anderem am Wiener Hauptbahnhof. Kommen Sie einfach ohne Termin vorbei. Ist das Teil lagernd, ist ein Display- oder Akkutausch oft in rund einer Stunde erledigt." },
 	{ q: "Verwenden Sie Original Apple Teile?", a: "Ja. Wir verwenden Original Apple Ersatzteile, sofern Apple sie für Ihr Modell und die jeweilige Reparatur bereitstellt. Ist das nicht der Fall, besprechen wir die Alternative vorher mit Ihnen." },
 	{ q: "Was kostet eine iPhone Reparatur?", a: "Das hängt von Modell und Schaden ab. Die Fixpreise für jedes iPhone und iPad Modell finden Sie auf der jeweiligen Modellseite, zum Beispiel unter iPhone Reparatur › Wählen Sie Ihr iPhone. Repariert wird erst, wenn Sie zustimmen." },
 	{ q: "Bleiben meine Daten bei der Reparatur erhalten?", a: "Bei Display-, Rückglas- und Akkureparaturen bleiben Ihre Daten auf dem Gerät. Wir empfehlen trotzdem vorab ein Backup in iCloud oder auf Ihrem Computer." },
@@ -108,7 +108,7 @@ export function deviceFaq(d: Device): QA[] {
 	const n = d.name;
 	const g = de(n);
 	return [
-		{ q: `Wo lasse ich ${g.mein} ${n} in Wien reparieren?`, a: `An unseren Standorten in Wien und Umgebung, unter anderem am Wiener Hauptbahnhof. Kommen Sie ohne Termin vorbei oder stellen Sie vorab online eine Anfrage. Sie bringen ${g.ihr} ${n} vorbei und holen ${g.es} repariert wieder ab.` },
+		{ q: `Wo lasse ich ${g.mein} ${n} in Wien reparieren?`, a: `An unseren Standorten in Wien und Umgebung, unter anderem am Wiener Hauptbahnhof. Kommen Sie einfach ohne Termin vorbei. Sie bringen ${g.ihr} ${n} vorbei und holen ${g.es} repariert wieder ab.` },
 		{ q: `Was kostet eine ${n} Reparatur?`, a: d.key === "iphone" ? `Das hängt vom Modell ab. Oben unter „Wählen Sie Ihr ${n}“ finden Sie die Fixpreise für jedes Modell, mit Original Apple Teilen oder als günstigere Alternative, ohne Arbeitszeit-Zuschlag.` : d.key === "ipad" ? `Das hängt vom Modell ab. Oben unter „Wählen Sie Ihr ${n}“ finden Sie die Fixpreise für jedes Modell, ohne Arbeitszeit-Zuschlag.` : `Der Preis hängt von Modell und Schaden ab. Den Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur. Repariert wird erst nach Ihrer Zustimmung.` },
 		{ q: `Wie lange dauert die Reparatur?`, a: `Ist das Teil lagernd, ist ein Display- oder Akkutausch oft in rund einer Stunde erledigt. Bei aufwendigeren Reparaturen nennen wir Ihnen die Dauer mit dem Kostenvoranschlag.` },
 		d.key === "iphone" || d.key === "mac"

@@ -37,7 +37,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		<a href={telHref(business.hotline)} class="gnav__call" aria-label={`Gratis Service-Hotline ${business.hotline}`}>
 			<Icon name="ph:phone-fill" aria-hidden="true" /><span class="gnav__call-num">{business.hotline}</span>
 		</a>
-		<a href="/reparatur-anfragen" class="gnav__cta"><span class="gnav__cta-long">Reparatur </span>anfragen</a>
+		<a href="/kontakt" class="gnav__cta"><span class="gnav__cta-long">Ohne Termin </span>vorbeikommen</a>
 		<button type="button" class="gnav__toggle" aria-expanded="false" aria-controls="gnav-menu" aria-label="Menü öffnen" data-gnav-toggle>
 			<span></span><span></span>
 		</button>
@@ -45,7 +45,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	<div id="gnav-menu" class="gnav__menu" data-gnav-menu>
 		<ul role="list">
 			{links.map(([href, label], i) => <li style={`--i:${i}`}><a href={href}>{label}</a></li>)}
-			<li style={`--i:${links.length}`}><a href="/reparatur-anfragen">Reparatur anfragen</a></li>
+			<li style={`--i:${links.length}`}><a href="/kontakt">Ohne Termin vorbeikommen</a></li>
 			<li style={`--i:${links.length + 1}`} class="gnav__menu-contact">
 				<a href={telHref(business.hotline)}><Icon name="ph:phone-fill" aria-hidden="true" />{business.hotline}</a>
 				<a href={whatsappHref} target="_blank" rel="noopener"><Icon name="ph:whatsapp-logo" class="gnav__menu-wa" aria-hidden="true" />WhatsApp 24/7</a>
@@ -251,18 +251,20 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		}
 	}
 
-	@media (max-width: 1159px) {
-		.gnav__links a {
-			padding: 0 8px;
-			font-size: 15px;
-		}
-
+	@media (max-width: 1299px) {
 		.gnav__cta-long {
 			display: none;
 		}
 
 		.gnav__cta {
 			text-transform: capitalize;
+		}
+	}
+
+	@media (max-width: 1159px) {
+		.gnav__links a {
+			padding: 0 8px;
+			font-size: 15px;
 		}
 	}
 
@@ -425,6 +427,13 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 
 		:global(.gnav-open) body {
 			overflow: hidden;
+		}
+	}
+
+	@media (max-width: 420px) {
+		.gnav__cta {
+			font-size: 14px;
+			padding: 9px 12px;
 		}
 	}
 </style>

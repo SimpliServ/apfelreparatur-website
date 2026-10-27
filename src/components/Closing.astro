@@ -9,7 +9,7 @@ interface Props {
 const {
 	title = "Ihr Gerät ist in guten Händen.",
 	text = "Original Apple Teile, Preis vorab und " + business.warrantyMonths + " Monate Garantie. Ohne Termin, in Wien und Umgebung.",
-	href = "/reparatur-anfragen",
+	href = "/kontakt",
 } = Astro.props;
 ---
 
@@ -18,7 +18,7 @@ const {
 		<h2 class="t-section">{title}</h2>
 		<p class="t-lead muted closing__text">{text}</p>
 		<div class="btn-row">
-			<a class="btn btn--lg" href={href}>Reparatur anfragen</a>
+			<a class="btn btn--lg" href={href}>Ohne Termin vorbeikommen</a>
 		</div>
 	</div>
 </section>

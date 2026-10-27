@@ -21,10 +21,10 @@ const opensOn = (l: (typeof locations)[number], day: number) =>
 	);
 const sunday = locations.filter((l) => opensOn(l, 6));
 const faq: QA[] = [
-	{ q: "Brauche ich einen Termin?", a: "Nein. Kommen Sie einfach an einen unserer Standorte, ein Termin ist nicht nötig. Vorab können Sie online eine Anfrage stellen." },
+	{ q: "Brauche ich einen Termin?", a: "Nein. Kommen Sie einfach an einen unserer Standorte, ein Termin ist nicht nötig." },
 	{ q: "Haben Sie am Wochenende geöffnet?", a: `Ja, ${locations.every((l) => opensOn(l, 5)) ? "alle Standorte haben" : "viele Filialen haben"} am Samstag geöffnet${sunday.length ? `, ${[...new Set(sunday.map((l) => l.name))].join(" und ")} auch am Sonntag` : ""}. Die genauen Zeiten stehen bei jeder Filiale.` },
 	{ q: "Welcher Standort ist für mich der richtige?", a: "Alle Standorte reparieren iPhone, iPad, Mac und Apple Watch. Wählen Sie einfach den, der für Sie am besten liegt." },
-	{ q: "Kann ich anrufen, bevor ich komme?", a: `Gerne. Die gratis Service-Hotline ${business.hotline}, die Nummer der Filiale oder rund um die Uhr per WhatsApp (Button oben). Oder Sie stellen online eine Anfrage.` },
+	{ q: "Kann ich anrufen, bevor ich komme?", a: `Gerne. Die gratis Service-Hotline ${business.hotline}, die Nummer der Filiale oder rund um die Uhr per WhatsApp (Button oben).` },
 ];
 ---
 
@@ -77,10 +77,10 @@ const faq: QA[] = [
 				<div>
 					<h2 class="t-title">Lieber schreiben?</h2>
 					<p class="muted">
-						Stellen Sie eine Anfrage oder schreiben Sie an <a href={`mailto:${business.email}`}>{business.email}</a>.
+						Senden Sie uns eine Nachricht oder schreiben Sie an <a href={`mailto:${business.email}`}>{business.email}</a>.
 					</p>
 				</div>
-				<a class="btn" href="/reparatur-anfragen">Reparatur anfragen</a>
+				<a class="btn" href="/reparatur-anfragen">Nachricht schreiben</a>
 			</div>
 		</div>
 	</section>

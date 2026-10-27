@@ -71,7 +71,7 @@ export function modelFaq(m: Model): QA[] {
 		out.push({ q: "Bleiben meine Daten erhalten?", a: `Ja, bei Display, Batterie und Rückglas bleiben Ihre Daten auf ${dat(m)} ${m.title}. Ein aktuelles Backup empfehlen wir trotzdem.` });
 	}
 	out.push({ q: "Welche Garantie bekomme ich?", a: `${g} Monate auf das getauschte Teil und unsere Arbeit, an allen Standorten. Ihre gesetzlichen Gewährleistungsrechte bleiben bestehen.` });
-	out.push({ q: "Brauche ich einen Termin?", a: "Nein. Kommen Sie ohne Termin an einen unserer Standorte in Wien und Umgebung oder stellen Sie vorab online eine Anfrage." });
+	out.push({ q: "Brauche ich einen Termin?", a: "Nein. Kommen Sie ohne Termin an einen unserer Standorte in Wien und Umgebung, auch am Wochenende." });
 	return out;
 }
 

@@ -4,7 +4,7 @@ interface Props {
 	links: [string, string][];
 	cta?: { href: string; label: string };
 }
-const { title, links, cta = { href: "/reparatur-anfragen", label: "Anfragen" } } = Astro.props;
+const { title, links, cta = { href: "/kontakt", label: "Vorbeikommen" } } = Astro.props;
 ---
 
 <nav class="lnav" aria-label={title} data-lnav>

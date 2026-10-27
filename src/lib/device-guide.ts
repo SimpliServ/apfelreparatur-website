@@ -61,7 +61,7 @@ export const guides: Record<GuideKey, Guide> = {
 			"Backup in iCloud oder am Computer erstellen. Bei Display, Batterie und Rückglas bleiben Ihre Daten erhalten, sicher ist sicher.",
 			"Modell nachsehen: Einstellungen › Allgemein › Info › Modellname.",
 			"Gerätecode wissen: Für den Funktionstest nach der Reparatur entsperren Sie das iPhone am besten selbst.",
-			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen oder vorab [online anfragen](/reparatur-anfragen?geraet=iphone).",
+			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen, auch am Wochenende.",
 		],
 		faq: [
 			{ q: "Was bedeutet „Unbekanntes Teil“ in den Einstellungen?", a: "iOS zeigt diesen Hinweis, wenn ein Teil nicht als Original Apple Teil erkannt wird, zum Beispiel ein kompatibles Display. Das iPhone funktioniert weiter, je nach Teil können einzelne Funktionen wie True Tone fehlen. Wir sagen Ihnen vorab, was Sie bei welchem Teil erwartet." },
@@ -117,7 +117,7 @@ export const guides: Record<GuideKey, Guide> = {
 			"Backup in iCloud oder am Computer erstellen.",
 			"Apple Pencil mitbringen, wenn Sie ihn nutzen, damit wir die Stifteingabe testen können.",
 			"Ist das Display gewölbt oder steht es am Rand ab: nicht mehr laden, der Akku kann aufgebläht sein.",
-			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen oder vorab [online anfragen](/reparatur-anfragen?geraet=ipad).",
+			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen, auch am Wochenende.",
 		],
 		faq: [
 			{ q: "Kann man beim iPad nur das Glas tauschen?", a: "Bei Modellen mit getrenntem Glas, vor allem beim Standard-iPad, ja. Bei iPad Air, iPad mini und iPad Pro neuerer Generationen sind Glas und Display verklebt, dann wird das ganze Displaymodul getauscht. Welche Variante Ihr Modell hat, sagen wir Ihnen vorab." },
@@ -173,7 +173,7 @@ export const guides: Record<GuideKey, Guide> = {
 			"Backup mit Time Machine oder in iCloud erstellen, wenn der Mac noch startet.",
 			"Netzteil und Ladekabel mitbringen, damit wir Laden und Batterie testen können.",
 			"Modellnummer notieren: Sie steht auf der Unterseite und beginnt mit A.",
-			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen oder vorab [online anfragen](/reparatur-anfragen?geraet=mac).",
+			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen, auch am Wochenende.",
 		],
 		faq: [
 			{ q: "Woher weiß ich, welches MacBook ich habe?", a: "Die Modellnummer steht auf der Unterseite und beginnt mit A, zum Beispiel A2337 (MacBook Air 13″, M1, 2020). Unter Apple Menü › Über diesen Mac sehen Sie Modell und Baujahr. Mit der Nummer finden Sie Ihr MacBook in unserer Modellsuche." },
@@ -227,7 +227,7 @@ export const guides: Record<GuideKey, Guide> = {
 			"Backup mit Time Machine erstellen, wenn der iMac noch startet.",
 			"Netzkabel bzw. Netzteil mitbringen. Tastatur und Maus können zu Hause bleiben.",
 			"Für den Transport die Originalverpackung oder eine Decke verwenden, das Display nach innen.",
-			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen oder vorab [online anfragen](/reparatur-anfragen?geraet=mac).",
+			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen, auch am Wochenende.",
 		],
 		faq: [
 			{ q: "Lohnt sich eine SSD statt der alten Festplatte im iMac?", a: "Bei iMacs mit Festplatte oder Fusion Drive meistens ja. Start und Programme werden spürbar schneller, und Ihre Daten können wir dabei übertragen. Beim iMac 24″ mit Apple Silicon ist die SSD fest verbaut." },
@@ -276,7 +276,7 @@ export const guides: Record<GuideKey, Guide> = {
 			"Ladekabel mitbringen, damit wir das Laden testen können.",
 			"Ihre Daten sichert das gekoppelte iPhone automatisch. Den Code der Uhr sollten Sie für den Test nach der Reparatur wissen.",
 			"Hebt sich das Display: nicht mehr laden, der Akku kann aufgebläht sein.",
-			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen oder vorab [online anfragen](/reparatur-anfragen?geraet=apple-watch).",
+			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen, auch am Wochenende.",
 		],
 		faq: [
 			{ q: "Lohnt sich die Reparatur einer Apple Watch?", a: "Bei neueren Modellen meistens, ein Display oder eine Batterie kostet deutlich weniger als eine neue Uhr. Bei älteren Modellen sagen wir Ihnen nach der Diagnose ehrlich, ob sich die Reparatur noch rechnet." },

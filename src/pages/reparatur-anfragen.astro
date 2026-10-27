@@ -60,9 +60,9 @@ const visible = issueOptions[values.device] ?? allIssues;
 
 <Base
 	og="anfragen"
-	title="Reparatur anfragen – iPhone, iPad & Mac Wien"
-	description="Reparatur in Wien anfragen: Gerät und Problem angeben, wir melden uns mit einer ersten Preiseinschätzung. Unverbindlich."
-	jsonLd={[breadcrumbLd([["Start", "/"], ["Reparatur anfragen", "/reparatur-anfragen"]])]}
+	title="Frage zur Reparatur – iPhone, iPad & Mac Wien"
+	description="Eine Frage vor dem Besuch? Gerät und Problem angeben, wir melden uns mit einer ersten Einschätzung. Für die Reparatur selbst brauchen Sie keinen Termin."
+	jsonLd={[breadcrumbLd([["Start", "/"], ["Frage zur Reparatur", "/reparatur-anfragen"]])]}
 >
 	{
 		sent ? (
@@ -70,11 +70,11 @@ const visible = issueOptions[values.device] ?? allIssues;
 				<div class="wrap wrap--narrow center" data-reveal>
 					<Icon name="ph:check-circle-fill" class="done__icon" aria-hidden="true" />
 					<h1 class="t-display">Danke.</h1>
-					<p class="t-hero-sub done__sub">Ihre Anfrage ist bei uns. Wir melden uns mit einer ersten Einschätzung. Sie können jederzeit ohne Termin an einem unserer Standorte vorbeikommen.</p>
+					<p class="t-hero-sub done__sub">Ihre Nachricht ist bei uns. Wir melden uns mit einer ersten Einschätzung. Sie können jederzeit ohne Termin an einem unserer Standorte vorbeikommen.</p>
 					<p class="muted">Eine Bestätigung ist unterwegs in Ihr Postfach.</p>
 					<div class="btn-row done__ctas">
 						<a class="btn" href="/">Zur Startseite</a>
-						<a class="btn btn--ghost" href="/reparatur-anfragen">Weitere Anfrage</a>
+						<a class="btn btn--ghost" href="/reparatur-anfragen">Weitere Nachricht</a>
 					</div>
 				</div>
 			</section>
@@ -82,9 +82,9 @@ const visible = issueOptions[values.device] ?? allIssues;
 			<>
 				<header class="head">
 					<div class="wrap wrap--xl rise">
-						<p class="t-eyebrow head__eyebrow">Kostenlos und ohne Verpflichtung</p>
-						<h1 class="t-display">Reparatur anfragen.</h1>
-						<p class="t-hero-sub head__sub">Ein paar Angaben. Wir melden uns mit einer ersten Preiseinschätzung.</p>
+						<p class="t-eyebrow head__eyebrow">Für die Reparatur brauchen Sie keinen Termin</p>
+						<h1 class="t-display">Eine Frage vorab?</h1>
+						<p class="t-hero-sub head__sub">Ein paar Angaben. Wir melden uns mit einer ersten Einschätzung. Oder kommen Sie einfach <a href="/kontakt">ohne Termin vorbei</a>.</p>
 					</div>
 				</header>
 
@@ -189,9 +189,9 @@ const visible = issueOptions[values.device] ?? allIssues;
 							<div class="hp" aria-hidden="true">
 								<label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
 							</div>
-							<button class="btn btn--lg cfg__submit" type="submit">Anfrage senden</button>
+							<button class="btn btn--lg cfg__submit" type="submit">Nachricht senden</button>
 							<p class="cfg__small muted">
-								Die Anfrage ist kostenlos und verpflichtet Sie zu nichts. Lieber direkt schreiben? <a href={`mailto:${business.email}`}>{business.email}</a>
+								Kostenlos und unverbindlich. Lieber direkt schreiben? <a href={`mailto:${business.email}`}>{business.email}</a>
 							</p>
 						</div>
 					</div>

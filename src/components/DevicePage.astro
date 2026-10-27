@@ -55,7 +55,6 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 	<LocalNav
 		title={`${d.name} Reparatur`}
 		links={[["#modelle", "Modelle"], ...d.repairs.map((r) => [`#${r.key}`, services[r.key].label] as [string, string])]}
-		cta={{ href: `/reparatur-anfragen?geraet=${d.key}`, label: "Anfragen" }}
 	/>
 
 	<header class="hero">
@@ -63,7 +62,7 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 			<h1 class="t-display hero__title">{dn} Reparatur <span class="hero__city">in Wien.</span></h1>
 			<p class="t-hero-sub hero__sub">{d.sub}<a class="fn" href="#fn-1">1</a></p>
 			<div class="btn-row">
-				<a class="btn" href={`/reparatur-anfragen?geraet=${d.key}`}>Reparatur anfragen</a>
+				<a class="btn" href="/kontakt">Ohne Termin vorbeikommen</a>
 				<a class="btn btn--ghost" href="#modelle">Preise nach Modell</a>
 			</div>
 		</div>
@@ -114,8 +113,8 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 									<Icon name="ph:caret-right" aria-hidden="true" />
 								</a>
 							)}
-							<a class="more rep__link" href={`/reparatur-anfragen?geraet=${d.key}&anliegen=${r.key}`}>
-								Anfragen
+							<a class="more rep__link" href="/kontakt">
+								Vorbeikommen
 								<Icon name="ph:caret-right" aria-hidden="true" />
 							</a>
 						</p>
@@ -131,7 +130,7 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 	<DeviceGuide guide={guide} yours={`${de(d.name).ihr} ${d.name}`} />
 	<FAQ title={`Fragen zur ${dn} Reparatur.`} items={faq} />
 
-	<Closing title={`${de(d.name).ihr} ${d.name}. Bald wieder wie neu.`} href={`/reparatur-anfragen?geraet=${d.key}`} />
+	<Closing title={`${de(d.name).ihr} ${d.name}. Bald wieder wie neu.`} />
 </Base>
 
 <style>

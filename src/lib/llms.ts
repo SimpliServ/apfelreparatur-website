@@ -23,7 +23,7 @@ const summary = `> Unabhängige Reparatur für iPhone, iPad und Mac in Wien und 
 
 const facts = (locations: Location[]) => [
 	`- Standorte: ${[...new Set(locations.map((l) => l.name))].join(", ")} (Details: ${SITE}/kontakt)`,
-	"- Termin: nicht nötig, einfach vorbeikommen. Online-Anfrage optional.",
+	"- Termin: nicht nötig, einfach vorbeikommen.",
 	"- Preise: iPhone und iPad zum Fixpreis je Modell (Preisliste unten bzw. auf der Modellseite), ohne Arbeitspauschale oder Arbeitszeit-Zuschlag. Mac und Apple Watch: Preis nach der Diagnose, vor der Reparatur. Repariert wird erst nach Zustimmung.",
 	"- Dauer: ist das Teil lagernd, ist ein Display- oder Akkutausch oft in rund einer Stunde erledigt.",
 	`- Garantie: ${business.warrantyMonths} Monate auf getauschte Teile und Arbeit, gesetzliche Gewährleistung bleibt bestehen.`,

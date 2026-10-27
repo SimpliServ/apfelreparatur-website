@@ -28,7 +28,7 @@ const chapters = [
 	["/apple-watch", "ph:watch", "Watch"],
 	["/datenrettung", "ph:database", "Datenrettung"],
 	["/datenrettung#uebertragung", "ph:arrows-left-right", "Datenübertragung"],
-	["/reparatur-anfragen", "ph:wrench", "Anfragen"],
+	["/kontakt", "ph:map-pin", "Standorte"],
 ] as const;
 ---
 
@@ -59,7 +59,7 @@ const chapters = [
 		eyebrow="iPhone Reparatur in Wien"
 		title="Wie am ersten Tag."
 		sub={'Premium Reparaturen mit Original Apple Teilen.<a class="fn" href="#fn-1">1</a>'}
-		primary={{ href: "/reparatur-anfragen", label: "Reparatur anfragen" }}
+		primary={{ href: "/kontakt", label: "Ohne Termin vorbeikommen" }}
 		secondary={{ href: "/iphone", label: "Mehr erfahren" }}
 	/>
 
@@ -69,48 +69,48 @@ const chapters = [
 			photo="display"
 			title="Display."
 			sub="Gesprungen? Bald wieder makellos."
-			primary={{ href: "/reparatur-anfragen?geraet=iphone&anliegen=display", label: "Anfragen" }}
-			secondary={{ href: "/iphone/display-reparatur", label: "Mehr erfahren" }}
+			primary={{ href: "/iphone/display-reparatur", label: "Mehr erfahren" }}
+			secondary={{ href: "/kontakt", label: "Vorbeikommen" }}
 		/>
 		<Tile
 			half
 			photo="rueckglas"
 			title="Rückglas."
 			sub="Die Rückseite, wieder aus einem Guss."
-			primary={{ href: "/reparatur-anfragen?geraet=iphone&anliegen=rueckglas", label: "Anfragen" }}
-			secondary={{ href: "/iphone/rueckglas-reparatur", label: "Mehr erfahren" }}
+			primary={{ href: "/iphone/rueckglas-reparatur", label: "Mehr erfahren" }}
+			secondary={{ href: "/kontakt", label: "Vorbeikommen" }}
 		/>
 		<Tile
 			half
 			photo="akku"
 			title="Akku."
 			sub="Wieder 100 % Batteriezustand."
-			primary={{ href: "/reparatur-anfragen?geraet=iphone&anliegen=akku", label: "Anfragen" }}
-			secondary={{ href: "/iphone/batterietausch", label: "Mehr erfahren" }}
+			primary={{ href: "/iphone/batterietausch", label: "Mehr erfahren" }}
+			secondary={{ href: "/kontakt", label: "Vorbeikommen" }}
 		/>
 		<Tile
 			half
 			photo="daten"
 			title="Datenrettung."
 			sub="Fotos, Nachrichten, Dateien. Zurückgeholt."
-			primary={{ href: "/reparatur-anfragen?anliegen=datenrettung", label: "Anfragen" }}
-			secondary={{ href: "/datenrettung", label: "Mehr erfahren" }}
+			primary={{ href: "/datenrettung", label: "Mehr erfahren" }}
+			secondary={{ href: "/kontakt", label: "Vorbeikommen" }}
 		/>
 		<Tile
 			half
 			photo="ipad"
 			title="iPad."
 			sub="Glas, Display und Akku. Wie neu."
-			primary={{ href: "/reparatur-anfragen?geraet=ipad", label: "Anfragen" }}
-			secondary={{ href: "/ipad", label: "Mehr erfahren" }}
+			primary={{ href: "/ipad", label: "Mehr erfahren" }}
+			secondary={{ href: "/kontakt", label: "Vorbeikommen" }}
 		/>
 		<Tile
 			half
 			photo="mac-hero"
 			title="Mac."
 			sub="MacBook Air, MacBook Pro und iMac."
-			primary={{ href: "/reparatur-anfragen?geraet=mac", label: "Anfragen" }}
-			secondary={{ href: "/mac", label: "Mehr erfahren" }}
+			primary={{ href: "/mac", label: "Mehr erfahren" }}
+			secondary={{ href: "/kontakt", label: "Vorbeikommen" }}
 		/>
 	</div>
 
@@ -119,8 +119,8 @@ const chapters = [
 		eyebrow="Apple Watch Reparatur"
 		title="Apple Watch."
 		sub="Display und Akku. Wieder bereit für jeden Tag."
-		primary={{ href: "/reparatur-anfragen?geraet=apple-watch", label: "Anfragen" }}
-		secondary={{ href: "/apple-watch", label: "Mehr erfahren" }}
+		primary={{ href: "/apple-watch", label: "Mehr erfahren" }}
+		secondary={{ href: "/kontakt", label: "Vorbeikommen" }}
 	/>
 
 	{
@@ -174,7 +174,7 @@ const chapters = [
 	</section>
 
 	<RepairDirectory title="Alle Reparaturen in Wien.">
-		Ohne Termin an unseren Standorten {places.join(", ").replace(/, ([^,]*)$/, " und $1")}. Oder vorab <a href="/reparatur-anfragen">online anfragen</a>.
+		Ohne Termin an unseren Standorten {places.join(", ").replace(/, ([^,]*)$/, " und $1")}, auch am Wochenende.
 	</RepairDirectory>
 
 	<FAQ title="Häufige Fragen." items={homeFaq} />
