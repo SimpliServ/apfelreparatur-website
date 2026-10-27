@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-iconset/components";
 import type { Location } from "../lib/business";
 
 interface Props {
@@ -11,7 +12,14 @@ const inShop = /Shopping City Süd/i.test(l.name);
 
 <li class="card card--gray scard">
 	<p class="scard__venue">{l.venue}</p>
-	{inShop && <p class="scard__shop">Im MobiNil Shop</p>}
+	{
+		inShop && (
+			<p class="scard__shop">
+				<Icon name="ph:storefront" aria-hidden="true" />
+				Im MobiNil Shop
+			</p>
+		)
+	}
 	<p class="muted">
 		{l.street}
 		<br />
@@ -45,10 +53,21 @@ const inShop = /Shopping City Süd/i.test(l.name);
 	}
 
 	.scard__shop {
-		margin-bottom: 6px;
-		font-size: 15px;
-		font-weight: 600;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		margin: 4px 0 12px;
+		padding: 5px 12px 5px 10px;
+		border-radius: 980px;
+		background: var(--accent-soft);
 		color: var(--accent);
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.scard__shop :global(svg) {
+		width: 16px;
+		height: 16px;
 	}
 
 	.scard__hours {
