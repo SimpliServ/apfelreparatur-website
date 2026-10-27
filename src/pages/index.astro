@@ -64,6 +64,8 @@ const chapters = [
 		secondary={{ href: "#geraete", label: "Gerät wählen" }}
 	/>
 
+	<DevicePicker id="geraete" title="Welches Gerät möchten Sie reparieren?" models={catalogue.models} />
+
 	<div class="grid">
 		<Tile
 			half
@@ -124,8 +126,6 @@ const chapters = [
 		secondary={{ href: "/kontakt", label: "Vorbeikommen" }}
 	/>
 
-
-	<DevicePicker id="geraete" title="Reparatur nach Gerät auswählen." models={catalogue.models} />
 
 	{
 		top.length > 0 && (
