@@ -39,7 +39,7 @@ const devices = [
 								)}
 							</span>
 							<span class="pcard__label pcard__more">
-								{d.label} Reparatur <Icon name="ph:arrow-right" aria-hidden="true" />
+								{d.label} <span class="pcard__nowrap">Reparatur <Icon name="ph:arrow-right" aria-hidden="true" /></span>
 							</span>
 						</a>
 					</li>
@@ -47,13 +47,12 @@ const devices = [
 			}
 		</ul>
 		<a class="pcard pcard--stores" href="/kontakt">
-			<span class="pcard__pin"><Icon name="ph:map-pin" aria-hidden="true" /></span>
 			<span>
 				<span class="pcard__label">Unsere Standorte</span>
 				<span class="pcard__text">Finden Sie Ihre nächste Filiale in Wien oder Niederösterreich.</span>
 				<span class="pcard__text">Ohne Termin vorbeikommen.</span>
 			</span>
-			<span class="btn pcard__cta">Standorte ansehen <Icon name="ph:arrow-right" aria-hidden="true" /></span>
+			<span class="btn pcard__cta"><Icon name="ph:map-pin" aria-hidden="true" /> Standorte ansehen</span>
 		</a>
 	</div>
 </section>
@@ -138,6 +137,10 @@ const devices = [
 		letter-spacing: 0.011em;
 	}
 
+	.pcard__nowrap {
+		white-space: nowrap;
+	}
+
 	.pcard__more :global(svg) {
 		margin-left: 4px;
 		vertical-align: -0.125em;
@@ -166,18 +169,6 @@ const devices = [
 	/* --muted on --accent-soft is < 4.5:1 */
 	.pcard--stores .pcard__text {
 		color: var(--ink);
-	}
-
-	.pcard__pin {
-		display: grid;
-		flex: none;
-		place-items: center;
-		width: 56px;
-		height: 56px;
-		border-radius: 50%;
-		background: var(--accent);
-		color: #fff;
-		font-size: 28px;
 	}
 
 	.pcard__text {
@@ -214,7 +205,7 @@ const devices = [
 			padding: 20px;
 		}
 
-		.pcard--stores > span:nth-child(2) {
+		.pcard--stores > span:first-child {
 			flex: 1 1 0;
 			min-width: 0;
 		}
@@ -232,7 +223,7 @@ const devices = [
 		}
 
 		.pcard__more {
-			font-size: 16px;
+			font-size: 15px;
 		}
 	}
 </style>
