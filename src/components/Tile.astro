@@ -18,6 +18,8 @@ interface Props {
 const { title, sub, eyebrow, photo, alt, dark = false, half = false, primary, secondary, heading = "h2", eager = false } = Astro.props;
 const H = heading;
 const seamless = !dark && "seamless" in photos[photo];
+const p = photos[photo];
+const [top, bot] = "box" in p ? p.box : [0, 1];
 ---
 
 <section class:list={["tile", { "tile--half": half, "tile--hero": heading === "h1", "on-dark": dark, "tile--light": !dark, "tile--seamless": seamless }]}>
@@ -50,7 +52,7 @@ const seamless = !dark && "seamless" in photos[photo];
 		}
 		<slot />
 	</div>
-	<div class:list={["tile__media", heading === "h1" ? "settle sd-drift" : "sd-zoom"]}>
+	<div class:list={["tile__media", heading === "h1" ? "settle sd-drift" : "sd-zoom"]} style={`--ar:${p.h / p.w};--top:${top};--bot:${bot}`}>
 		<Pic name={photo} alt={alt} sizes={half ? "(max-width: 833px) 100vw, 50vw" : "100vw"} eager={eager} />
 	</div>
 </section>
@@ -152,27 +154,73 @@ const seamless = !dark && "seamless" in photos[photo];
 		background: linear-gradient(180deg, var(--fade) 0%, var(--fade) 34%, transparent 72%);
 	}
 
+	/* The photo exports land at #f6f5f8, one step off --gray; match it so no edge shows. */
+	.tile.tile--seamless {
+		background: #f6f5f8;
+	}
+
 	.tile.tile--seamless .tile__media :global(img) {
 		object-fit: contain;
 		object-position: center bottom;
+	}
+
+	/* Seamless shots sit in the space below the copy. The img is sized so its product (box) fits that
+	   space, so it can grow on wide tiles but never reach the text; empty margins overflow and are clipped. */
+	.tile--seamless:not(.tile--hero) .tile__media {
+		--k: 1.5;
+		position: relative;
+		inset: auto;
+		flex: 1 1 0;
+		min-height: 0;
+		width: 100%;
+		margin-top: 24px;
+		overflow: hidden;
+		container-type: size;
+	}
+
+	.tile.tile--seamless:not(.tile--hero) .tile__media :global(img) {
+		--iw: min(var(--k) * 100cqw, 100cqh / ((var(--bot) - var(--top)) * var(--ar)));
+		position: absolute;
+		left: 50%;
+		bottom: calc(var(--iw) * var(--ar) * (var(--bot) - 1));
+		translate: -50% 0;
+		width: var(--iw);
+		max-width: none;
+		height: auto;
+		object-fit: fill;
+	}
+
+	.tile--half.tile--seamless .tile__media {
+		--k: 1.7;
 	}
 
 	.tile--seamless .tile__media::after {
 		content: none;
 	}
 
+	/* Hero image flows below the copy so it can never overlap it. The composite's devices fill
+	   x 20–83 % / y 20–80 % of the frame, so the img is oversized and its empty margins cut off. */
 	.tile--hero {
-		height: clamp(640px, 70vw, 900px);
+		height: auto;
 	}
 
 	.tile--hero .tile__media {
-		top: 28%;
+		--w: min(150vw, 1360px);
+		position: relative;
+		inset: auto;
+		display: flex;
+		justify-content: center;
+		margin-top: clamp(20px, 3vw, 36px);
+		padding-bottom: clamp(24px, 4vw, 48px);
 	}
 
-	/* The hero composite carries wide margins; scale it up from the bottom edge. */
-	.tile--hero.tile--seamless .tile__media :global(img) {
-		scale: 1.16;
-		transform-origin: center bottom;
+	.tile.tile--hero .tile__media :global(img) {
+		flex: none;
+		width: var(--w);
+		max-width: none;
+		height: auto;
+		margin: calc(var(--w) * -0.12) 0 calc(var(--w) * -0.08);
+		scale: none;
 	}
 
 	.tile--hero .tile__media :global(img) {
@@ -183,31 +231,7 @@ const seamless = !dark && "seamless" in photos[photo];
 		background: linear-gradient(180deg, var(--fade) 0%, transparent 35%, transparent 85%, var(--fade) 100%);
 	}
 
-	@media (min-width: 735px) and (max-width: 1199px) {
-		.tile--hero .tile__media {
-			top: 34%;
-		}
-
-		.tile--hero.tile--seamless .tile__media :global(img) {
-			scale: 1.06;
-		}
-	}
-
 	@media (max-width: 734px) {
-		/* Seamless shots carry wide margins; enlarge them on narrow screens (scale, not transform: .sd-zoom animates transform). */
-		.tile.tile--seamless .tile__media :global(img) {
-			scale: 1.3;
-			transform-origin: center bottom;
-		}
-
-		.tile--hero {
-			height: 560px;
-		}
-
-		.tile--hero.tile--seamless .tile__media :global(img) {
-			scale: 1.55;
-		}
-
 		.tile__copy {
 			padding-top: 40px;
 		}
@@ -228,10 +252,6 @@ const seamless = !dark && "seamless" in photos[photo];
 		.tile__ctas .btn {
 			padding: 8px 13px;
 			font-size: 14px;
-		}
-
-		.tile--hero .tile__media {
-			top: 36%;
 		}
 
 		.tile__media::after,
