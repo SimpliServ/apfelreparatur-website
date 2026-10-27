@@ -5,10 +5,13 @@ interface Props {
 	store: Location;
 }
 const { store: l } = Astro.props;
+// SCS has several phone shops; tell walk-ins which one is ours.
+const inShop = /Shopping City Süd/i.test(l.name);
 ---
 
 <li class="card card--gray scard">
 	<p class="scard__venue">{l.venue}</p>
+	{inShop && <p class="scard__shop">Im MobiNil Shop</p>}
 	<p class="muted">
 		{l.street}
 		<br />
@@ -39,6 +42,13 @@ const { store: l } = Astro.props;
 		font-size: 19px;
 		font-weight: 600;
 		margin-bottom: 6px;
+	}
+
+	.scard__shop {
+		margin-bottom: 6px;
+		font-size: 15px;
+		font-weight: 600;
+		color: var(--accent);
 	}
 
 	.scard__hours {
