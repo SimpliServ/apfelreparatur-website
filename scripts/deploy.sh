@@ -20,7 +20,7 @@ rollback() {
 FAIL=0
 TMP=$(mktemp)
 trap 'rm -f "$TMP"' EXIT
-for P in / /iphone /ipad /mac /apple-watch /datenrettung /reparatur-anfragen /kontakt /llms.txt /sitemap.xml; do
+for P in / /iphone /ipad /mac /imac /apple-watch /datenrettung /reparatur-anfragen /kontakt /llms.txt /sitemap.xml; do
 	if CODE=$(curl -sS -L -o "$TMP" -w "%{http_code}" --max-time 30 "$BASE$P"); then :; else CODE=000; fi
 	echo "$CODE $P"
 	[ "$CODE" = 200 ] || FAIL=1

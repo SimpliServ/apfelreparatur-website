@@ -12,6 +12,8 @@ export const photos = {
 	ipad: { w: 2400, h: 1600, alt: "Hand mit Eingabestift an einem Tablet auf einem weißen Schreibtisch", by: "cottonbro studio", id: 3944397 },
 	mac: { w: 2400, h: 1350, alt: "Geöffneter Laptop mit sichtbarer Platine auf einer Werkstattmatte", by: "Found GHI", id: 34514242 },
 	"mac-hero": { w: 2400, h: 1530, alt: "MacBook Pro in der Frontansicht auf hellem Hintergrund", by: "Meet Patel", id: 37085303, retouched: true, seamless: true, v: 3 },
+	// Wikimedia Commons (CC BY), same shot as the iMac 24″ model photos; credited with source + licence instead of Pexels.
+	"imac-hero": { w: 2400, h: 1530, alt: "iMac 24″ in Blau, Vorderansicht auf hellem Hintergrund", by: "Seasider53, CC BY 4.0", id: "imac-hero", retouched: true, seamless: true, source: "https://commons.wikimedia.org/wiki/File:IMac_M4_2024_2_(cropped).jpg", license: "https://creativecommons.org/licenses/by/4.0" },
 	watch: { w: 2400, h: 1530, alt: "Apple Watch mit schwarzem Sportarmband auf hellem Hintergrund", by: "Torsten Dettlaff", id: 437037, retouched: true, seamless: true },
 	"watch-display": { w: 2400, h: 1530, alt: "Apple Watch mit gesprungenem Display auf hellem Hintergrund", by: "Torsten Dettlaff", id: 437037, retouched: true, seamless: true },
 	"watch-akku": { w: 2400, h: 1530, alt: "Apple Watch auf einem Ladepuck mit Ladeanzeige", by: "Torsten Dettlaff", id: 437037, retouched: true, seamless: true },

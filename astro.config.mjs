@@ -71,6 +71,7 @@ export default defineConfig({
 					"device-tablet",
 					"watch",
 					"laptop",
+					"desktop",
 					"devices",
 					"battery-full",
 					"cards",

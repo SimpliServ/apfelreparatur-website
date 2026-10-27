@@ -6,7 +6,7 @@ import Pic from "./Pic.astro";
 import PlusCards from "./PlusCards.astro";
 import FAQ from "./FAQ.astro";
 import Closing from "./Closing.astro";
-import { de, devices, services, type DeviceKey, type ServiceKey } from "../lib/content";
+import { de, devices, imac, services, type DeviceKey, type ServiceKey } from "../lib/content";
 import { deviceFaq, repairPhoto, whyCards } from "../lib/copy";
 import { breadcrumbLd, faqLd, localBusinessLd, serviceLd } from "../lib/seo";
 import { loadModels, useHints } from "../lib/devices";
@@ -15,26 +15,31 @@ import { repairPages } from "../lib/repair-pages";
 
 interface Props {
 	device: DeviceKey;
+	/** Sub-hub for one product line (/imac), filtered to its series. */
+	line?: "imac";
 	title: string;
 	description: string;
 }
-const { device, title, description } = Astro.props;
-const d = devices[device];
+const { device, line, title, description } = Astro.props;
+const d = line ? imac : devices[device];
 const faq = deviceFaq(d);
-const path = `/${d.key}`;
+const path = `/${line ?? d.key}`;
 // People search "MacBook Reparatur", not "Mac Reparatur".
-const dn = d.key === "mac" ? "MacBook" : d.name;
-const { models, cacheHint } = await loadModels(device);
-useHints(Astro, cacheHint);
+const dn = !line && d.key === "mac" ? "MacBook" : d.name;
+const all = await loadModels(device);
+const models = line ? all.models.filter((m) => m.series.startsWith("iMac")) : all.models;
+useHints(Astro, all.cacheHint);
 const detail = (key: ServiceKey): [string, string] | undefined => {
 	if (key === "datenrettung") return ["/datenrettung", `${dn} Datenrettung`];
+	// Mac repair landing pages are written for MacBooks.
+	if (line) return undefined;
 	const p = repairPages.find((x) => x.device === device && x.service === key);
 	return p && [p.path, `${dn} ${p.copy.label}`];
 };
 ---
 
 <Base
-	og={device}
+	og={line ?? device}
 	title={title}
 	description={description}
 	jsonLd={[
@@ -69,7 +74,7 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 			<section id="modelle" class="section on-gray" aria-labelledby="models-h">
 				<div class="wrap wrap--xl">
 					<div class="center models__head" data-reveal>
-						<h2 id="models-h" class="t-section">Wählen Sie Ihr {d.key === "mac" ? "Mac Modell" : d.name}.</h2>
+						<h2 id="models-h" class="t-section">Wählen Sie Ihr {d.key === "mac" ? `${line ? "iMac" : "Mac"} Modell` : d.name}.</h2>
 						<p class="t-lead muted">{d.key === "iphone" || d.key === "ipad" ? "Alle Preise auf einen Blick, mit Original Apple Teilen oder als günstigere Alternative." : "Jedes Modell mit eigener Seite. Den Preis nennen wir Ihnen nach der Diagnose."}</p>
 					</div>
 					<ModelGrid models={models} grouped rows={2} search={d.key === "mac" ? "Modell oder Modellnummer suchen" : `${d.name} Modell suchen`} />
@@ -113,7 +118,7 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 						</p>
 					</div>
 					<figure class="rep__img sd-zoom">
-						<Pic name={repairPhoto(d.key, r.key)} sizes="(max-width: 900px) 100vw, 640px" />
+						<Pic name={line && r.key === "display" ? "werkstatt" : repairPhoto(d.key, r.key)} sizes="(max-width: 900px) 100vw, 640px" />
 					</figure>
 				</div>
 			</section>

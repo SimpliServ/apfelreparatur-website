@@ -8,6 +8,7 @@ const links = [
 	["/iphone", "iPhone"],
 	["/ipad", "iPad"],
 	["/mac", "Mac"],
+	["/imac", "iMac"],
 	["/apple-watch", "Watch"],
 	["/datenrettung", "Datenrettung"],
 	["/#ablauf", "So funktioniert’s"],
@@ -113,6 +114,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		display: block;
 		padding: 0 13px;
 		line-height: var(--nav-h);
+		white-space: nowrap;
 		font-size: 14px;
 		letter-spacing: -0.01em;
 		color: rgba(0, 0, 0, 0.8);
@@ -226,7 +228,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		text-transform: none;
 	}
 
-	@media (max-width: 1199px) {
+	@media (max-width: 1319px) {
 		.gnav__call {
 			width: 32px;
 			padding: 0;
@@ -239,7 +241,6 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 
 		.gnav__links a {
 			padding: 0 9px;
-			white-space: nowrap;
 		}
 	}
 

@@ -99,3 +99,19 @@ export const devices: Record<DeviceKey, Device> = {
 };
 
 export const deviceList = Object.values(devices);
+
+// iMac has its own hub (/imac) but stays key "mac" everywhere else (form, price list, model URLs /mac/<slug>).
+export const imac: Device = {
+	...devices.mac,
+	name: "iMac",
+	headline: "iMac Reparatur.",
+	sub: "iMac 24″, 27″ und 21,5″. Sorgfältig repariert, mit Original Apple Teilen.",
+	tile: "Display und SSD. Damit Ihr iMac wieder arbeitet wie Sie.",
+	image: "imac-hero",
+	imageAlt: "iMac 24″ in Blau, Vorderansicht auf hellem Hintergrund",
+	models: ["iMac 24\"", "iMac 27\"", "iMac 21,5\"", "iMac Pro", "Anderer iMac"],
+	repairs: [
+		{ key: "display", title: "Display. Wieder brillant.", text: "Gesprungenes Glas, Streifen oder Flecken im Bild: Wir tauschen das Display Ihres iMac und kalibrieren es, damit Farben stimmen.", points: ["Original Apple Display", "Kalibrierung nach dem Tausch", "Staubfrei verklebt"] },
+		{ key: "datenrettung", title: "SSD und Daten. Nichts geht verloren.", text: "Startet Ihr iMac nicht mehr, holen wir Ihre Dateien, wenn es technisch möglich ist, und übertragen sie auf Wunsch auf einen neuen Mac.", points: ["Diagnose vor jeder Arbeit", "Vertraulicher Umgang mit Ihren Daten", "Übergabe auf Datenträger oder neuen Mac"] },
+	],
+};

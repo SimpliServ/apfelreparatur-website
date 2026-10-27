@@ -1,7 +1,7 @@
 // llms.txt (index) and llms-full.txt (all facts in one file) for AI agents, built from the same data as the pages.
 import { business, type Location } from "./business";
 import { dataCards, deviceFaq, homeFaq, steps, whyCards } from "./copy";
-import { deviceList, services, type DeviceKey } from "./content";
+import { deviceList, imac, services, type DeviceKey } from "./content";
 import { repairPages } from "./repair-pages";
 import { SITE } from "./seo";
 import { CATEGORY, euro, modelPath, priceGroups, type Model } from "./devices";
@@ -37,6 +37,7 @@ export function llmsTxt(locations: Location[]): string {
 		"",
 		"## Geräte",
 		...deviceList.map((d) => `- [${d.name} Reparatur Wien](${SITE}/${d.key}): ${d.repairs.map((r) => services[r.key].label).join(", ")}`),
+		`- [iMac Reparatur Wien](${SITE}/imac): ${imac.repairs.map((r) => services[r.key].label).join(", ")}`,
 		`- [Datenrettung und Datenübertragung](${SITE}/datenrettung): iPhone, iPad und Mac`,
 		"",
 		"## Reparaturen",

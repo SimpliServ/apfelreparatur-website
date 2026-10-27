@@ -78,13 +78,20 @@ const deviceCredits = catalogue.models
 	</p>
 
 	<h2>Urheberrecht und Bildnachweise</h2>
-	<p>Texte und Gestaltung dieser Website sind urheberrechtlich geschützt. Fotos stammen von Pexels und werden gemäß der Pexels-Lizenz verwendet; einige Produktbilder sind KI-generiert (siehe Gerätebilder). Abgebildete Personen und Räume sind Symbolbilder, nicht unsere Werkstatt.</p>
+	<p>Texte und Gestaltung dieser Website sind urheberrechtlich geschützt. Fotos stammen, wo nicht anders angegeben, von Pexels und werden gemäß der Pexels-Lizenz verwendet; einige Produktbilder sind KI-generiert (siehe Gerätebilder). Abgebildete Personen und Räume sind Symbolbilder, nicht unsere Werkstatt.</p>
 	<ul>
 		{
 			credits.map((p) => (
 				<li>
 					{p.alt}{"retouched" in p && p.retouched ? " (retuschiert)" : ""}: {p.by}
-					{!("ai" in p) && (
+					{"source" in p ? (
+						<>
+							{" / "}
+							<a href={p.source} rel="noopener">Wikimedia Commons</a>
+							{" · "}
+							<a href={p.license} rel="license noopener">Lizenz</a>
+						</>
+					) : !("ai" in p) && (
 						<>
 							{" / "}
 							<a href={`https://www.pexels.com/photo/${p.id}/`} rel="noopener">Pexels</a>
