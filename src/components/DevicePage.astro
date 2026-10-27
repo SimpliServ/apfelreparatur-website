@@ -29,6 +29,7 @@ const faq = [...deviceFaq(d), ...guide.faq];
 const path = `/${line ?? d.key}`;
 // People search "MacBook Reparatur", not "Mac Reparatur".
 const dn = !line && d.key === "mac" ? "MacBook" : d.name;
+const iphone = !line && d.key === "iphone";
 const all = await loadModels(device);
 const models = line ? all.models.filter((m) => m.series.startsWith("iMac")) : all.models;
 useHints(Astro, all.cacheHint);
@@ -59,40 +60,12 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 
 	<header class="hero">
 		<div class="wrap center rise">
-			{
-				d.hero ? (
-					<>
-						<h1 class="t-display hero__title">
-							{dn} Reparatur. <span class="hero__city hero__tagline">{d.hero.tagline}</span>
-						</h1>
-						<p class="t-hero-sub hero__sub hero__intro">
-							{d.hero.intro}
-							<a class="fn" href="#fn-1">1</a>
-						</p>
-						<ul class="hero__chips" role="list">
-							{d.hero.chips.map((c) => (
-								<li>
-									<Icon name="ph:check" aria-hidden="true" />
-									{c}
-								</li>
-							))}
-						</ul>
-						<div class="btn-row">
-							<a class="btn" href="/kontakt">Jetzt Standort finden</a>
-							<a class="btn btn--ghost" href="#modelle">Reparaturpreise ansehen</a>
-						</div>
-					</>
-				) : (
-					<>
-						<h1 class="t-display hero__title">{dn} Reparatur <span class="hero__city">in Wien.</span></h1>
-						<p class="t-hero-sub hero__sub">{d.sub}<a class="fn" href="#fn-1">1</a></p>
-						<div class="btn-row">
-							<a class="btn" href="/kontakt">Ohne Termin vorbeikommen</a>
-							<a class="btn btn--ghost" href="#modelle">Preise nach Modell</a>
-						</div>
-					</>
-				)
-			}
+			<h1 class="t-display hero__title">{dn} Reparatur <span class="hero__city">in Wien.</span></h1>
+			<p class="t-hero-sub hero__sub">{d.sub}<a class="fn" href="#fn-1">1</a></p>
+			<div class="btn-row">
+				<a class="btn" href="/kontakt">{iphone ? "Jetzt Standort finden" : "Ohne Termin vorbeikommen"}</a>
+				<a class="btn btn--ghost" href="#modelle">{iphone ? "Reparaturpreise ansehen" : "Preise nach Modell"}</a>
+			</div>
 		</div>
 		<figure class="hero__img wrap wrap--xl sd-grow">
 			<Pic name={d.image as never} alt={d.imageAlt} eager sizes="(max-width: 1260px) 100vw, 1260px" />
@@ -176,44 +149,6 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 		max-width: 30ch;
 		margin: 18px auto 28px;
 		color: var(--ink-2);
-	}
-
-	.hero__tagline {
-		margin-top: 4px;
-		font-size: 0.56em;
-		line-height: 1.1;
-	}
-
-	.hero__intro {
-		max-width: 40ch;
-		margin-bottom: 22px;
-		font-size: clamp(19px, 2.2vw, 22px);
-		line-height: 1.4;
-		color: var(--muted);
-	}
-
-	.hero__chips {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 10px;
-		margin: 0 auto 28px;
-	}
-
-	.hero__chips li {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		padding: 7px 14px;
-		border-radius: 980px;
-		background: var(--gray);
-		font-size: 15px;
-		color: var(--ink);
-	}
-
-	.hero__chips :global(svg) {
-		width: 16px;
-		height: 16px;
 	}
 
 	.hero__img {
