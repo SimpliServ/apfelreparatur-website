@@ -431,9 +431,24 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	}
 
 	@media (max-width: 420px) {
+		.gnav__bar {
+			gap: 4px;
+		}
+
+		.gnav__logo :global(.wm) {
+			height: 20px;
+		}
+
 		.gnav__cta {
 			font-size: 14px;
 			padding: 9px 12px;
+		}
+	}
+
+	/* Menu repeats the CTA; on the narrowest phones it would push the toggle out. */
+	@media (max-width: 359px) {
+		.gnav__cta {
+			display: none;
 		}
 	}
 </style>
