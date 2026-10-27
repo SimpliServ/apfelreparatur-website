@@ -57,7 +57,7 @@ const partLabel = (q?: string | null) => (q && q !== "standard" ? qualityLabels.
 const included = [
 	{ icon: "ph:shield-check", title: `${business.warrantyMonths} Monate Garantie`, text: "Auf das getauschte Teil und unsere Arbeit. Zusätzlich zur gesetzlichen Gewährleistung." },
 	{ icon: "ph:receipt", title: "Preis vor der Reparatur", text: "Sie wissen vorher, was es kostet. Repariert wird erst nach Ihrer Zustimmung." },
-	{ icon: "ph:storefront", title: "Ohne Termin", text: "An unseren Standorten in Wien und Umgebung, zum Beispiel am Hauptbahnhof." },
+	{ icon: "ph:storefront", title: "Ohne Termin", text: "An unseren Standorten in Wien und Niederösterreich." },
 	{ icon: "ph:lock-simple", title: "Daten bleiben privat", text: "Für die Reparatur brauchen wir keinen Zugriff auf Fotos oder Nachrichten." },
 ];
 const offers = m.repairs.map((r) => ({ name: [repairLabels.de[r.repair] ?? r.repair, partLabel(r.quality)].filter(Boolean).join(", "), price: r.price, from: !!r.price_from }));
