@@ -7,6 +7,7 @@ import Steps from "../components/Steps.astro";
 import FAQ from "../components/FAQ.astro";
 import Closing from "../components/Closing.astro";
 import RepairDirectory from "../components/RepairDirectory.astro";
+import DevicePicker from "../components/DevicePicker.astro";
 import { homeFaq, steps, whyCards } from "../lib/copy";
 import { faqLd, localBusinessLd } from "../lib/seo";
 import { business } from "../lib/business";
@@ -56,12 +57,14 @@ const chapters = [
 		heading="h1"
 		eager
 		photo="hero"
-		eyebrow="iPhone Reparatur in Wien"
+		eyebrow="Apple Reparatur in Wien"
 		title="Wie am ersten Tag."
 		sub={'Premium Reparaturen mit Original Apple Teilen.<a class="fn" href="#fn-1">1</a>'}
 		primary={{ href: "/kontakt", label: "Ohne Termin vorbeikommen" }}
-		secondary={{ href: "/iphone", label: "Mehr erfahren" }}
+		secondary={{ href: "#geraete", label: "Gerät wählen" }}
 	/>
+
+	<DevicePicker id="geraete" title="Reparatur nach Gerät auswählen." models={catalogue.models} />
 
 	<div class="grid">
 		<Tile
