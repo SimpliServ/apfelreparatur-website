@@ -162,11 +162,17 @@ const seamless = !dark && "seamless" in photos[photo];
 	}
 
 	.tile--hero {
-		height: clamp(620px, 66vw, 760px);
+		height: clamp(640px, 70vw, 900px);
 	}
 
 	.tile--hero .tile__media {
-		top: 26%;
+		top: 28%;
+	}
+
+	/* The hero composite carries wide margins; scale it up from the bottom edge. */
+	.tile--hero.tile--seamless .tile__media :global(img) {
+		scale: 1.16;
+		transform-origin: center bottom;
 	}
 
 	.tile--hero .tile__media :global(img) {
@@ -177,11 +183,29 @@ const seamless = !dark && "seamless" in photos[photo];
 		background: linear-gradient(180deg, var(--fade) 0%, transparent 35%, transparent 85%, var(--fade) 100%);
 	}
 
+	@media (min-width: 735px) and (max-width: 1199px) {
+		.tile--hero .tile__media {
+			top: 34%;
+		}
+
+		.tile--hero.tile--seamless .tile__media :global(img) {
+			scale: 1.06;
+		}
+	}
+
 	@media (max-width: 734px) {
 		/* Seamless shots carry wide margins; enlarge them on narrow screens (scale, not transform: .sd-zoom animates transform). */
 		.tile.tile--seamless .tile__media :global(img) {
 			scale: 1.3;
 			transform-origin: center bottom;
+		}
+
+		.tile--hero {
+			height: 560px;
+		}
+
+		.tile--hero.tile--seamless .tile__media :global(img) {
+			scale: 1.55;
 		}
 
 		.tile__copy {
