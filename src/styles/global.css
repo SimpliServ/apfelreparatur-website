@@ -33,6 +33,12 @@
 	color-scheme: light;
 }
 
+@media (min-width: 1024px) {
+	:root {
+		--nav-h: 64px;
+	}
+}
+
 *,
 *::before,
 *::after {
@@ -506,7 +512,7 @@ body:has(.lnav) .gnav {
 	position: relative;
 }
 
-@media (max-width: 833px) {
+@media (max-width: 1023px) {
 	body:has(.lnav) .gnav__cta {
 		display: none;
 	}

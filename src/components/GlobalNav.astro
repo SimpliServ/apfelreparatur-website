@@ -21,7 +21,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 
 <header class="gnav" data-gnav>
 	<nav class="gnav__bar" aria-label="Hauptnavigation">
-		<a href="/" class="gnav__logo" aria-label="Apfelreparatur – Startseite"><Wordmark height={22} /></a>
+		<a href="/" class="gnav__logo" aria-label="Apfelreparatur – Startseite"><Wordmark height={27} /></a>
 		<ul class="gnav__links" role="list">
 			{
 				links.map(([href, label]) => (
@@ -54,6 +54,9 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	</div>
 </header>
 <div class="gnav__curtain" data-gnav-curtain aria-hidden="true"></div>
+<a href={telHref(business.hotline)} class="callfab" aria-label={`Gratis Service-Hotline ${business.hotline} anrufen`}>
+	<Icon name="ph:phone-fill" aria-hidden="true" />
+</a>
 
 <script>
 	const root = document.querySelector<HTMLElement>("[data-gnav]")!;
@@ -67,7 +70,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	toggle.addEventListener("click", () => set(!root.classList.contains("is-open")));
 	root.querySelectorAll("[data-gnav-menu] a").forEach((a) => a.addEventListener("click", () => set(false)));
 	addEventListener("keydown", (e) => e.key === "Escape" && set(false));
-	matchMedia("(min-width: 834px)").addEventListener("change", () => set(false));
+	matchMedia("(min-width: 1024px)").addEventListener("change", () => set(false));
 </script>
 
 <style>
@@ -86,7 +89,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		align-items: center;
 		gap: 8px;
 		height: var(--nav-h);
-		width: min(1100px, calc(100% - 44px));
+		width: min(1360px, calc(100% - 44px));
 		margin-inline: auto;
 	}
 
@@ -112,10 +115,10 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 
 	.gnav__links a {
 		display: block;
-		padding: 0 13px;
+		padding: 0 14px;
 		line-height: var(--nav-h);
 		white-space: nowrap;
-		font-size: 14px;
+		font-size: 16px;
 		letter-spacing: -0.01em;
 		color: rgba(0, 0, 0, 0.8);
 		transition: color 0.3s var(--ease);
@@ -135,10 +138,10 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		display: inline-flex;
 		align-items: center;
 		flex: none;
-		gap: 6px;
-		height: 32px;
+		gap: 7px;
+		height: 40px;
 		border-radius: 980px;
-		font-size: 14px;
+		font-size: 16px;
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
 		white-space: nowrap;
@@ -146,7 +149,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	}
 
 	.gnav__call {
-		padding: 0 12px 0 10px;
+		padding: 0 16px 0 14px;
 		color: var(--accent);
 		background: var(--accent-soft);
 	}
@@ -157,15 +160,15 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	}
 
 	.gnav__call :global(svg) {
-		width: 17px;
-		height: 17px;
+		width: 19px;
+		height: 19px;
 		flex: none;
 	}
 
 	.gnav__cta {
-		font-size: 14px;
+		font-size: 16px;
 		line-height: 1;
-		padding: 9px 16px;
+		padding: 12px 20px;
 		border-radius: 980px;
 		background: var(--accent);
 		color: #fff;
@@ -199,20 +202,20 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	}
 
 	.gnav__toggle span:first-child {
-		top: 22px;
+		top: calc(50% - 4px);
 	}
 
 	.gnav__toggle span:last-child {
-		top: 29px;
+		top: calc(50% + 3px);
 	}
 
 	.is-open .gnav__toggle span:first-child {
-		top: 25.5px;
+		top: calc(50% - 0.5px);
 		transform: rotate(45deg);
 	}
 
 	.is-open .gnav__toggle span:last-child {
-		top: 25.5px;
+		top: calc(50% - 0.5px);
 		transform: rotate(-45deg);
 	}
 
@@ -224,13 +227,17 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		display: none;
 	}
 
+	.callfab {
+		display: none;
+	}
+
 	.gnav__cta-long {
 		text-transform: none;
 	}
 
-	@media (max-width: 1319px) {
+	@media (max-width: 1479px) {
 		.gnav__call {
-			width: 32px;
+			width: 40px;
 			padding: 0;
 			justify-content: center;
 		}
@@ -240,14 +247,14 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		}
 
 		.gnav__links a {
-			padding: 0 9px;
+			padding: 0 11px;
 		}
 	}
 
-	@media (max-width: 939px) {
+	@media (max-width: 1159px) {
 		.gnav__links a {
-			padding: 0 7px;
-			font-size: 13px;
+			padding: 0 8px;
+			font-size: 15px;
 		}
 
 		.gnav__cta-long {
@@ -273,7 +280,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		}
 	}
 
-	@media (max-width: 833px) {
+	@media (max-width: 1023px) {
 		.gnav__links {
 			display: none;
 		}
@@ -315,6 +322,46 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 
 		.gnav__toggle {
 			display: block;
+		}
+
+		.gnav__logo :global(.wm) {
+			width: auto;
+			height: 23px;
+		}
+
+		.gnav__cta {
+			font-size: 15px;
+			padding: 10px 16px;
+		}
+
+		.callfab {
+			display: grid;
+			place-items: center;
+			position: fixed;
+			right: 16px;
+			bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+			z-index: 45;
+			width: 58px;
+			height: 58px;
+			border-radius: 50%;
+			background: var(--accent);
+			color: #fff;
+			box-shadow: 0 8px 24px rgba(29, 78, 216, 0.35), 0 2px 6px rgba(0, 0, 0, 0.12);
+			transition: transform 0.2s var(--ease), opacity 0.2s var(--ease);
+		}
+
+		.callfab:active {
+			transform: scale(0.94);
+		}
+
+		.callfab :global(svg) {
+			width: 26px;
+			height: 26px;
+		}
+
+		:global(.gnav-open) .callfab {
+			opacity: 0;
+			pointer-events: none;
 		}
 
 		.gnav__menu {
