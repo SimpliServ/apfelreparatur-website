@@ -26,6 +26,7 @@ export type Device = {
 	name: string;
 	headline: string;
 	sub: string;
+	hero?: { tagline: string; intro: string; chips: string[] };
 	tile: string;
 	image: string;
 	imageAlt: string;
@@ -39,6 +40,11 @@ export const devices: Record<DeviceKey, Device> = {
 		name: "iPhone",
 		headline: "iPhone Reparatur.",
 		sub: "Mit Original Apple Teilen. Zurück wie am ersten Tag.",
+		hero: {
+			tagline: "Schnell. Einfach. Ohne Termin.",
+			intro: "Ihr iPhone verdient den besten Service. Professionelle Reparaturen in Wien & Niederösterreich – auf Wunsch mit Original Apple Ersatzteilen.",
+			chips: ["Ohne Termin", "Schnelle Reparatur", "Faire Preise"],
+		},
 		tile: "Display, Rückglas und Akku. Präzise getauscht, mit Original Apple Teilen.",
 		image: "iphone",
 		imageAlt: "Geöffnetes iPhone mit Einzelteilen auf einer blauen Werkstattmatte",
