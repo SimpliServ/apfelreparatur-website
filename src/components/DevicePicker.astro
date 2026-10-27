@@ -64,10 +64,16 @@ const devices = [
 		background: var(--gray);
 	}
 
+	/* Lifted into the hero's empty bottom so it sits midway between the devices and the cards. */
 	.picker__title {
-		margin-bottom: clamp(30px, 3vw, 36px);
+		--lift: clamp(16px, 3.75vw, 54px);
+		position: relative;
+		z-index: 1;
+		margin-top: calc(-1 * var(--lift));
+		margin-bottom: calc(clamp(30px, 3vw, 36px) + var(--lift));
 		text-align: center;
 	}
+
 
 	.picker__grid {
 		display: grid;
