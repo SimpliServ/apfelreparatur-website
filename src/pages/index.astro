@@ -66,6 +66,29 @@ const chapters = [
 
 	<DevicePicker id="geraete" title="Reparatur nach Gerät auswählen." models={catalogue.models} />
 
+	{
+		top.length > 0 && (
+			<section id="preise" class="prices section" aria-labelledby="preise-h">
+				<div class="wrap wrap--xl">
+					<div class="center prices__head" data-reveal>
+						<h2 id="preise-h" class="t-section">Preise für Ihr Modell.</h2>
+						<p class="t-lead muted">Fixpreise für jedes iPhone und iPad, wahlweise mit Original Apple Teilen.<a class="fn" href="#fn-1">1</a> Wählen Sie Ihr Modell für alle Reparaturen.</p>
+					</div>
+					<ModelGrid models={top} />
+					<ul class="prices__all" role="list">
+						{[["/iphone#modelle", "Alle iPhone Modelle"], ["/ipad#modelle", "Alle iPad Modelle"], ["/mac#modelle", "Alle Mac Modelle"], ["/apple-watch#modelle", "Alle Apple Watch Modelle"]].map(([href, label]) => (
+							<li>
+								<a class="more" href={href}>
+									{label} <Icon name="ph:caret-right" aria-hidden="true" />
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</section>
+		)
+	}
+
 	<div class="grid">
 		<Tile
 			half
@@ -126,28 +149,6 @@ const chapters = [
 		secondary={{ href: "/kontakt", label: "Vorbeikommen" }}
 	/>
 
-	{
-		top.length > 0 && (
-			<section id="preise" class="prices section" aria-labelledby="preise-h">
-				<div class="wrap wrap--xl">
-					<div class="center prices__head" data-reveal>
-						<h2 id="preise-h" class="t-section">Preise für Ihr Modell.</h2>
-						<p class="t-lead muted">Fixpreise für jedes iPhone und iPad, wahlweise mit Original Apple Teilen.<a class="fn" href="#fn-1">1</a> Wählen Sie Ihr Modell für alle Reparaturen.</p>
-					</div>
-					<ModelGrid models={top} />
-					<ul class="prices__all" role="list">
-						{[["/iphone#modelle", "Alle iPhone Modelle"], ["/ipad#modelle", "Alle iPad Modelle"], ["/mac#modelle", "Alle Mac Modelle"], ["/apple-watch#modelle", "Alle Apple Watch Modelle"]].map(([href, label]) => (
-							<li>
-								<a class="more" href={href}>
-									{label} <Icon name="ph:caret-right" aria-hidden="true" />
-								</a>
-							</li>
-						))}
-					</ul>
-				</div>
-			</section>
-		)
-	}
 
 	<PlusCards id="warum" title="Warum Apfelreparatur." link={{ href: "/#garantie", label: "Garantie und Bedingungen ›" }} cards={whyCards} />
 
