@@ -7,7 +7,7 @@ import Pic from "./Pic.astro";
 import ModelGrid from "./ModelGrid.astro";
 import FAQ from "./FAQ.astro";
 import Closing from "./Closing.astro";
-import { business } from "../lib/business";
+import { business, telHref } from "../lib/business";
 import { devices } from "../lib/content";
 import { BASE_REPAIRS, DEVICE_OF, euro, imgSrc, modelPath, priceGroups, type Model } from "../lib/devices";
 import { headline, modelDescription, modelFaq, modelSub, modelTitle } from "../lib/model-copy";
@@ -123,6 +123,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 				<div class="btn-row mhero__ctas">
 					<a class="btn btn--lg btn--ghost" href="#preise">{priced ? "Alle Preise" : "Reparaturen"}</a>
 					<a class="btn btn--lg" href="/kontakt">Ohne Termin vorbeikommen</a>
+					<a class="btn btn--lg btn--call" href={telHref(business.hotline)} aria-label={`Anrufen: Gratis Hotline ${business.hotline}`}><Icon name="ph:phone-fill" aria-hidden="true" /><span class="btn--call__label">Anrufen</span></a>
 				</div>
 				<ul class="mhero__ticks" role="list">
 					<li><Icon name="ph:check" aria-hidden="true" />{business.warrantyMonths} Monate Garantie</li>
@@ -375,7 +376,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 	}
 
 	.mhero__title {
-		font-size: clamp(36px, 5.4vw, 64px);
+		font-size: var(--fs-display);
 		line-height: 1.0625;
 		font-weight: 600;
 		letter-spacing: -0.015em;
@@ -409,9 +410,34 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 		font-variant-numeric: tabular-nums;
 	}
 
+	/* Three pills on one line on desktop. */
 	.mhero__ctas {
+		flex-wrap: nowrap;
 		justify-content: flex-start;
+		gap: 10px;
 		margin-top: 32px;
+	}
+
+	.mhero__ctas .btn {
+		padding-inline: 22px;
+	}
+
+	/* Same soft blue as the nav hotline pill. */
+	.btn--call {
+		border-color: var(--accent-soft);
+		background: var(--accent-soft);
+		color: var(--accent);
+	}
+
+	.btn--call:hover {
+		border-color: #dce6fb;
+		background: #dce6fb;
+		color: var(--accent);
+	}
+
+	.btn--call :global(svg) {
+		width: 19px;
+		height: 19px;
 	}
 
 	.mhero__ticks {
@@ -683,6 +709,30 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 
 		.incl {
 			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	/* Narrow two-column hero: call shrinks to a round icon button. */
+	@media (min-width: 901px) and (max-width: 1200px) {
+		.mhero__ctas .btn {
+			padding-inline: 18px;
+		}
+
+		.mhero__ctas .btn--call {
+			flex: none;
+			width: 56px;
+			padding-inline: 0;
+		}
+
+		.btn--call__label {
+			display: none;
+		}
+	}
+
+	@media (min-width: 901px) and (max-width: 1000px) {
+		.mhero__ctas .btn {
+			padding-inline: 14px;
+			font-size: 15px;
 		}
 	}
 
