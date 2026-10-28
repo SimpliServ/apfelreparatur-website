@@ -14,8 +14,9 @@ interface Props {
 	secondary?: { href: string; label: string };
 	heading?: "h1" | "h2" | "h3";
 	eager?: boolean;
+	primaryLast?: boolean;
 }
-const { title, sub, eyebrow, photo, alt, dark = false, half = false, primary, secondary, heading = "h2", eager = false } = Astro.props;
+const { title, sub, eyebrow, photo, alt, dark = false, half = false, primary, secondary, heading = "h2", eager = false, primaryLast = false } = Astro.props;
 const H = heading;
 const seamless = !dark && "seamless" in photos[photo];
 const p = photos[photo];
@@ -41,12 +42,13 @@ const [top, bot] = "box" in p ? p.box : [0, 1];
 		{
 			(primary || secondary) && (
 				<div class="btn-row tile__ctas">
-					{primary && <a class="btn" href={primary.href}>{primary.label}</a>}
+					{primary && !primaryLast && <a class="btn" href={primary.href}>{primary.label}</a>}
 					{secondary && (
 						<a class="btn btn--ghost" href={secondary.href}>
 							{secondary.label}
 						</a>
 					)}
+					{primary && primaryLast && <a class="btn" href={primary.href}>{primary.label}</a>}
 				</div>
 			)
 		}
