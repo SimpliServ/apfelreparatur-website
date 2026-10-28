@@ -50,7 +50,7 @@ const quick = [
 		document.documentElement.classList.toggle("nsearch-open", open);
 		if (open) {
 			load();
-			requestAnimationFrame(() => q.focus());
+			requestAnimationFrame(() => q.focus({ preventScroll: true }));
 		}
 	};
 	btn.addEventListener("click", () => set(!!panel.hidden));
