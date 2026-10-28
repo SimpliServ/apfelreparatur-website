@@ -9,8 +9,8 @@ const quick = [
 ];
 ---
 
-<button type="button" class="nsearch__btn" aria-label="Modell suchen" aria-expanded="false" aria-controls="nsearch" data-nsearch-open>
-	<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /></svg>
+<button type="button" class="nsearch__btn" aria-label="Suchen – Modell finden" aria-expanded="false" aria-controls="nsearch" data-nsearch-open>
+	<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /></svg><span class="nsearch__btn-label">Suchen</span>
 </button>
 <div id="nsearch" class="nsearch" hidden data-nsearch>
 	<div class="nsearch__inner">
@@ -93,20 +93,40 @@ const quick = [
 
 <style>
 	.nsearch__btn {
-		display: inline-grid;
-		place-items: center;
-		width: 40px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex: none;
+		gap: 7px;
 		height: 40px;
+		padding: 0 15px 0 12px;
 		border: 0;
-		border-radius: 50%;
-		background: none;
-		color: rgba(0, 0, 0, 0.8);
+		border-radius: 980px;
+		background: #ececf0;
+		color: var(--ink);
+		font: inherit;
+		font-size: 15px;
+		font-weight: 500;
+		white-space: nowrap;
 		cursor: pointer;
 		transition: background-color 0.2s var(--ease);
 	}
 
-	.nsearch__btn:hover {
-		background: rgba(0, 0, 0, 0.05);
+	.nsearch__btn:hover,
+	.nsearch__btn[aria-expanded="true"] {
+		background: #e2e2e7;
+	}
+
+	/* Phones lack room for the word next to hotline, CTA and menu. */
+	@media (max-width: 520px) {
+		.nsearch__btn {
+			width: 40px;
+			padding: 0;
+		}
+
+		.nsearch__btn-label {
+			display: none;
+		}
 	}
 
 	.nsearch__btn svg,
