@@ -314,7 +314,8 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		text-transform: none;
 	}
 
-	@media (max-width: 1479px) {
+	/* "Gratis Hotline" label fits next to the links down to 1200px. */
+	@media (max-width: 1199px) {
 		.gnav__call {
 			width: 40px;
 			padding: 0;
@@ -324,7 +325,9 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		.gnav__call-num {
 			display: none;
 		}
+	}
 
+	@media (max-width: 1479px) {
 		.gnav__links a {
 			padding: 0 11px;
 		}
