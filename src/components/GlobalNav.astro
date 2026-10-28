@@ -15,13 +15,15 @@ const links = [
 	["/kontakt", "Kontakt"],
 ] as const;
 const path = Astro.url.pathname;
+// The FABs would sit on top of form controls there.
+const fab = !["/reparatur-anfragen", "/vertrag-widerrufen"].includes(path.replace(/\/$/, ""));
 // Model and repair pages (/iphone/…) keep their device section highlighted.
 const current = (href: string) => (path === href ? "page" : href.length > 2 && !href.includes("#") && path.startsWith(href + "/") ? "true" : undefined);
 ---
 
 <header class="gnav" data-gnav>
 	<nav class="gnav__bar" aria-label="Hauptnavigation">
-		<a href="/" class="gnav__logo" aria-label="Apfelreparatur – Startseite"><Wordmark height={27} /></a>
+		<a href="/" class="gnav__logo" aria-label="Apfelreparatur – Startseite"><Wordmark height={30} /></a>
 		<ul class="gnav__links" role="list">
 			{
 				links.map(([href, label]) => (
@@ -54,9 +56,20 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	</div>
 </header>
 <div class="gnav__curtain" data-gnav-curtain aria-hidden="true"></div>
-<a href={telHref(business.hotline)} class="callfab" aria-label={`Gratis Service-Hotline ${business.hotline} anrufen`}>
-	<Icon name="ph:phone-fill" aria-hidden="true" />
-</a>
+{
+	fab && (
+		<div class="fabs" data-fabs>
+			<a href={whatsappHref} class="wafab" target="_blank" rel="noopener" aria-label="Per WhatsApp schreiben, rund um die Uhr">
+				<span class="wafab__icon">
+					<Icon name="ph:whatsapp-logo" aria-hidden="true" />
+				</span>
+			</a>
+			<a href={telHref(business.hotline)} class="callfab" aria-label={`Gratis Service-Hotline ${business.hotline} anrufen`}>
+				<Icon name="ph:phone-fill" aria-hidden="true" />
+			</a>
+		</div>
+	)
+}
 
 <script>
 	const root = document.querySelector<HTMLElement>("[data-gnav]")!;
@@ -71,6 +84,11 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	root.querySelectorAll("[data-gnav-menu] a").forEach((a) => a.addEventListener("click", () => set(false)));
 	addEventListener("keydown", (e) => e.key === "Escape" && set(false));
 	matchMedia("(min-width: 1024px)").addEventListener("change", () => set(false));
+
+	const fab = document.querySelector<HTMLElement>("[data-fabs]");
+	// The contact buttons leave while the footer's legal row is on screen, so it never covers those links.
+	const legal = document.querySelector(".foot__legal");
+	if (legal && fab) new IntersectionObserver(([e]) => fab.classList.toggle("is-foot", e.isIntersecting)).observe(legal);
 </script>
 
 <style>
@@ -79,7 +97,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		top: 0;
 		z-index: 50;
 		height: var(--nav-h);
-		background: rgba(250, 250, 252, 0.8);
+		background: rgba(250, 250, 252, 0.94);
 		backdrop-filter: saturate(180%) blur(20px);
 		-webkit-backdrop-filter: saturate(180%) blur(20px);
 	}
@@ -227,8 +245,91 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		display: none;
 	}
 
+	/* WhatsApp above the hotline, bottom right on every page. */
+	.fabs {
+		position: fixed;
+		right: 20px;
+		bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+		z-index: 45;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 12px;
+		transition: transform 0.2s var(--ease), opacity 0.2s var(--ease), visibility 0s;
+	}
+
+	.wafab,
 	.callfab {
-		display: none;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		color: #fff;
+		transition: transform 0.2s var(--ease);
+	}
+
+	.wafab:hover,
+	.callfab:hover {
+		text-decoration: none;
+		transform: translateY(-2px);
+	}
+
+	.wafab:active,
+	.callfab:active {
+		transform: scale(0.96);
+	}
+
+	.wafab__icon {
+		display: grid;
+		place-items: center;
+		width: 58px;
+		height: 58px;
+		border-radius: 50%;
+		background: var(--wa);
+		box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4), 0 2px 6px rgba(0, 0, 0, 0.12);
+	}
+
+	.wafab__icon :global(svg) {
+		width: 30px;
+		height: 30px;
+	}
+
+	.callfab {
+		justify-content: center;
+		width: 58px;
+		height: 58px;
+		border-radius: 50%;
+		background: var(--accent);
+		box-shadow: 0 8px 24px rgba(29, 78, 216, 0.35), 0 2px 6px rgba(0, 0, 0, 0.12);
+	}
+
+	.callfab :global(svg) {
+		width: 26px;
+		height: 26px;
+	}
+
+	/* visibility (after the fade) also takes the hidden buttons out of the tab order. */
+	.fabs:global(.is-foot),
+	:global(.gnav-open) .fabs,
+	:global(.nsearch-open) .fabs {
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(24px);
+		pointer-events: none;
+		transition-delay: 0s, 0s, 0.2s;
+	}
+
+	@media (max-width: 734px) {
+		.fabs {
+			right: 16px;
+			bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+			gap: 10px;
+		}
+
+		.wafab__icon,
+		.callfab {
+			width: 54px;
+			height: 54px;
+		}
 	}
 
 	.gnav__cta-long {
@@ -328,42 +429,12 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 
 		.gnav__logo :global(.wm) {
 			width: auto;
-			height: 23px;
+			height: 25px;
 		}
 
 		.gnav__cta {
 			font-size: 15px;
 			padding: 10px 16px;
-		}
-
-		.callfab {
-			display: grid;
-			place-items: center;
-			position: fixed;
-			right: 16px;
-			bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-			z-index: 45;
-			width: 58px;
-			height: 58px;
-			border-radius: 50%;
-			background: var(--accent);
-			color: #fff;
-			box-shadow: 0 8px 24px rgba(29, 78, 216, 0.35), 0 2px 6px rgba(0, 0, 0, 0.12);
-			transition: transform 0.2s var(--ease), opacity 0.2s var(--ease);
-		}
-
-		.callfab:active {
-			transform: scale(0.94);
-		}
-
-		.callfab :global(svg) {
-			width: 26px;
-			height: 26px;
-		}
-
-		:global(.gnav-open) .callfab {
-			opacity: 0;
-			pointer-events: none;
 		}
 
 		.gnav__menu {
@@ -436,7 +507,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		}
 
 		.gnav__logo :global(.wm) {
-			height: 20px;
+			height: 22px;
 		}
 
 		.gnav__cta {
