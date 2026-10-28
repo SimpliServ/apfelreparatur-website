@@ -64,9 +64,6 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 					<Icon name="ph:whatsapp-logo" aria-hidden="true" />
 				</span>
 			</a>
-			<a href={telHref(business.hotline)} class="callfab" aria-label={`Gratis Service-Hotline ${business.hotline} anrufen`}>
-				<Icon name="ph:phone-fill" aria-hidden="true" />
-			</a>
 		</div>
 	)
 }
@@ -245,7 +242,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		display: none;
 	}
 
-	/* WhatsApp above the hotline, bottom right on every page. */
+	/* WhatsApp bottom right on every page. */
 	.fabs {
 		position: fixed;
 		right: 20px;
@@ -258,8 +255,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		transition: transform 0.2s var(--ease), opacity 0.2s var(--ease), visibility 0s;
 	}
 
-	.wafab,
-	.callfab {
+	.wafab {
 		display: flex;
 		align-items: center;
 		gap: 10px;
@@ -267,14 +263,12 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		transition: transform 0.2s var(--ease);
 	}
 
-	.wafab:hover,
-	.callfab:hover {
+	.wafab:hover {
 		text-decoration: none;
 		transform: translateY(-2px);
 	}
 
-	.wafab:active,
-	.callfab:active {
+	.wafab:active {
 		transform: scale(0.96);
 	}
 
@@ -291,20 +285,6 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	.wafab__icon :global(svg) {
 		width: 30px;
 		height: 30px;
-	}
-
-	.callfab {
-		justify-content: center;
-		width: 58px;
-		height: 58px;
-		border-radius: 50%;
-		background: var(--accent);
-		box-shadow: 0 8px 24px rgba(29, 78, 216, 0.35), 0 2px 6px rgba(0, 0, 0, 0.12);
-	}
-
-	.callfab :global(svg) {
-		width: 26px;
-		height: 26px;
 	}
 
 	/* visibility (after the fade) also takes the hidden buttons out of the tab order. */
@@ -325,8 +305,7 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 			gap: 10px;
 		}
 
-		.wafab__icon,
-		.callfab {
+		.wafab__icon {
 			width: 54px;
 			height: 54px;
 		}
