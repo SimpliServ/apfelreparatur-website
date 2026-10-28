@@ -237,11 +237,11 @@ const [top, bot] = "box" in p ? p.box : [0, 1];
 		}
 
 		/* Width-bound on phones: size the photo box to the product so no gap opens above it. */
-		.tile--half.tile--seamless {
+		.tile--seamless:not(.tile--hero) {
 			height: auto;
 		}
 
-		.tile--half.tile--seamless .tile__media {
+		.tile--seamless:not(.tile--hero) .tile__media {
 			flex: none;
 			height: min(calc(var(--k) * 100vw * var(--ar) * (var(--bot) - var(--top))), 420px);
 			margin-top: 28px;
