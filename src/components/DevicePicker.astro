@@ -8,20 +8,23 @@ interface Props {
 	models: Model[];
 	id?: string;
 	title: string;
+	/** Ankauf: cards preselect the device in the /ankauf form, no stores card. */
+	sell?: boolean;
 }
-const { models, id, title } = Astro.props;
+const { models, id, title, sell = false } = Astro.props;
 
 // Card photo = a catalogue model shot; Watches have none yet, so they fall back to the Pic photo.
 // fit = [width, left, top] in % of the tile, measured from each shot's product bounds so every
 // device fits the same centred 64 % box (the flat Mac 80 % wide). Re-measure when a photo changes.
 const devices = [
-	{ href: "/iphone", label: "iPhone", slug: "iphone-17-pro", fit: [33.7, 33.2, 16.7] },
-	{ href: "/ipad", label: "iPad", slug: "ipad-air-11-m3-2025", fit: [52.9, 23.6, 14.9] },
-	{ href: "/mac", label: "Mac", slug: "macbook-air-13-m2-2022", fit: [109.3, -6.8, 11.6] },
-	{ href: "/apple-watch", label: "Watch", slug: "", fit: [166.2, -33.7, -8.5] },
+	{ key: "iphone", label: "iPhone", slug: "iphone-17-pro", fit: [33.7, 33.2, 16.7] },
+	{ key: "ipad", label: "iPad", slug: "ipad-air-11-m3-2025", fit: [52.9, 23.6, 14.9] },
+	{ key: "mac", label: "Mac", slug: "macbook-air-13-m2-2022", fit: [109.3, -6.8, 11.6] },
+	{ key: "apple-watch", label: "Watch", slug: "", fit: [166.2, -33.7, -8.5] },
 ].map((d) => {
 	const m = models.find((x) => x.slug === d.slug);
-	return { ...d, image: m?.image?.meta?.storageKey || m?.image?.src ? m.image : null };
+	const href = sell ? `/ankauf?geraet=${d.key}#anfrage` : `/${d.key}`;
+	return { ...d, href, image: m?.image?.meta?.storageKey || m?.image?.src ? m.image : null };
 });
 ---
 
@@ -41,21 +44,25 @@ const devices = [
 								)}
 							</span>
 							<span class="pcard__label pcard__more">
-								{d.label} <span class="pcard__nowrap">Reparatur <Icon name="ph:arrow-right" aria-hidden="true" /></span>
+								{d.label} <span class="pcard__nowrap">{sell ? "verkaufen" : "Reparatur"} <Icon name="ph:arrow-right" aria-hidden="true" /></span>
 							</span>
 						</a>
 					</li>
 				))
 			}
 		</ul>
-		<a class="pcard pcard--stores" href="/kontakt">
-			<span>
-				<span class="pcard__label">Unsere Standorte</span>
-				<span class="pcard__text">Finden Sie Ihre nächste Filiale in Wien oder Niederösterreich.</span>
-				<span class="pcard__text">Ohne Termin vorbeikommen.</span>
-			</span>
-			<span class="btn pcard__cta"><Icon name="ph:map-pin" aria-hidden="true" /> Standorte ansehen</span>
-		</a>
+		{
+			!sell && (
+				<a class="pcard pcard--stores" href="/kontakt">
+					<span>
+						<span class="pcard__label">Unsere Standorte</span>
+						<span class="pcard__text">Finden Sie Ihre nächste Filiale in Wien oder Niederösterreich.</span>
+						<span class="pcard__text">Ohne Termin vorbeikommen.</span>
+					</span>
+					<span class="btn pcard__cta"><Icon name="ph:map-pin" aria-hidden="true" /> Standorte ansehen</span>
+				</a>
+			)
+		}
 	</div>
 </section>
 

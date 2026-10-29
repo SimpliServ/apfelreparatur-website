@@ -3,7 +3,7 @@ import { getPublicPluginApiRouteHandler } from "emdash/plugin-utils";
 const PLUGIN = "apfel-inquiry";
 type Outcome = { ok: true } | { ok: false; error: string };
 
-export async function sendToPlugin(locals: App.Locals, url: URL, route: "repair" | "withdrawal", body: Record<string, unknown>, original: Request): Promise<Outcome> {
+export async function sendToPlugin(locals: App.Locals, url: URL, route: "repair" | "sell" | "withdrawal", body: Record<string, unknown>, original: Request): Promise<Outcome> {
 	const handler = getPublicPluginApiRouteHandler(locals);
 	if (!handler) return { ok: false, error: "UNAVAILABLE" };
 	// Forward the visitor's IP, otherwise the per-IP limit would count every visitor together.

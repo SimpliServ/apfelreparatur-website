@@ -3,6 +3,7 @@ export const inquiry = {
 		MISSING_FIELDS: "Bitte füllen Sie alle Pflichtfelder aus.",
 		INVALID_EMAIL: "Bitte geben Sie eine gültige E-Mail-Adresse an.",
 		PHONE_REQUIRED: "Für einen Rückruf brauchen wir Ihre Telefonnummer.",
+		ADDRESS_REQUIRED: "Für den Versand brauchen wir Ihre Adresse.",
 		CONSENT: "Bitte bestätigen Sie, dass Sie die Datenschutzerklärung zur Kenntnis genommen haben.",
 		RATE_LIMIT: "Zu viele Anfragen in kurzer Zeit. Bitte versuchen Sie es später erneut.",
 		SPAM: "Anfrage abgelehnt.",
@@ -29,6 +30,29 @@ export const inquiry = {
 		title: "Danke, {name}.",
 		lead: "Wir haben Ihre Anfrage erhalten und melden uns mit einer ersten Einschätzung.",
 		steps: ["Wir prüfen Ihre Angaben und melden uns mit einer ersten Einschätzung.", "Sie kommen ohne Termin an einen unserer Standorte, die Adressen finden Sie unter apfelreparatur.at/kontakt.", "Vor der Reparatur nennen wir Ihnen den Preis. Repariert wird erst nach Ihrer Zustimmung."],
+	},
+	sell: {
+		devices: { iphone: "iPhone", ipad: "iPad", mac: "Mac", "apple-watch": "Apple Watch" } as Record<string, string>,
+		storage: ["64 GB", "128 GB", "256 GB", "512 GB", "1 TB", "2 TB", "Weiß ich nicht"],
+		conditions: {
+			"wie-neu": ["Wie neu", "Keine oder kaum sichtbare Gebrauchsspuren"],
+			gut: ["Gut", "Normale Gebrauchsspuren, leichte Kratzer"],
+			gebraucht: ["Stark gebraucht", "Deutliche Kratzer, Dellen oder Abnutzung"],
+			defekt: ["Defekt", "Glasbruch, Fehler oder nicht voll funktionsfähig"],
+		} as Record<string, [string, string]>,
+		handoffs: { shop: "Im Shop vorbeibringen", post: "Per Post schicken" } as Record<string, string>,
+		field: { device: "Gerät", storage: "Speicher", condition: "Zustand", note: "Anmerkungen", handoff: "Übergabe", store: "Standort", address: "Adresse", name: "Name", email: "E-Mail", phone: "Telefon" },
+		staffLead: "Neue Ankauf-Anfrage über apfelreparatur.at. Antworten Sie direkt auf diese E-Mail, sie geht an die anfragende Person.",
+		customer: {
+			subject: "Ihre Ankauf-Anfrage bei Apfelreparatur",
+			title: "Danke, {name}.",
+			lead: "Wir haben Ihre Ankauf-Anfrage erhalten und melden uns per E-Mail.",
+			steps: [
+				"Vor der Übergabe: Daten sichern, „Wo ist?“ ausschalten, von iCloud abmelden, SIM-Karte entnehmen.",
+				"Bringen Sie Ihr Gerät ohne Termin an einen unserer Standorte. Wenn Sie es per Post schicken möchten, warten Sie bitte auf unsere Versanddetails.",
+				"Nach der Prüfung nennen wir Ihnen den Ankaufspreis. Sie entscheiden dann, ob Sie verkaufen.",
+			],
+		},
 	},
 	withdrawal: {
 		subject: "Ihr Widerruf ist bei uns eingegangen",

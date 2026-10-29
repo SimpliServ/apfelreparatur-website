@@ -1,0 +1,693 @@
+---
+import { Icon } from "astro-iconset/components";
+import Base from "../layouts/Base.astro";
+import Tile from "../components/Tile.astro";
+import LocalNav from "../components/LocalNav.astro";
+import DevicePicker from "../components/DevicePicker.astro";
+import PlusCards, { type PlusCard } from "../components/PlusCards.astro";
+import Steps from "../components/Steps.astro";
+import FAQ, { type QA } from "../components/FAQ.astro";
+import Closing from "../components/Closing.astro";
+import { devices } from "../lib/content";
+import { inquiry } from "../lib/inquiry-copy";
+import { sendToPlugin } from "../lib/send";
+import { getLocations, getModels } from "../lib/mobinil";
+import { loadModels } from "../lib/devices";
+import { business } from "../lib/business";
+import { breadcrumbLd, faqLd, serviceLd } from "../lib/seo";
+
+Astro.response.headers.set("Cache-Control", "private, no-store");
+
+const s = inquiry.sell;
+const deviceIcons: Record<string, string> = { iphone: "ph:device-mobile", ipad: "ph:device-tablet", mac: "ph:laptop", "apple-watch": "ph:watch" };
+
+let values: Record<string, string> = {
+	device: Astro.url.searchParams.get("geraet") ?? "",
+	model: (Astro.url.searchParams.get("modell") ?? "").slice(0, 80),
+	handoff: "shop",
+};
+let error = "";
+const sent = Astro.request.method === "GET" && Astro.url.searchParams.has("gesendet");
+
+if (Astro.request.method === "POST") {
+	const form = await Astro.request.formData();
+	values = Object.fromEntries([...form.entries()].map(([k, v]) => [k, String(v)]));
+	const res = await sendToPlugin(Astro.locals, Astro.url, "sell", { ...values, consent: values.consent === "on" }, Astro.request);
+	if (res.ok) return Astro.redirect("/ankauf?gesendet=1", 303);
+	error = inquiry.error[res.error] ?? inquiry.error.UNAVAILABLE;
+}
+
+const [locations, catalogue, live] = await Promise.all([
+	getLocations(),
+	loadModels().catch(() => ({ models: [] })),
+	Promise.all(Object.values(devices).map(async (d) => [d.key, (await getModels(d.key)).map((m) => m.title)] as const)),
+]);
+const models = Object.fromEntries(live);
+// Two shops share a station/mall, so the label carries floor/entrance ("Erdgeschoss, Top 133").
+const stores = locations.map((l) => `${l.name} · ${l.venue.split(", ").slice(1).join(", ") || l.street}`);
+
+const cards: PlusCard[] = [
+	{
+		icon: "ph:tag",
+		pre: "Ein",
+		hl: "fairer Preis",
+		post: "nach Prüfung.",
+		detailTitle: "Geprüft. Dann bewertet.",
+		detail: [
+			"Unsere Techniker prüfen Display, Akku, Kameras, Tasten und Anschlüsse. Modell, Speicher und Zustand ergeben den Ankaufspreis.",
+			"Je genauer Ihre Angaben im Formular, desto besser können wir Ihr Gerät vorab einschätzen.",
+		],
+	},
+	{
+		icon: "ph:wrench",
+		pre: "Auch",
+		hl: "defekte Geräte.",
+		detailTitle: "Gesprungen, schwach, still?",
+		detail: [
+			"Geben Sie den Zustand einfach ehrlich an. Wir prüfen jedes Gerät, auch mit Glasbruch oder schwachem Akku.",
+			"Geräte, die wir nicht ankaufen, entsorgen wir auf Wunsch kostenlos und umweltgerecht.",
+		],
+	},
+	{
+		icon: "ph:storefront",
+		pre: "Vorbeibringen",
+		hl: "ohne Termin.",
+		detailTitle: "Einfach vorbeikommen.",
+		detail: [
+			"Bringen Sie Ihr Gerät an einen unserer Standorte in Wien und Umgebung, auch am Wochenende. Mit oder ohne Anfrage vorab.",
+			"Lieber per Post? Schicken Sie uns zuerst die Anfrage, wir melden uns mit den Versanddetails.",
+		],
+	},
+];
+
+const steps = [
+	{ n: "01", title: "Gerät angeben.", text: "Modell, Speicher und Zustand. Dauert nur eine Minute." },
+	{ n: "02", title: "Vorbeibringen.", text: "Ohne Termin an einen unserer Standorte. Oder per Post, nach Rücksprache." },
+	{ n: "03", title: "Prüfung.", text: "Unsere Techniker prüfen Ihr Gerät und nennen den Ankaufspreis." },
+	{ n: "04", title: "Sie entscheiden.", text: "Passt der Preis, kaufen wir an. Sonst bekommen Sie Ihr Gerät zurück." },
+];
+
+const faq: QA[] = [
+	{ q: "Bekomme ich sofort einen Preis?", a: "Den Ankaufspreis nennen wir, nachdem unsere Techniker Ihr Gerät geprüft haben. Mit Modell, Speicher und Zustand aus dem Formular können wir es vorab einschätzen." },
+	{ q: "Welche Geräte kaufen Sie an?", a: "iPhone, iPad, MacBook, iMac und Apple Watch, auch ältere Modelle. Für andere Geräte schreiben Sie uns einfach im Feld „Anmerkungen“." },
+	{ q: "Kaufen Sie auch defekte Geräte an?", a: "Ja, wir prüfen jedes Gerät, auch mit Glasbruch oder schwachem Akku. Geräte, die wir nicht ankaufen, entsorgen wir auf Wunsch kostenlos und umweltgerecht." },
+	{ q: "Brauche ich einen Termin?", a: "Nein. Sie können Ihr Gerät ohne Termin an einen unserer Standorte bringen, mit oder ohne Anfrage vorab." },
+	{ q: "Was muss ich vor dem Verkauf tun?", a: "Sichern Sie Ihre Daten, schalten Sie „Wo ist?“ aus, melden Sie sich von iCloud ab und entnehmen Sie SIM- und Speicherkarte. Ohne Abmeldung von iCloud können wir ein Gerät nicht ankaufen." },
+];
+const desc = "iPhone, iPad, Mac oder Apple Watch verkaufen in Wien: Modell und Zustand online angeben, ohne Termin vorbeibringen, fairer Preis nach Prüfung. Auch defekte Geräte.";
+const checked = (name: string, v: string) => values[name] === v;
+---
+
+<Base
+	title="iPhone verkaufen Wien – Apple Ankauf, auch defekt"
+	description={desc}
+	jsonLd={[breadcrumbLd([["Start", "/"], ["Ankauf", "/ankauf"]]), serviceLd("Ankauf gebrauchter Apple Geräte", desc, "/ankauf", "Ankauf"), faqLd(faq)]}
+	robots={Astro.request.method === "POST" ? "noindex" : undefined}
+>
+	{
+		sent ? (
+			<section class="done section">
+				<div class="wrap wrap--narrow center" data-reveal>
+					<Icon name="ph:check-circle-fill" class="done__icon" aria-hidden="true" />
+					<h1 class="t-display">Danke.</h1>
+					<p class="t-hero-sub done__sub">Ihre Ankauf-Anfrage ist bei uns. Wir melden uns per E-Mail. Sie können Ihr Gerät jederzeit ohne Termin an einem unserer Standorte vorbeibringen.</p>
+					<p class="muted">Vorher: Daten sichern, „Wo ist?“ ausschalten und von iCloud abmelden.</p>
+					<div class="btn-row done__ctas">
+						<a class="btn" href="/kontakt">Standorte ansehen</a>
+						<a class="btn btn--ghost" href="/">Zur Startseite</a>
+					</div>
+				</div>
+			</section>
+		) : (
+			<>
+				<LocalNav title="Ankauf" links={[["#geraete", "Geräte"], ["#ablauf", "Ablauf"], ["#anfrage", "Anfrage"], ["#faq", "Fragen"]]} cta={{ href: "#anfrage", label: "Ankauf anfragen" }} />
+
+				<Tile
+					heading="h1"
+					eager
+					photo="hero"
+					eyebrow="Apple Geräte Ankauf in Wien"
+					title={'Wir kaufen Ihr<br /><span style="color: var(--accent)">altes Gerät.</span>'}
+					sub="iPhone, iPad, Mac und Apple Watch. Gebraucht oder defekt."
+					primary={{ href: "#anfrage", label: "Ankauf anfragen" }}
+					secondary={{ href: "/kontakt", label: "Ohne Termin vorbeikommen" }}
+					primaryLast
+				/>
+
+				<DevicePicker id="geraete" title="Welches Gerät möchten Sie verkaufen?" models={catalogue.models} sell />
+
+				<Steps id="ablauf" title="So funktioniert der Ankauf." items={steps} />
+
+				<PlusCards id="vorteile" title="Verkaufen. Ganz einfach." cards={cards} />
+
+				<section class="section" id="anfrage" aria-labelledby="anfrage-h">
+					<div class="wrap wrap--xl">
+						<div class="head" data-reveal>
+							<p class="t-eyebrow muted head__eyebrow">Kostenlos und unverbindlich</p>
+							<h2 id="anfrage-h" class="t-section">Ankauf anfragen.</h2>
+							<p class="t-lead muted head__sub">Ein paar Angaben zu Ihrem Gerät. Den Preis nennen wir nach der Prüfung, Sie entscheiden dann.</p>
+						</div>
+
+						<form method="post" action="/ankauf#anfrage" class="cfg" novalidate data-form toolname="request_device_buyback" tooldescription="Ankauf-Anfrage für ein gebrauchtes iPhone, iPad, Mac oder Apple Watch an Apfelreparatur in Wien senden. Der Preis wird nach Prüfung des Geräts genannt.">
+							{error && (
+								<p class="cfg__error" role="alert">
+									<Icon name="ph:warning-circle" aria-hidden="true" />
+									{error}
+								</p>
+							)}
+
+							<div class="row" role="group" aria-labelledby="g-device">
+								<h3 class="row__h" id="g-device">
+									<span>Gerät.</span> <span class="muted">Was möchten Sie verkaufen?</span>
+								</h3>
+								<div class="row__body">
+									<div class="choices choices--device">
+										{Object.entries(s.devices).map(([key, label]) => (
+											<label class="choice">
+												<input type="radio" name="device" value={key} required checked={checked("device", key)} />
+												<span class="choice__box">
+													<Icon name={deviceIcons[key]} aria-hidden="true" />
+													<span class="choice__label">{label}</span>
+												</span>
+											</label>
+										))}
+									</div>
+									<div class="field field--gap">
+										<input id="model" name="model" list="models" required value={values.model ?? ""} placeholder=" " autocomplete="off" maxlength="80" />
+										<label for="model">Modell, z. B. iPhone 13 Pro</label>
+										<datalist id="models" data-models={JSON.stringify(models)}>
+											{(models[values.device as keyof typeof models] ?? []).map((m) => <option value={m} />)}
+										</datalist>
+									</div>
+									<p class="row__label">Speicher (optional)</p>
+									<div class="choices choices--pills">
+										{s.storage.map((v) => (
+											<label class="choice choice--pill">
+												<input type="radio" name="storage" value={v} checked={checked("storage", v)} />
+												<span class="choice__box">
+													<span class="choice__label">{v}</span>
+												</span>
+											</label>
+										))}
+									</div>
+								</div>
+							</div>
+
+							<div class="row" role="group" aria-labelledby="g-condition">
+								<h3 class="row__h" id="g-condition">
+									<span>Zustand.</span> <span class="muted">Wie gut erhalten ist es?</span>
+								</h3>
+								<div class="row__body">
+									<div class="choices choices--condition">
+										{Object.entries(s.conditions).map(([key, [label, text]]) => (
+											<label class="choice choice--card">
+												<input type="radio" name="condition" value={key} required checked={checked("condition", key)} />
+												<span class="choice__box">
+													<span class="choice__label">{label}</span>
+													<span class="choice__text">{text}</span>
+												</span>
+											</label>
+										))}
+									</div>
+									<div class="field field--area">
+										<textarea id="note" name="note" rows="3" placeholder=" " maxlength="2000">{values.note ?? ""}</textarea>
+										<label for="note">Anmerkungen, z. B. Farbe, Akkuzustand, Zubehör (optional)</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="row" role="group" aria-labelledby="g-handoff">
+								<h3 class="row__h" id="g-handoff">
+									<span>Übergabe.</span> <span class="muted">Wie kommt Ihr Gerät zu uns?</span>
+								</h3>
+								<div class="row__body">
+									<div class="choices choices--pills">
+										{Object.entries(s.handoffs).map(([key, label]) => (
+											<label class="choice choice--pill">
+												<input type="radio" name="handoff" value={key} checked={checked("handoff", key)} />
+												<span class="choice__box">
+													<span class="choice__label">{label}</span>
+												</span>
+											</label>
+										))}
+									</div>
+									<div data-show="shop" hidden={values.handoff === "post"}>
+										<p class="row__label">Standort (optional)</p>
+										<div class="choices choices--pills">
+											{stores.map((v) => (
+												<label class="choice choice--pill">
+													<input type="radio" name="store" value={v} checked={checked("store", v)} />
+													<span class="choice__box">
+														<span class="choice__label">{v}</span>
+													</span>
+												</label>
+											))}
+										</div>
+									</div>
+									<div class="fields fields--gap" data-show="post" hidden={values.handoff !== "post"}>
+										<div class="field field--full">
+											<input id="street" name="street" autocomplete="street-address" value={values.street ?? ""} placeholder=" " maxlength="120" />
+											<label for="street">Straße und Hausnummer</label>
+										</div>
+										<div class="field">
+											<input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" value={values.zip ?? ""} placeholder=" " maxlength="10" />
+											<label for="zip">PLZ</label>
+										</div>
+										<div class="field">
+											<input id="city" name="city" autocomplete="address-level2" value={values.city ?? ""} placeholder=" " maxlength="80" />
+											<label for="city">Ort</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row" role="group" aria-labelledby="g-contact">
+								<h3 class="row__h" id="g-contact">
+									<span>Kontakt.</span> <span class="muted">Wie erreichen wir Sie?</span>
+								</h3>
+								<div class="row__body">
+									<div class="fields">
+										<div class="field field--full">
+											<input id="name" name="name" required autocomplete="name" value={values.name ?? ""} placeholder=" " maxlength="120" />
+											<label for="name">Vor- und Nachname</label>
+										</div>
+										<div class="field">
+											<input id="email" name="email" type="email" required autocomplete="email" value={values.email ?? ""} placeholder=" " maxlength="160" />
+											<label for="email">E-Mail</label>
+										</div>
+										<div class="field">
+											<input id="phone" name="phone" type="tel" autocomplete="tel" value={values.phone ?? ""} placeholder=" " maxlength="40" />
+											<label for="phone">Telefon (optional)</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row row--submit">
+								<div class="row__h" aria-hidden="true"></div>
+								<div class="row__body">
+									<label class="consent">
+										<input type="checkbox" name="consent" required checked={values.consent === "on"} />
+										<span>
+											Ich habe die <a href="/datenschutz" target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen. Meine Angaben werden nur zur
+											Bearbeitung dieser Ankauf-Anfrage verwendet.
+										</span>
+									</label>
+									<div class="hp" aria-hidden="true">
+										<label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+									</div>
+									<button class="btn btn--lg cfg__submit" type="submit">Anfrage senden</button>
+									<p class="cfg__small muted">
+										Den Preis nennen wir nach der Prüfung. Lieber direkt schreiben? <a href={`mailto:${business.email}`}>{business.email}</a>
+									</p>
+								</div>
+							</div>
+						</form>
+					</div>
+				</section>
+
+				<FAQ id="faq" title="Fragen zum Ankauf." items={faq} />
+
+				<Closing title="Lieber gleich vorbeikommen?" text="Ohne Termin an unseren Standorten in Wien und Umgebung, auch am Wochenende. Wir prüfen Ihr Gerät direkt vor Ort." />
+			</>
+		)
+	}
+</Base>
+
+<script>
+	const found = document.querySelector<HTMLFormElement>("[data-form]");
+	if (found) {
+		const form: HTMLFormElement = found;
+		const models = JSON.parse(form.querySelector<HTMLElement>("[data-models]")!.dataset.models!) as Record<string, string[]>;
+		const list = form.querySelector("datalist")!;
+		const radio = (name: string) => form.elements.namedItem(name) as RadioNodeList;
+		const syncModels = () => list.replaceChildren(...(models[radio("device").value] ?? []).map((m) => Object.assign(document.createElement("option"), { value: m })));
+		const syncHandoff = () => {
+			const v = radio("handoff").value;
+			form.querySelectorAll<HTMLElement>("[data-show]").forEach((el) => (el.hidden = el.dataset.show !== v));
+		};
+		form.addEventListener("change", (e) => {
+			const name = (e.target as HTMLInputElement).name;
+			if (name === "device") syncModels();
+			if (name === "handoff") syncHandoff();
+		});
+
+		// Picker cards preselect the device without a reload.
+		document.querySelectorAll<HTMLAnchorElement>('a[href^="/ankauf?geraet="]').forEach((a) =>
+			a.addEventListener("click", (e) => {
+				const key = new URL(a.href).searchParams.get("geraet");
+				const input = form.querySelector<HTMLInputElement>(`input[name=device][value="${key}"]`);
+				if (!input) return;
+				e.preventDefault();
+				input.checked = true;
+				syncModels();
+				document.getElementById("anfrage")!.scrollIntoView({ behavior: "smooth" });
+				(form.elements.namedItem("model") as HTMLInputElement).focus({ preventScroll: true });
+			}),
+		);
+
+		form.addEventListener("submit", (e) => {
+			const msgs: string[] = [];
+			form.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
+			const flag = (el: Element | null, msg: string) => {
+				el?.classList.add("is-invalid");
+				msgs.push(msg);
+			};
+			const input = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+			if (!radio("device").value) flag(form.querySelector(".choices--device"), "Bitte wählen Sie Ihr Gerät.");
+			if (!input("model").value.trim()) flag(input("model").parentElement, "Bitte geben Sie das Modell an.");
+			if (!radio("condition").value) flag(form.querySelector(".choices--condition"), "Bitte wählen Sie den Zustand.");
+			if (radio("handoff").value === "post" && ["street", "zip", "city"].some((n) => !input(n).value.trim())) {
+				["street", "zip", "city"].forEach((n) => !input(n).value.trim() && input(n).parentElement!.classList.add("is-invalid"));
+				msgs.push("Für den Versand brauchen wir Ihre Adresse.");
+			}
+			if (!input("name").value.trim()) flag(input("name").parentElement, "Bitte geben Sie Ihren Namen an.");
+			if (!input("email").validity.valid || !input("email").value) flag(input("email").parentElement, "Bitte geben Sie eine gültige E-Mail-Adresse an.");
+			if (!input("consent").checked) flag(input("consent").parentElement, "Bitte bestätigen Sie, dass Sie die Datenschutzerklärung zur Kenntnis genommen haben.");
+			if (!msgs.length) return;
+			e.preventDefault();
+			let box = form.querySelector<HTMLElement>(".cfg__error");
+			if (!box) {
+				box = document.createElement("div");
+				box.className = "cfg__error";
+				box.setAttribute("role", "alert");
+				form.insertBefore(box, form.firstChild);
+			}
+			box.replaceChildren(...msgs.map((m) => Object.assign(document.createElement("p"), { textContent: m })));
+			box.scrollIntoView({ behavior: "smooth", block: "center" });
+		});
+	}
+</script>
+
+<style>
+	.head {
+		max-width: 40ch;
+		margin-bottom: clamp(24px, 4vw, 40px);
+	}
+
+	.head__eyebrow {
+		margin-bottom: 8px;
+	}
+
+	.head__sub {
+		margin-top: 14px;
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+		gap: 24px 64px;
+		padding: 48px 0;
+		border-top: 1px solid var(--line);
+	}
+
+	.row__h {
+		font-size: clamp(24px, 2.4vw, 28px);
+		line-height: 1.14;
+		font-weight: 600;
+		letter-spacing: 0.007em;
+	}
+
+	.row__label {
+		margin: 28px 0 12px;
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.choices {
+		display: grid;
+		gap: 14px;
+	}
+
+	.choices--device {
+		grid-template-columns: repeat(4, 1fr);
+	}
+
+	.choices--condition {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.choices--pills {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+
+	.choice {
+		position: relative;
+		cursor: pointer;
+	}
+
+	.choice input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.choice__box {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		height: 100%;
+		min-height: 120px;
+		padding: 18px 12px;
+		border: 1px solid var(--faint);
+		border-radius: 12px;
+		background: var(--paper);
+		transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+	}
+
+	.choice__box svg {
+		width: 36px;
+		height: 36px;
+	}
+
+	.choice__label {
+		font-size: 17px;
+		font-weight: 600;
+	}
+
+	.choice:hover .choice__box {
+		border-color: var(--ink-2);
+	}
+
+	.choice input:checked + .choice__box {
+		border-color: var(--accent);
+		box-shadow: 0 0 0 1px var(--accent);
+	}
+
+	.choice input:focus-visible + .choice__box {
+		outline: 2px solid var(--accent);
+		outline-offset: 3px;
+	}
+
+	.choice--card .choice__box {
+		align-items: flex-start;
+		justify-content: flex-start;
+		gap: 4px;
+		min-height: 0;
+		padding: 16px 18px;
+		text-align: left;
+	}
+
+	.choice__text {
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 1.35;
+	}
+
+	.choice--pill .choice__box {
+		min-height: 0;
+		padding: 11px 18px;
+		border-radius: 980px;
+	}
+
+	.choice--pill .choice__label {
+		font-size: 15px;
+		font-weight: 500;
+	}
+
+	.fields {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 14px;
+	}
+
+	.fields[hidden],
+	[data-show][hidden] {
+		display: none;
+	}
+
+	.fields--gap,
+	.field--gap,
+	.field--area {
+		margin-top: 14px;
+	}
+
+	.fields--gap {
+		margin-top: 28px;
+	}
+
+	.field {
+		position: relative;
+	}
+
+	.field--full {
+		grid-column: 1 / -1;
+	}
+
+	.field input,
+	.field textarea {
+		width: 100%;
+		height: 56px;
+		padding: 26px 16px 8px;
+		border: 1px solid var(--faint);
+		border-radius: 12px;
+		background: var(--paper);
+		font-size: 17px;
+		line-height: 1.23;
+		outline: none;
+		transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+	}
+
+	.field textarea {
+		height: auto;
+		min-height: 104px;
+		resize: vertical;
+	}
+
+	.field label {
+		position: absolute;
+		left: 17px;
+		top: 17px;
+		right: 16px;
+		font-size: 17px;
+		color: var(--muted);
+		pointer-events: none;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		transform-origin: left top;
+		transition: transform 0.15s var(--ease), color 0.15s var(--ease);
+	}
+
+	.field input:focus,
+	.field textarea:focus {
+		border-color: var(--accent);
+		box-shadow: 0 0 0 3px var(--accent-ring);
+	}
+
+	.field input:focus + label,
+	.field input:not(:placeholder-shown) + label,
+	.field textarea:focus + label,
+	.field textarea:not(:placeholder-shown) + label {
+		transform: translateY(-9px) scale(0.71);
+	}
+
+	:global(.is-invalid) .choice__box,
+	:global(.is-invalid) input,
+	:global(.is-invalid) textarea {
+		border-color: var(--err);
+	}
+
+	:global(.consent.is-invalid) {
+		color: var(--err);
+	}
+
+	.consent {
+		display: flex;
+		gap: 12px;
+		align-items: flex-start;
+		font-size: 14px;
+		line-height: 1.43;
+		color: var(--ink-2);
+		cursor: pointer;
+	}
+
+	.consent input {
+		flex: none;
+		width: 20px;
+		height: 20px;
+		margin: 0;
+		accent-color: var(--accent);
+	}
+
+	.hp {
+		position: absolute;
+		left: -9999px;
+	}
+
+	.cfg__submit {
+		width: 100%;
+		margin: 28px 0 14px;
+		font-weight: 400;
+	}
+
+	.cfg__small {
+		font-size: 12px;
+		text-align: center;
+	}
+
+	:global(.cfg__error) {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		margin-bottom: 24px;
+		padding: 16px 20px;
+		border-radius: 12px;
+		background: #fff2f2;
+		color: var(--err);
+		font-size: 15px;
+	}
+
+	:global(.cfg__error) svg {
+		width: 20px;
+		height: 20px;
+	}
+
+	.done {
+		min-height: 70vh;
+		display: flex;
+		align-items: center;
+	}
+
+	.done__icon {
+		width: 64px;
+		height: 64px;
+		color: var(--ok);
+		margin: 0 auto 20px;
+	}
+
+	.done__sub {
+		margin: 18px auto 12px;
+		max-width: 30ch;
+	}
+
+	.done__ctas {
+		margin-top: 32px;
+	}
+
+	@media (max-width: 900px) {
+		.row {
+			grid-template-columns: 1fr;
+			padding: 36px 0;
+		}
+
+		.row__h:empty {
+			display: none;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.choices--device,
+		.choices--condition {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.fields {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

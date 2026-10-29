@@ -4,7 +4,7 @@ import { env } from "cloudflare:workers";
 import { mailHtml, mailText, type MailContent } from "../lib/mail";
 import { inquiry as q } from "../lib/inquiry-copy";
 
-// Repair requests and withdrawals only go out as mails (office + confirmation to the customer); nothing is stored.
+// Repair, buyback and withdrawal requests only go out as mails (office + confirmation to the customer); nothing is stored.
 type Limit = { count: number; expiresAt: number };
 type Store<T> = {
 	get(id: string): Promise<T | null>;
@@ -89,6 +89,40 @@ export function createPlugin() {
 						"repair",
 						{ subject: `Reparaturanfrage · ${device} · ${d.name}`, preheader: device, title: "Neue Reparaturanfrage", lead: q.staffLead, facts: [...rows, [q.received, received()]], staff: true },
 						{ subject: q.customer.subject, preheader: q.customer.lead, title: q.customer.title.replace("{name}", d.name.split(" ")[0]), lead: q.customer.lead, facts: rows, steps: q.customer.steps },
+						d.email,
+					);
+				},
+			},
+			sell: {
+				public: true,
+				methods: ["POST"],
+				request: { body: "json" },
+				handler: async (ctx) => {
+					const i = (ctx.input ?? {}) as Record<string, unknown>;
+					const s = q.sell;
+					const f = s.field;
+					const d = {
+						device: line(i.device, 20), model: line(i.model, 80), storage: line(i.storage, 20), condition: line(i.condition, 20), note: str(i.note, 2000),
+						handoff: line(i.handoff, 10), store: line(i.store, 120), street: line(i.street, 120), zip: line(i.zip, 10), city: line(i.city, 80),
+						name: line(i.name, 120), email: line(i.email, 160).toLowerCase(), phone: line(i.phone, 40),
+					};
+					if (str(i.website)) return fail("SPAM");
+					if (i.consent !== true) return fail("CONSENT");
+					if (!Object.hasOwn(s.devices, d.device) || !d.model || !Object.hasOwn(s.conditions, d.condition) || !Object.hasOwn(s.handoffs, d.handoff) || !d.name || !d.email) return fail("MISSING_FIELDS");
+					if (d.handoff === "post" && (!d.street || !d.zip || !d.city)) return fail("ADDRESS_REQUIRED");
+					if (!EMAIL_RE.test(d.email)) return fail("INVALID_EMAIL");
+					const device = `${s.devices[d.device]} · ${d.model}`;
+					const [condition, conditionDesc] = s.conditions[d.condition];
+					const rows = facts([
+						[f.device, device], [f.storage, s.storage.includes(d.storage) ? d.storage : ""], [f.condition, `${condition} (${conditionDesc})`], [f.note, d.note],
+						[f.handoff, s.handoffs[d.handoff]], [f.store, d.handoff === "shop" ? d.store : ""], [f.address, d.handoff === "post" ? `${d.street}, ${d.zip} ${d.city}` : ""],
+						[f.name, d.name], [f.email, d.email], [f.phone, d.phone],
+					]);
+					return deliver(
+						ctx,
+						"sell",
+						{ subject: `Ankauf · ${device} · ${d.name}`, preheader: device, title: "Neue Ankauf-Anfrage", lead: s.staffLead, facts: [...rows, [q.received, received()]], staff: true },
+						{ subject: s.customer.subject, preheader: s.customer.lead, title: s.customer.title.replace("{name}", d.name.split(" ")[0]), lead: s.customer.lead, facts: rows, steps: s.customer.steps },
 						d.email,
 					);
 				},

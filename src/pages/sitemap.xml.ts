@@ -3,7 +3,7 @@ import { SITE } from "../lib/seo";
 import { repairPages } from "../lib/repair-pages";
 import { loadModels, modelPath } from "../lib/devices";
 
-const PATHS = ["/", "/iphone", "/ipad", "/mac", "/imac", "/apple-watch", ...repairPages.map((p) => p.path), "/datenrettung", "/reparatur-anfragen", "/kontakt", "/impressum", "/datenschutz", "/agb"];
+const PATHS = ["/", "/iphone", "/ipad", "/mac", "/imac", "/apple-watch", ...repairPages.map((p) => p.path), "/datenrettung", "/reparatur-anfragen", "/ankauf", "/kontakt", "/impressum", "/datenschutz", "/agb"];
 
 // Build date: every deploy may change copy on any page.
 const LASTMOD = __BUILD_DATE__;

@@ -50,6 +50,7 @@ export function llmsTxt(locations: Location[]): string {
 		"",
 		"## Anfrage",
 		`- [Reparatur anfragen](${SITE}/reparatur-anfragen): Formular mit Gerät, Anliegen, Name, E-Mail, optional Telefon und Modell. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&anliegen=display|rueckglas|akku|kamera|ladebuchse|tastatur|datenrettung|datenuebertragung\`. Das Formular ist als WebMCP-Tool \`request_repair\` annotiert.`,
+		`- [Gerät verkaufen (Ankauf)](${SITE}/ankauf): iPhone, iPad, Mac und Apple Watch, auch defekt. Formular mit Gerät, Modell, Speicher, Zustand, Übergabe (Standort oder Post), Name, E-Mail. Preis erst nach Prüfung des Geräts. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&modell=…\`. WebMCP-Tool \`request_device_buyback\`.`,
 		`- [Standorte und Öffnungszeiten](${SITE}/kontakt)`,
 		"",
 		"## Optional",
