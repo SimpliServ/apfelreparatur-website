@@ -4,11 +4,11 @@
 	"main": "./src/worker.ts",
 	"compatibility_date": "2026-02-24",
 	"compatibility_flags": ["nodejs_compat"],
-	// Attach once the apfelreparatur.at zone is in the Cloudflare account; the middleware 301s www to the bare domain.
-	// "routes": [
-	// 	{ "pattern": "apfelreparatur.at", "custom_domain": true },
-	// 	{ "pattern": "www.apfelreparatur.at", "custom_domain": true },
-	// ],
+	// The middleware 301s www to the bare domain.
+	"routes": [
+		{ "pattern": "apfelreparatur.at", "custom_domain": true },
+		{ "pattern": "www.apfelreparatur.at", "custom_domain": true },
+	],
 	"workers_dev": true,
 	// Workers Cache in front of the Worker; TTLs come from src/middleware.ts (withCache).
 	"cache": {
