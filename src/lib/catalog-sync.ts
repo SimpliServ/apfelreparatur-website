@@ -1,4 +1,4 @@
-// MobiNil catalogue snapshot in R2. The cron refreshes it every 10 min with a conditional request (304 when unchanged);
+// MobiNil catalogue snapshot in R2. The cron refreshes it once an hour with a conditional request (304 when unchanged);
 // pages only read it. On a change the edge cache of every page (tag CATALOG_TAG) is purged at once, so no page ever
 // shows a mix of old and new prices, and pages are only re-rendered when prices actually changed.
 import * as workers from "cloudflare:workers";

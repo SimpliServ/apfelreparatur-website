@@ -8,8 +8,8 @@ const emdashScheduled = createScheduledHandler();
 export default {
 	...handler,
 	scheduled(event, env, ctx) {
-		// MobiNil catalogue every 10 min; EmDash's own tasks every minute.
-		if (new Date(event.scheduledTime).getUTCMinutes() % 10 === 0) ctx.waitUntil(refreshCatalog().catch(() => false));
+		// MobiNil catalogue once an hour (owner: up to ~2 h delay is fine); EmDash's own tasks every minute.
+		if (new Date(event.scheduledTime).getUTCMinutes() === 17) ctx.waitUntil(refreshCatalog().catch(() => false));
 		return emdashScheduled(event, env, ctx);
 	},
 } satisfies ExportedHandler;
