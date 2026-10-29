@@ -102,6 +102,7 @@ const checked = (name: string, v: string) => values[name] === v;
 <Base
 	title="iPhone verkaufen Wien – iPhone & Mac Ankauf, auch defekt"
 	description={desc}
+	og="ankauf"
 	jsonLd={[breadcrumbLd([["Start", "/"], ["Ankauf", "/ankauf"]]), serviceLd("iPhone Ankauf in Wien", desc, "/ankauf", "Ankauf gebrauchter und defekter Apple Geräte"), faqLd(faq)]}
 	robots={Astro.request.method === "POST" ? "noindex" : undefined}
 >
