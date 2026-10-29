@@ -1,5 +1,6 @@
 import { env } from "cloudflare:workers";
 import { defineMiddleware } from "astro:middleware";
+import { CATALOG_TAG } from "./lib/catalog-sync";
 
 // Workers Cache (wrangler.jsonc "cache") answers public pages before the Worker runs; uncached SSR exceeds the free plan's CPU limit.
 const EDGE_PAGE = "max-age=300, stale-while-revalidate=604800, stale-if-error=604800";
@@ -63,6 +64,8 @@ function withCache(ctx: Ctx, pathname: string, res: Response): Response {
 	out.headers.set("cache-control", d[0]);
 	if (d[1]) out.headers.set("cloudflare-cdn-cache-control", d[1]);
 	else out.headers.delete("cloudflare-cdn-cache-control");
+	// Pages show catalogue data; lib/catalog-sync.ts purges this tag when MobiNil prices change.
+	if (d[1] === EDGE_PAGE) out.headers.set("cache-tag", CATALOG_TAG);
 	return out;
 }
 

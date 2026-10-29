@@ -2,6 +2,7 @@
 // /api/v1/katalog.json); this site adds MARKUP. The local `devices` collection is only the offline fallback.
 // Model pages live at /<gerät>/<slug>.
 import { getEmDashCollection, type CacheHint } from "emdash";
+import { readCatalog } from "./catalog-sync";
 import type { DeviceKey, ServiceKey } from "./content";
 import { repairLabels } from "../i18n/ui";
 
@@ -41,12 +42,9 @@ export function useHints(astro: Hintable, ...hints: (CacheHint | undefined)[]) {
 	for (const h of hints) if (h) astro.cache.set(h);
 }
 
-const FEED = "https://www.mobinil.at/api/v1/katalog.json?marke=apple";
 /** Longer warranty here, so +10 € on every MobiNil price; watches cost the same everywhere (owner 2026-10-29). */
 const MARKUP = 10;
 const markup = (category: string, price: number) => (category === "watch" ? price : Math.round((price + MARKUP) * 100) / 100);
-// No instant updates needed: one feed read per isolate per 30 min, served from the colo cache (MobiNil edge-caches it too).
-const TTL = 1_800_000;
 
 type FeedDevice = {
 	slug: string;
@@ -73,30 +71,23 @@ const fromFeed = (d: FeedDevice): Model => ({
 	updatedAt: d.updatedAt ?? undefined,
 });
 
-let memo: { at: number; models: Model[] } | null = null;
-let pending: Promise<Model[] | null> | null = null;
+let memo: { version: string; at: number; models: Model[] } | null = null;
 
-async function fetchFeed(): Promise<Model[] | null> {
-	try {
-		const res = await fetch(FEED, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(4000), cf: { cacheTtl: 1800, cacheEverything: true } } as RequestInit);
-		if (!res.ok) return null;
-		const models = ((await res.json()) as { devices: FeedDevice[] }).devices.filter((d) => CATS.includes(d.category as Category)).map(fromFeed);
-		return models.length ? models : null;
-	} catch {
-		return null;
-	}
-}
-
-/** Last good feed; a failed refresh keeps serving it and retries after a minute. */
+/** Snapshot from R2 (kept current by the cron in lib/catalog-sync.ts); one check per isolate per 10 s, parsed only on a new version. */
 async function central(): Promise<Model[] | null> {
-	if (memo && Date.now() - memo.at < TTL) return memo.models;
-	pending ??= fetchFeed().then((models) => {
-		if (models) memo = { at: Date.now(), models };
-		else if (memo) memo = { at: Date.now() - TTL + 60_000, models: memo.models };
-		pending = null;
+	if (memo && Date.now() - memo.at < 10_000) return memo.models;
+	try {
+		const snap = await readCatalog(memo?.version);
+		if (!snap) return memo?.models ?? null;
+		if (snap.body) {
+			const models = (JSON.parse(snap.body) as { devices: FeedDevice[] }).devices.filter((d) => CATS.includes(d.category as Category)).map(fromFeed);
+			if (!models.length) return memo?.models ?? null;
+			memo = { version: snap.version, at: Date.now(), models };
+		} else if (memo) memo.at = Date.now();
 		return memo?.models ?? null;
-	});
-	return pending;
+	} catch {
+		return memo?.models ?? null;
+	}
 }
 
 const toModel = (e: { id: string; data: unknown; updatedAt?: Date | string }) => {
