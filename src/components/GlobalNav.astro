@@ -350,6 +350,13 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 		}
 	}
 
+	/* Phones: the call button wins the slot; "Standorte" stays in the menu. */
+	@media (max-width: 480px) {
+		.gnav__cta {
+			display: none;
+		}
+	}
+
 	@media (max-width: 420px) {
 		.gnav__cta-long {
 			display: none;
@@ -371,10 +378,6 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 
 		.gnav__cta {
 			margin-right: 4px;
-		}
-
-		.gnav__call {
-			display: none;
 		}
 
 		.gnav__menu-contact {
