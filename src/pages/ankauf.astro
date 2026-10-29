@@ -88,20 +88,21 @@ const steps = [
 ];
 
 const faq: QA[] = [
-	{ q: "Bekomme ich sofort einen Preis?", a: "Den Ankaufspreis nennen wir, nachdem unsere Techniker Ihr Gerät geprüft haben. Mit Modell, Speicher und Zustand aus dem Formular können wir es vorab einschätzen." },
-	{ q: "Welche Geräte kaufen Sie an?", a: "iPhone, iPad, MacBook, iMac und Apple Watch, auch ältere Modelle. Für andere Geräte schreiben Sie uns einfach im Feld „Anmerkungen“." },
-	{ q: "Kaufen Sie auch defekte Geräte an?", a: "Ja, wir prüfen jedes Gerät, auch mit Glasbruch oder schwachem Akku. Geräte, die wir nicht ankaufen, entsorgen wir auf Wunsch kostenlos und umweltgerecht." },
+	{ q: "Wie viel bekomme ich für mein altes iPhone?", a: "Das hängt von Modell, Speicher und Zustand ab. Den genauen Ankaufspreis nennen wir, nachdem unsere Techniker Ihr Gerät geprüft haben. Mit Modell, Speicher und Zustand aus dem Formular können wir es vorab einschätzen." },
+	{ q: "Welche Apple Geräte kaufen Sie an?", a: "iPhone, iPad, MacBook, iMac und Apple Watch, auch ältere Modelle. Für andere Geräte schreiben Sie uns einfach im Feld „Anmerkungen“." },
+	{ q: "Kann ich ein defektes iPhone verkaufen?", a: "Ja, wir kaufen auch defekte iPhones, iPads und Macs an und prüfen jedes Gerät, auch mit kaputtem Display, Glasbruch oder schwachem Akku. Geräte, die wir nicht ankaufen, entsorgen wir auf Wunsch kostenlos und umweltgerecht." },
+	{ q: "Wo kann ich mein iPhone in Wien verkaufen?", a: "An jedem unserer Standorte in Wien und Umgebung, auch am Wochenende. Adressen und Öffnungszeiten finden Sie unter Kontakt." },
 	{ q: "Brauche ich einen Termin?", a: "Nein. Sie können Ihr Gerät ohne Termin an einen unserer Standorte bringen, mit oder ohne Anfrage vorab." },
 	{ q: "Was muss ich vor dem Verkauf tun?", a: "Sichern Sie Ihre Daten, schalten Sie „Wo ist?“ aus, melden Sie sich von iCloud ab und entnehmen Sie SIM- und Speicherkarte. Ohne Abmeldung von iCloud können wir ein Gerät nicht ankaufen." },
 ];
-const desc = "iPhone, iPad, Mac oder Apple Watch verkaufen in Wien: Modell und Zustand online angeben, ohne Termin vorbeibringen, fairer Preis nach Prüfung. Auch defekte Geräte.";
+const desc = "iPhone verkaufen in Wien: Ankauf von iPhone, iPad, MacBook und Apple Watch, auch defekt. Ohne Termin vorbeibringen, fairer Preis nach Prüfung.";
 const checked = (name: string, v: string) => values[name] === v;
 ---
 
 <Base
-	title="iPhone verkaufen Wien – Apple Ankauf, auch defekt"
+	title="iPhone verkaufen Wien – iPhone & Mac Ankauf, auch defekt"
 	description={desc}
-	jsonLd={[breadcrumbLd([["Start", "/"], ["Ankauf", "/ankauf"]]), serviceLd("Ankauf gebrauchter Apple Geräte", desc, "/ankauf", "Ankauf"), faqLd(faq)]}
+	jsonLd={[breadcrumbLd([["Start", "/"], ["Ankauf", "/ankauf"]]), serviceLd("iPhone Ankauf in Wien", desc, "/ankauf", "Ankauf gebrauchter und defekter Apple Geräte"), faqLd(faq)]}
 	robots={Astro.request.method === "POST" ? "noindex" : undefined}
 >
 	{
@@ -126,7 +127,7 @@ const checked = (name: string, v: string) => values[name] === v;
 					heading="h1"
 					eager
 					photo="hero"
-					eyebrow="Apple Geräte Ankauf in Wien"
+					eyebrow="iPhone & Apple Ankauf in Wien"
 					title={'Wir kaufen Ihr<br /><span style="color: var(--accent)">altes Gerät.</span>'}
 					sub="iPhone, iPad, Mac und Apple Watch. Gebraucht oder defekt."
 					primary={{ href: "#anfrage", label: "Ankauf anfragen" }}
