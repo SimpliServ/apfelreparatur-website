@@ -45,7 +45,8 @@ const FEED = "https://www.mobinil.at/api/v1/katalog.json?marke=apple";
 /** Longer warranty here, so +10 € on every MobiNil price; watches cost the same everywhere (owner 2026-10-29). */
 const MARKUP = 10;
 const markup = (category: string, price: number) => (category === "watch" ? price : Math.round((price + MARKUP) * 100) / 100);
-const TTL = 300_000;
+// No instant updates needed: one feed read per isolate per 30 min, served from the colo cache (MobiNil edge-caches it too).
+const TTL = 1_800_000;
 
 type FeedDevice = {
 	slug: string;
@@ -73,19 +74,29 @@ const fromFeed = (d: FeedDevice): Model => ({
 });
 
 let memo: { at: number; models: Model[] } | null = null;
+let pending: Promise<Model[] | null> | null = null;
 
+async function fetchFeed(): Promise<Model[] | null> {
+	try {
+		const res = await fetch(FEED, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(4000), cf: { cacheTtl: 1800, cacheEverything: true } } as RequestInit);
+		if (!res.ok) return null;
+		const models = ((await res.json()) as { devices: FeedDevice[] }).devices.filter((d) => CATS.includes(d.category as Category)).map(fromFeed);
+		return models.length ? models : null;
+	} catch {
+		return null;
+	}
+}
+
+/** Last good feed; a failed refresh keeps serving it and retries after a minute. */
 async function central(): Promise<Model[] | null> {
 	if (memo && Date.now() - memo.at < TTL) return memo.models;
-	try {
-		const res = await fetch(FEED, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(4000), cf: { cacheTtl: 300, cacheEverything: true } } as RequestInit);
-		if (!res.ok) return memo?.models ?? null;
-		const models = ((await res.json()) as { devices: FeedDevice[] }).devices.filter((d) => CATS.includes(d.category as Category)).map(fromFeed);
-		if (!models.length) return memo?.models ?? null;
-		memo = { at: Date.now(), models };
-		return models;
-	} catch {
+	pending ??= fetchFeed().then((models) => {
+		if (models) memo = { at: Date.now(), models };
+		else if (memo) memo = { at: Date.now() - TTL + 60_000, models: memo.models };
+		pending = null;
 		return memo?.models ?? null;
-	}
+	});
+	return pending;
 }
 
 const toModel = (e: { id: string; data: unknown; updatedAt?: Date | string }) => {

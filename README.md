@@ -8,7 +8,7 @@ A conversion-focused landing page template built with [EmDash](https://github.co
 
 ## Preise, Geräte und Bilder kommen von MobiNil
 
-Alle Geräte, Reparaturpreise, Gerätebilder und die Reihenfolge der Modelle von apfelreparatur.at werden **zentral auf MobiNil** gepflegt: www.mobinil.at → Admin → Preisliste (Apple, inkl. Smartwatches und Macs). Die Seite liest `https://www.mobinil.at/api/v1/katalog.json` und zeigt jeden Preis **+10 €** (längere Garantie); Smartwatches kosten gleich viel wie bei MobiNil. Änderungen erscheinen dort nach spätestens ca. 15–20 Minuten (Caches). Hier im CMS gibt es keine Preisliste mehr; die lokale `devices`-Sammlung ist nur Notfall-Reserve, falls MobiNil nicht erreichbar ist. Details: `AGENTS.md`.
+Alle Geräte, Reparaturpreise, Gerätebilder und die Reihenfolge der Modelle von apfelreparatur.at werden **zentral auf MobiNil** gepflegt: www.mobinil.at → Admin → Preisliste (Apple, inkl. Smartwatches und Macs). Die Seite liest `https://www.mobinil.at/api/v1/katalog.json` und zeigt jeden Preis **+10 €** (längere Garantie); Smartwatches kosten gleich viel wie bei MobiNil. Änderungen erscheinen dort bewusst verzögert, nach spätestens ca. 1,5 Stunden (Caches schonen MobiNil und halten die Seite schnell). Hier im CMS gibt es keine Preisliste mehr; die lokale `devices`-Sammlung ist nur Notfall-Reserve, falls MobiNil nicht erreichbar ist. Details: `AGENTS.md`.
 
 ## What's Included
 
