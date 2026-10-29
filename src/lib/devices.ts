@@ -93,13 +93,7 @@ const toModel = (e: { id: string; data: unknown; updatedAt?: Date | string }) =>
 	return { ...d, slug: e.id, sort: d.sort ?? 999, series: d.series ?? "", repairs: d.repairs ?? [], updatedAt: e.updatedAt ? new Date(e.updatedAt).toISOString() : undefined } as Model;
 };
 
-/** MobiNil order: category, then series blocks by their first model, then sort. */
-function order(models: Model[]) {
-	const first = new Map<string, number>();
-	for (const m of models) first.set(m.category + m.series, Math.min(first.get(m.category + m.series) ?? Infinity, m.sort));
-	const by = (a: Model, b: Model) => a.sort - b.sort || a.title.localeCompare(b.title, "de");
-	return models.sort((a, b) => CATS.indexOf(a.category) - CATS.indexOf(b.category) || first.get(a.category + a.series)! - first.get(b.category + b.series)! || a.series.localeCompare(b.series) || by(a, b));
-}
+const order = (models: Model[]) => models.sort((a, b) => CATS.indexOf(a.category) - CATS.indexOf(b.category) || a.sort - b.sort || a.title.localeCompare(b.title, "de"));
 
 async function catalogue(): Promise<{ models: Model[]; cacheHint?: CacheHint }> {
 	const models = await central();
