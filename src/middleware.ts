@@ -69,7 +69,16 @@ function withCache(ctx: Ctx, pathname: string, res: Response): Response {
 	return out;
 }
 
-export const onRequest = defineMiddleware(async (ctx, next) => {
+// A streamed page sends 200 before rendering; a render that dies mid-stream got cached as an empty /iphone (2026-10-29).
+// Edge-cached pages are buffered so only complete HTML reaches the cache.
+async function complete(res: Response): Promise<Response> {
+	if (res.headers.get("cloudflare-cdn-cache-control") !== EDGE_PAGE || !res.body) return res;
+	const html = await res.text().catch(() => "");
+	if (html.includes("</html>")) return new Response(html, res);
+	return new Response("Service unavailable", { status: 503, headers: { "cache-control": NO_STORE, "retry-after": "5", "content-type": "text/plain" } });
+}
+
+export const onRequest =defineMiddleware(async (ctx, next) => {
 	const { pathname, hostname } = ctx.url;
 	if (hostname === "www.apfelreparatur.at") {
 		const read = ctx.request.method === "GET" || ctx.request.method === "HEAD";
@@ -82,7 +91,7 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
 	if (legacy) return new Response(null, { status: 301, headers: { location: legacy, "cache-control": "public, max-age=86400" } });
 	const key = ctx.request.method === "GET" ? mediaKeyOf(ctx.url) : null;
 	if (key) await copyCentralMedia(key).catch(() => {});
-	const out = mutable(withCache(ctx, pathname, await next()));
+	const out = mutable(await complete(withCache(ctx, pathname, await next())));
 	// Preview hosts (workers.dev) must not compete with apfelreparatur.at in search results.
 	if (hostname !== "apfelreparatur.at" && hostname !== "localhost") out.headers.set("x-robots-tag", "noindex, nofollow");
 	out.headers.set("x-content-type-options", "nosniff");
