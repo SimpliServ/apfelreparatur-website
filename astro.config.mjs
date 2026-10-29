@@ -20,14 +20,6 @@ const email = {
 	entrypoint: fileURLToPath(new URL("./src/plugins/email.ts", import.meta.url)),
 };
 
-const prices = {
-	id: "apfel-prices",
-	version: "1.0.0",
-	format: "native",
-	entrypoint: fileURLToPath(new URL("./src/plugins/prices.ts", import.meta.url)),
-	adminEntry: fileURLToPath(new URL("./src/plugins/prices-admin.tsx", import.meta.url)),
-};
-
 export default defineConfig({
 	site: "https://apfelreparatur.at",
 	output: "server",
@@ -118,7 +110,7 @@ export default defineConfig({
 		emdash({
 			database: d1({ binding: "DB", session: "auto", coalesce: true }),
 			storage: r2({ binding: "MEDIA" }),
-			plugins: [inquiry, email, prices],
+			plugins: [inquiry, email],
 		}),
 	],
 	devToolbar: { enabled: false },

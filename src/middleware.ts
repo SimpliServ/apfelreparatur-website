@@ -1,3 +1,4 @@
+import { env } from "cloudflare:workers";
 import { defineMiddleware } from "astro:middleware";
 
 // Workers Cache (wrangler.jsonc "cache") answers public pages before the Worker runs; uncached SSR exceeds the free plan's CPU limit.
@@ -10,6 +11,23 @@ const PRIVATE_PATH = /^\/(?:_|reparatur-anfragen|vertrag-widerrufen)/;
 
 // EmDash's redirect table skips paths with a file extension, so the old site's file URLs live here.
 const LEGACY_FILES: Record<string, string> = { "/reparaturformular.pdf": "/reparatur-anfragen", "/index.php": "/" };
+
+// Device photos live in MobiNil's media library (see lib/devices.ts). EmDash serves and scales media straight from R2,
+// so a photo this bucket lacks is copied over on its first request.
+const MEDIA_KEY = /^\/_emdash\/api\/media\/file\/([A-Z0-9]{26}\.(?:webp|png|jpe?g|avif))$/;
+async function copyCentralMedia(key: string) {
+	if (await env.MEDIA.head(key)) return;
+	const res = await fetch(`https://www.mobinil.at/_emdash/api/media/file/${key}`).catch(() => null);
+	if (res?.ok) await env.MEDIA.put(key, await res.arrayBuffer(), { httpMetadata: { contentType: res.headers.get("content-type") ?? undefined } });
+}
+function mediaKeyOf(url: URL): string | null {
+	try {
+		const path = url.pathname === "/_image" ? new URL(url.searchParams.get("href") ?? "/", url).pathname : url.pathname;
+		return MEDIA_KEY.exec(path)?.[1] ?? null;
+	} catch {
+		return null;
+	}
+}
 
 type Ctx = Parameters<Parameters<typeof defineMiddleware>[0]>[0];
 
@@ -59,6 +77,8 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
 	}
 	const legacy = LEGACY_FILES[pathname.toLowerCase()];
 	if (legacy) return new Response(null, { status: 301, headers: { location: legacy, "cache-control": "public, max-age=86400" } });
+	const key = ctx.request.method === "GET" ? mediaKeyOf(ctx.url) : null;
+	if (key) await copyCentralMedia(key).catch(() => {});
 	const out = mutable(withCache(ctx, pathname, await next()));
 	// Preview hosts (workers.dev) must not compete with apfelreparatur.at in search results.
 	if (hostname !== "apfelreparatur.at" && hostname !== "localhost") out.headers.set("x-robots-tag", "noindex, nofollow");

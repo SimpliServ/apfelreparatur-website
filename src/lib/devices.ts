@@ -1,5 +1,7 @@
-// Device catalogue from the CMS (`devices`, prices maintained in Admin → Preisliste). Model pages live at /<gerät>/<slug>.
-import { getEmDashCollection, getEmDashEntry, type CacheHint } from "emdash";
+// Device catalogue, prices, photos and order come from MobiNil (Admin → Preisliste on www.mobinil.at, feed
+// /api/v1/katalog.json); this site adds MARKUP. The local `devices` collection is only the offline fallback.
+// Model pages live at /<gerät>/<slug>.
+import { getEmDashCollection, type CacheHint } from "emdash";
 import type { DeviceKey, ServiceKey } from "./content";
 import { repairLabels } from "../i18n/ui";
 
@@ -39,21 +41,82 @@ export function useHints(astro: Hintable, ...hints: (CacheHint | undefined)[]) {
 	for (const h of hints) if (h) astro.cache.set(h);
 }
 
+const FEED = "https://www.mobinil.at/api/v1/katalog.json?marke=apple";
+/** Longer warranty here, so +10 € on every MobiNil price; watches cost the same everywhere (owner 2026-10-29). */
+const MARKUP = 10;
+const markup = (category: string, price: number) => (category === "watch" ? price : Math.round((price + MARKUP) * 100) / 100);
+const TTL = 300_000;
+
+type FeedDevice = {
+	slug: string;
+	title: string;
+	category: string;
+	series: string;
+	sort: number;
+	search_terms: string;
+	image: { key: string; width: number | null; height: number | null; alt: string; caption: string } | null;
+	repairs: RepairRow[];
+	updatedAt: string | null;
+};
+
+const fromFeed = (d: FeedDevice): Model => ({
+	slug: d.slug,
+	title: d.title,
+	category: d.category as Category,
+	series: d.series,
+	sort: d.sort,
+	// Served by the media fallback in middleware.ts.
+	image: d.image ? { id: d.image.key, alt: d.image.alt, width: d.image.width ?? undefined, height: d.image.height ?? undefined, meta: { storageKey: d.image.key, caption: d.image.caption } } : null,
+	model_numbers: d.search_terms.match(/\bA\d{4}\b/g)?.join(", ") || undefined,
+	repairs: d.repairs.map((r) => ({ ...r, price: markup(d.category, r.price) })),
+	updatedAt: d.updatedAt ?? undefined,
+});
+
+let memo: { at: number; models: Model[] } | null = null;
+
+async function central(): Promise<Model[] | null> {
+	if (memo && Date.now() - memo.at < TTL) return memo.models;
+	try {
+		const res = await fetch(FEED, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(4000), cf: { cacheTtl: 300, cacheEverything: true } } as RequestInit);
+		if (!res.ok) return memo?.models ?? null;
+		const models = ((await res.json()) as { devices: FeedDevice[] }).devices.filter((d) => CATS.includes(d.category as Category)).map(fromFeed);
+		if (!models.length) return memo?.models ?? null;
+		memo = { at: Date.now(), models };
+		return models;
+	} catch {
+		return memo?.models ?? null;
+	}
+}
+
 const toModel = (e: { id: string; data: unknown; updatedAt?: Date | string }) => {
 	const d = e.data as Omit<Model, "slug">;
 	return { ...d, slug: e.id, sort: d.sort ?? 999, series: d.series ?? "", repairs: d.repairs ?? [], updatedAt: e.updatedAt ? new Date(e.updatedAt).toISOString() : undefined } as Model;
 };
 
-export async function loadModels(device?: DeviceKey) {
+/** MobiNil order: category, then series blocks by their first model, then sort. */
+function order(models: Model[]) {
+	const first = new Map<string, number>();
+	for (const m of models) first.set(m.category + m.series, Math.min(first.get(m.category + m.series) ?? Infinity, m.sort));
+	const by = (a: Model, b: Model) => a.sort - b.sort || a.title.localeCompare(b.title, "de");
+	return models.sort((a, b) => CATS.indexOf(a.category) - CATS.indexOf(b.category) || first.get(a.category + a.series)! - first.get(b.category + b.series)! || a.series.localeCompare(b.series) || by(a, b));
+}
+
+async function catalogue(): Promise<{ models: Model[]; cacheHint?: CacheHint }> {
+	const models = await central();
+	if (models) return { models };
 	const { entries, cacheHint } = await getEmDashCollection("devices");
-	const models = entries.map(toModel).filter((m) => !device || m.category === CATEGORY[device]).sort((a, b) => CATS.indexOf(a.category) - CATS.indexOf(b.category) || a.sort - b.sort || a.title.localeCompare(b.title, "de"));
-	return { models, cacheHint };
+	return { models: entries.map(toModel), cacheHint };
+}
+
+export async function loadModels(device?: DeviceKey) {
+	const { models, cacheHint } = await catalogue();
+	return { models: order(models.filter((m) => !device || m.category === CATEGORY[device])), cacheHint };
 }
 
 export async function loadModel(device: DeviceKey, slug: string) {
-	const { entry, cacheHint } = await getEmDashEntry("devices", slug);
-	const model = entry ? toModel(entry as never) : null;
-	return { model: model && model.category === CATEGORY[device] ? model : null, entry, cacheHint };
+	const { models, cacheHint } = await catalogue();
+	const model = models.find((m) => m.slug === slug && m.category === CATEGORY[device]) ?? null;
+	return { model, entry: null, cacheHint };
 }
 
 export const modelPath = (m: Pick<Model, "slug" | "category">) => `/${DEVICE_OF[m.category]}/${m.slug}`;
