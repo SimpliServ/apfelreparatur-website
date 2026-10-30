@@ -65,10 +65,10 @@ export function modelFaq(m: Model): QA[] {
 		out.push({ q: `Was kostet die Reparatur ${bei(m)}?`, a: `Das hängt vom Schaden ab. Wir prüfen ${article(m)} ${m.title} und nennen Ihnen den Preis vor der Reparatur. Repariert wird erst nach Ihrer Zustimmung.` });
 	if (m.category === "mac") {
 		out.push({ q: `Woran erkenne ich, ob ich ${article(m)} ${m.title} habe?`, a: `Im Apple Menü unter „Über diesen Mac“ stehen Modell und Jahr.${m.model_numbers ? ` Die Modellnummer ${m.model_numbers} finden Sie außerdem klein gedruckt auf der Unterseite des Geräts.` : ""}` });
-		out.push({ q: "Bleiben meine Daten bei der Reparatur erhalten?", a: "Bei Display, Batterie und Tastatur bleibt die SSD unberührt. Ein aktuelles Time Machine Backup empfehlen wir trotzdem. Startet Ihr Mac nicht mehr, hilft unsere Datenrettung." });
+		out.push({ q: "Bleiben meine Daten bei der Reparatur erhalten?", a: "Bei Display, Batterie und Tastatur bleibt die SSD unberührt. Startet Ihr Mac nicht mehr, hilft unsere Datenrettung." });
 	} else {
 		out.push({ q: `Wie lange dauert die Reparatur ${bei(m)}?`, a: "Ist das Teil lagernd, ist ein Display- oder Batterietausch oft in rund einer Stunde erledigt. Sonst nennen wir Ihnen die Dauer vorab." });
-		out.push({ q: "Bleiben meine Daten erhalten?", a: `Ja, bei Display, Batterie und Rückglas bleiben Ihre Daten auf ${dat(m)} ${m.title}. Ein aktuelles Backup empfehlen wir trotzdem.` });
+		out.push({ q: "Bleiben meine Daten erhalten?", a: `Ja, bei Display, Batterie und Rückglas bleiben Ihre Daten auf ${dat(m)} ${m.title}.` });
 	}
 	out.push({ q: "Welche Garantie bekomme ich?", a: `${g} Monate auf das getauschte Teil und unsere Arbeit, an allen Standorten. Ihre gesetzlichen Gewährleistungsrechte bleiben bestehen.` });
 	out.push({ q: "Brauche ich einen Termin?", a: "Nein. Kommen Sie ohne Termin an einen unserer Standorte in Wien und Umgebung, auch am Wochenende." });

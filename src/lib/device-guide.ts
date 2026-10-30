@@ -58,7 +58,7 @@ export const guides: Record<GuideKey, Guide> = {
 			},
 		],
 		prep: [
-			"Backup in iCloud oder am Computer erstellen. Bei Display, Batterie und Rückglas bleiben Ihre Daten erhalten, sicher ist sicher.",
+			"Bei Display, Batterie und Rückglas bleiben Ihre Daten erhalten.",
 			"Modell nachsehen: Einstellungen › Allgemein › Info › Modellname.",
 			"Gerätecode wissen: Für den Funktionstest nach der Reparatur entsperren Sie das iPhone am besten selbst.",
 			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen, auch am Wochenende.",
@@ -114,7 +114,6 @@ export const guides: Record<GuideKey, Guide> = {
 			},
 		],
 		prep: [
-			"Backup in iCloud oder am Computer erstellen.",
 			"Apple Pencil mitbringen, wenn Sie ihn nutzen, damit wir die Stifteingabe testen können.",
 			"Ist das Display gewölbt oder steht es am Rand ab: nicht mehr laden, der Akku kann aufgebläht sein.",
 			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen, auch am Wochenende.",
@@ -165,12 +164,11 @@ export const guides: Record<GuideKey, Guide> = {
 			{
 				h: "Ihre Daten und die SSD.",
 				p: [
-					"Bei Display, Batterie und Tastatur bleiben Ihre Daten auf dem Mac, ein Backup mit Time Machine empfehlen wir trotzdem. Bei Macs mit Apple Silicon oder T2-Chip ist die SSD fest verbaut und verschlüsselt. Daten lassen sich dann nur über den Mac selbst retten, ob das möglich ist, zeigt die Diagnose. Mehr zur [Datenrettung](/datenrettung).",
+					"Bei Display, Batterie und Tastatur bleiben Ihre Daten auf dem Mac. Bei Macs mit Apple Silicon oder T2-Chip ist die SSD fest verbaut und verschlüsselt. Daten lassen sich dann nur über den Mac selbst retten, ob das möglich ist, zeigt die Diagnose. Mehr zur [Datenrettung](/datenrettung).",
 				],
 			},
 		],
 		prep: [
-			"Backup mit Time Machine oder in iCloud erstellen, wenn der Mac noch startet.",
 			"Netzteil und Ladekabel mitbringen, damit wir Laden und Batterie testen können.",
 			"Modellnummer notieren: Sie steht auf der Unterseite und beginnt mit A.",
 			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen, auch am Wochenende.",
@@ -224,7 +222,6 @@ export const guides: Record<GuideKey, Guide> = {
 			},
 		],
 		prep: [
-			"Backup mit Time Machine erstellen, wenn der iMac noch startet.",
 			"Netzkabel bzw. Netzteil mitbringen. Tastatur und Maus können zu Hause bleiben.",
 			"Für den Transport die Originalverpackung oder eine Decke verwenden, das Display nach innen.",
 			"Ohne Termin an einen unserer [Standorte](/kontakt) kommen, auch am Wochenende.",

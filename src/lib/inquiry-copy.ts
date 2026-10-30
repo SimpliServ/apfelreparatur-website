@@ -48,7 +48,7 @@ export const inquiry = {
 			title: "Danke, {name}.",
 			lead: "Wir haben Ihre Ankauf-Anfrage erhalten und melden uns per E-Mail.",
 			steps: [
-				"Vor der Übergabe: Daten sichern, „Wo ist?“ ausschalten, von iCloud abmelden, SIM-Karte entnehmen.",
+				"Vor der Übergabe: „Wo ist?“ ausschalten, von iCloud abmelden, SIM-Karte entnehmen.",
 				"Bringen Sie Ihr Gerät ohne Termin an einen unserer Standorte. Wenn Sie es per Post schicken möchten, warten Sie bitte auf unsere Versanddetails.",
 				"Nach der Prüfung nennen wir Ihnen den Ankaufspreis. Sie entscheiden dann, ob Sie verkaufen.",
 			],

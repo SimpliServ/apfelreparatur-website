@@ -80,7 +80,7 @@ export const homeFaq: QA[] = [
 	{ q: "Wo kann ich mein iPhone in Wien reparieren lassen?", a: "An unseren Standorten in Wien und Umgebung, unter anderem am Wiener Hauptbahnhof. Kommen Sie einfach ohne Termin vorbei. Ist das Teil lagernd, ist ein Display- oder Akkutausch oft in rund einer Stunde erledigt." },
 	{ q: "Verwenden Sie Original Apple Teile?", a: "Ja. Wir verwenden Original Apple Ersatzteile, sofern Apple sie für Ihr Modell und die jeweilige Reparatur bereitstellt. Ist das nicht der Fall, besprechen wir die Alternative vorher mit Ihnen." },
 	{ q: "Was kostet eine iPhone Reparatur?", a: "Das hängt von Modell und Schaden ab. Die Fixpreise für jedes iPhone und iPad Modell finden Sie auf der jeweiligen Modellseite, zum Beispiel unter iPhone Reparatur › Wählen Sie Ihr iPhone. Repariert wird erst, wenn Sie zustimmen." },
-	{ q: "Bleiben meine Daten bei der Reparatur erhalten?", a: "Bei Display-, Rückglas- und Akkureparaturen bleiben Ihre Daten auf dem Gerät. Wir empfehlen trotzdem vorab ein Backup in iCloud oder auf Ihrem Computer." },
+	{ q: "Bleiben meine Daten bei der Reparatur erhalten?", a: "Bei Display-, Rückglas- und Akkureparaturen bleiben Ihre Daten auf dem Gerät." },
 	{ q: "Sind Sie ein Apple Store oder Apple Partner?", a: "Nein. Apfelreparatur ist ein unabhängiger Reparaturbetrieb in Wien und steht in keiner Verbindung zu Apple Inc. Wir sind auf Apple Geräte spezialisiert und arbeiten mit Original Apple Teilen." },
 	{ q: "Gibt es Garantie auf die Reparatur?", a: `Ja, ${business.warrantyMonths} Monate auf getauschte Teile und unsere Arbeit. Ihre gesetzlichen Gewährleistungsrechte bleiben bestehen.` },
 ];
@@ -114,7 +114,7 @@ export function deviceFaq(d: Device): QA[] {
 		d.key === "iphone" || d.key === "mac"
 			? { q: `Werden Original Apple Teile verbaut?`, a: `Ja, sofern Apple das Teil für Ihr Modell bereitstellt. Ansonsten besprechen wir die Alternative vorab mit Ihnen.` }
 			: { q: `Welche Ersatzteile werden verbaut?`, a: `Hochwertige Ersatzteile, die wir vor dem Einbau prüfen. Nach der Reparatur testen wir ${de(n).ihr} ${n}, bevor Sie ${de(n).es} zurückbekommen.` },
-		{ q: `Bleiben meine Daten erhalten?`, a: `Bei Hardware-Reparaturen wie Display oder Akku bleiben Ihre Daten auf ${g.dem} ${n}. Ein aktuelles Backup empfehlen wir trotzdem.` },
+		{ q: `Bleiben meine Daten erhalten?`, a: `Bei Hardware-Reparaturen wie Display oder Akku bleiben Ihre Daten auf ${g.dem} ${n}.` },
 		{ q: `Welche Garantie bekomme ich?`, a: `${business.warrantyMonths} Monate auf getauschte Teile und unsere Arbeit. Ihre gesetzlichen Gewährleistungsrechte bleiben bestehen.` },
 	];
 }

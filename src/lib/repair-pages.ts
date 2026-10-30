@@ -58,7 +58,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		faq: (n) => [
 			{ q: `Was kostet eine ${n} Display Reparatur in Wien?`, a: priceAnswer(n) },
 			{ q: `Wie lange dauert der Displaytausch ${de(n).beim} ${n}?`, a: "Ist das Display lagernd, ist der Tausch oft in rund einer Stunde erledigt. Sonst nennen wir Ihnen die Dauer vorab." },
-			{ q: "Bleiben meine Daten beim Displaytausch erhalten?", a: "Ja, beim Displaytausch bleiben Ihre Daten auf dem Gerät. Ein aktuelles Backup empfehlen wir trotzdem." },
+			{ q: "Bleiben meine Daten beim Displaytausch erhalten?", a: "Ja, beim Displaytausch bleiben Ihre Daten auf dem Gerät." },
 			{ q: "Verwenden Sie ein Original Apple Display?", a: "Ja, sofern Apple das Display für Ihr Modell bereitstellt. Sonst besprechen wir die Alternative vorher mit Ihnen." },
 			n === "iPhone"
 				? { q: "Muss bei gesprungenem Glas das ganze Display getauscht werden?", a: "Beim iPhone sind Glas und Display fest miteinander verbunden. Deshalb tauschen wir das komplette Displaymodul, damit Bild, Touch und Abdichtung wieder stimmen." }
@@ -131,7 +131,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		faq: (n) => [
 			{ q: `Was kostet eine ${n} Kamera Reparatur?`, a: "Das hängt davon ab, ob nur das Glas oder das Modul getauscht wird. Den Preis nennen wir vorab." },
 			{ q: "Reicht es, nur das Kameraglas zu tauschen?", a: "Oft ja. Wir prüfen zuerst, ob das Modul selbst intakt ist, und tauschen nur, was nötig ist." },
-			{ q: "Bleiben meine Fotos bei der Kamera Reparatur erhalten?", a: `Ja. Fotos und Daten bleiben auf Ihrem ${n}. Ein aktuelles Backup empfehlen wir trotzdem.` },
+			{ q: "Bleiben meine Fotos bei der Kamera Reparatur erhalten?", a: `Ja. Fotos und Daten bleiben auf Ihrem ${n}.` },
 			termin(n, "Kamera Reparatur"),
 		],
 	},
