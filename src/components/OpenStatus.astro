@@ -1,0 +1,46 @@
+---
+import { openState } from "../lib/hours";
+
+interface Props {
+	hours: [string, string][];
+	/** Only "Geöffnet" / "Geschlossen", for cards that list the hours anyway. */
+	short?: boolean;
+}
+const { hours, short = false } = Astro.props;
+const st = openState(hours);
+---
+
+<span class:list={["ostatus", { "is-open": st.open }]} data-hours={JSON.stringify(hours)} data-short={short || undefined}>
+	<strong>{st.word}</strong><span data-rest>{!short && st.rest && ` · ${st.rest}`}</span>
+</span>
+
+<script>
+	import { openState } from "../lib/hours";
+	// Pages come from the cache, so the server's status may be old: recompute now and every minute.
+	const tick = () =>
+		document.querySelectorAll<HTMLElement>("[data-hours]").forEach((el) => {
+			const st = openState(JSON.parse(el.dataset.hours!));
+			el.classList.toggle("is-open", st.open);
+			el.querySelector("strong")!.textContent = st.word;
+			if (!("short" in el.dataset)) el.querySelector("[data-rest]")!.textContent = st.rest && ` · ${st.rest}`;
+		});
+	tick();
+	setInterval(tick, 60_000);
+</script>
+
+<style>
+	.ostatus {
+		font-size: 15px;
+		color: var(--ink-2);
+	}
+
+	.ostatus strong {
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	/* Owner 2026-10-30: "Geöffnet" in green to catch the eye; #137333 keeps ≥ 5.4:1 on the grey cards. */
+	.is-open strong {
+		color: #137333;
+	}
+</style>

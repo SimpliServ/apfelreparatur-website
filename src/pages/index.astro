@@ -10,7 +10,7 @@ import RepairDirectory from "../components/RepairDirectory.astro";
 import DevicePicker from "../components/DevicePicker.astro";
 import { homeFaq, steps, whyCards } from "../lib/copy";
 import { faqLd, localBusinessLd } from "../lib/seo";
-import { business } from "../lib/business";
+import { business, slug } from "../lib/business";
 import { getLocations } from "../lib/mobinil";
 import ModelGrid from "../components/ModelGrid.astro";
 import { loadModels, popular, useHints } from "../lib/devices";
@@ -179,7 +179,7 @@ const chapters = [
 	</section>
 
 	<RepairDirectory title="Alle Reparaturen in Wien.">
-		Ohne Termin an unseren Standorten {places.join(", ").replace(/, ([^,]*)$/, " und $1")}, auch am Wochenende.
+		Ohne Termin an unseren Standorten {places.map((p, i) => <>{i ? (i === places.length - 1 ? " und " : ", ") : ""}<a href={`/kontakt#${slug(p)}`}>{p}</a></>)}, auch am Wochenende.
 	</RepairDirectory>
 
 	<FAQ title="Häufige Fragen." items={homeFaq} />

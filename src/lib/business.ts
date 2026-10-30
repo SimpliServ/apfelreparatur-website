@@ -101,5 +101,31 @@ export const fallbackLocations: Location[] = [
 export const address = `${business.street}, ${business.zip} ${business.city}`;
 export const legalLine = `${business.legalName}, ${address}, ${business.registerNo}, ${business.registerCourt}`;
 
+// Google Maps place of each shop, matched by phone (like the reviews on mobinil.at): the route then ends at the shop, not
+// somewhere in the mall. Wien Hauptbahnhof UG has no Google listing, so it keeps its coordinates.
+const PLACES: Record<string, string> = {
+	"16007306": "ChIJO-ndYjoHbUcRqbUk-eqvvOA",
+	"16991900": "ChIJVU6PLSqvbUcRAvS0bHKY6Qg",
+	"16092366": "ChIJ5W8cypavbUcRGchiDbTv1dA",
+	"224627749": "ChIJ9whzTiobbUcR0s39wmO1WAc",
+};
+const phoneKey = (phone = "") => phone.replace(/\D/g, "").replace(/^(?:00)?43/, "").replace(/^0/, "");
+
+export function routeHref(l: Location) {
+	const place = PLACES[phoneKey(l.phone)];
+	const to = place ? `&destination=${encodeURIComponent(`MobiNil, ${l.street}, ${l.zip} ${l.city}`)}&destination_place_id=${place}` : `&destination=${l.lat},${l.lng}`;
+	return `https://www.google.com/maps/dir/?api=1${to}`;
+}
+
+// Anchors on /kontakt: "Westfield Shopping City Süd, Eingang 4" -> "westfield-shopping-city-sud-eingang-4".
+export const slug = (s: string) =>
+	s
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/^-|-$/g, "");
+export const storeId = (l: Location) => slug(l.venue);
+
 export const telHref = (n: string) => `tel:${n.replace(/[^\d+]/g, "")}`;
 export const whatsappHref = `https://wa.me/${business.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Hallo, ich habe eine Frage")}`;

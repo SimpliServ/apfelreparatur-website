@@ -1,0 +1,65 @@
+---
+import OpenStatus from "./OpenStatus.astro";
+import { routeHref, storeId, type Location } from "../lib/business";
+
+interface Props {
+	stores: Location[];
+}
+const { stores } = Astro.props;
+---
+
+<ul class="slist" role="list">
+	{
+		stores.map((l) => (
+			<li class="slist__item">
+				<a class="slist__name" href={`/kontakt#${storeId(l)}`}>
+					{l.name}
+					<span class="slist__spot">{l.venue.split(", ").slice(1).join(", ")}</span>
+				</a>
+				<OpenStatus hours={l.hours} />
+				<a class="slist__route" href={routeHref(l)} rel="noopener" target="_blank" aria-label={`Route zum Shop: ${l.venue}`}>Route zum Shop</a>
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.slist {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		border-radius: var(--radius);
+		background: var(--gray);
+	}
+
+	.slist__item {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 4px 16px;
+		align-items: center;
+		padding: 14px 20px;
+	}
+
+	.slist__item + .slist__item {
+		border-top: 1px solid var(--line);
+	}
+
+	.slist__name {
+		grid-column: 1 / -1;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.slist__spot {
+		font-weight: 400;
+		color: var(--ink-2);
+	}
+
+	.slist__spot:not(:empty)::before {
+		content: " · ";
+	}
+
+	.slist__route {
+		font-size: 15px;
+	}
+</style>

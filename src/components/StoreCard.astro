@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-iconset/components";
-import type { Location } from "../lib/business";
+import OpenStatus from "./OpenStatus.astro";
+import { routeHref, storeId, type Location } from "../lib/business";
 
 interface Props {
 	store: Location;
@@ -8,12 +9,15 @@ interface Props {
 const { store: l } = Astro.props;
 ---
 
-<li class="card card--gray scard">
+<li class="card card--gray scard" id={storeId(l)}>
 	<p class="scard__venue">{l.venue}</p>
-	<p class="scard__shop">
-		<Icon name="ph:storefront" aria-hidden="true" />
-		Im MobiNil Shop
-	</p>
+	<div class="scard__tags">
+		<p class="scard__shop">
+			<Icon name="ph:storefront" aria-hidden="true" />
+			Im MobiNil Shop
+		</p>
+		<OpenStatus hours={l.hours} short />
+	</div>
 	<p class="muted">
 		{l.street}
 		<br />
@@ -31,7 +35,7 @@ const { store: l } = Astro.props;
 	</dl>
 	<div class="scard__links">
 		{l.phone && <a href={`tel:${l.phone.replace(/\s/g, "")}`}>{l.phone}</a>}
-		<a href={`https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}`} rel="noopener" target="_blank">Route planen</a>
+		<a href={routeHref(l)} rel="noopener" target="_blank">Route zum Shop</a>
 	</div>
 </li>
 
@@ -62,6 +66,22 @@ const { store: l } = Astro.props;
 	.scard__shop :global(svg) {
 		width: 16px;
 		height: 16px;
+	}
+
+	.scard {
+		scroll-margin-top: calc(var(--nav-h) + 24px);
+	}
+
+	.scard__tags {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 6px 14px;
+		margin: 4px 0 12px;
+	}
+
+	.scard__tags .scard__shop {
+		margin: 0;
 	}
 
 	.scard__hours {

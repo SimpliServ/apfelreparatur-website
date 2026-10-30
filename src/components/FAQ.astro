@@ -1,12 +1,23 @@
 ---
+import StoreList from "./StoreList.astro";
+import { getLocations } from "../lib/mobinil";
+
 export type QA = { q: string; a: string };
 
 interface Props {
 	title: string;
 	items: QA[];
 	id?: string;
+	/** Link "unseren Standorten" in the answers and list the stores below them (off on /kontakt, which shows the cards). */
+	stores?: boolean;
 }
-const { title, items, id = "faq" } = Astro.props;
+const { title, items, id = "faq", stores = true } = Astro.props;
+const STORES = /unser(?:en|er) Standort(?:en|e)/;
+const locations = stores && items.some((it) => STORES.test(it.a)) ? await getLocations() : [];
+const split = (a: string) => {
+	const m = locations.length ? a.match(STORES) : null;
+	return m ? [a.slice(0, m.index), m[0], a.slice(m.index! + m[0].length)] : null;
+};
 ---
 
 <section class="faq section" id={id} aria-labelledby={`${id}-h`}>
@@ -20,7 +31,21 @@ const { title, items, id = "faq" } = Astro.props;
 							<h3>{it.q}</h3>
 							<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7.5l6 6 6-6" /></svg>
 						</summary>
-						<p>{it.a}</p>
+						{(() => {
+							const parts = split(it.a);
+							return parts ? (
+								<div class="faq__body">
+									<p>
+										{parts[0]}
+										<a href="/kontakt">{parts[1]}</a>
+										{parts[2]}
+									</p>
+									<StoreList stores={locations} />
+								</div>
+							) : (
+								<p>{it.a}</p>
+							);
+						})()}
 					</details>
 				))
 			}
@@ -86,6 +111,15 @@ const { title, items, id = "faq" } = Astro.props;
 
 	.faq__item[open] svg {
 		transform: rotate(180deg);
+	}
+
+	.faq__body {
+		padding-bottom: 26px;
+		max-width: 62ch;
+	}
+
+	.faq__item .faq__body p {
+		padding: 0 0 16px;
 	}
 
 	.faq__item p {
