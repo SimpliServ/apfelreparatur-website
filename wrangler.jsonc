@@ -26,8 +26,9 @@
 			"bucket_name": "apfelreparatur-website-media",
 		},
 	],
+	// Every 5 min (each run costs ~40 ms CPU); 2-59 keeps minute 17 for the hourly catalogue sync in src/worker.ts.
 	"triggers": {
-		"crons": ["* * * * *"],
+		"crons": ["2-59/5 * * * *"],
 	},
 	"observability": {
 		"logs": {
