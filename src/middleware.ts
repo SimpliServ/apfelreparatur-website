@@ -1,9 +1,11 @@
+import * as workers from "cloudflare:workers";
 import { env } from "cloudflare:workers";
 import { defineMiddleware } from "astro:middleware";
 import { CATALOG_TAG } from "./lib/catalog-sync";
 
 // Workers Cache (wrangler.jsonc "cache") answers public pages before the Worker runs; uncached SSR exceeds the free plan's CPU limit.
-const EDGE_PAGE = "max-age=300, stale-while-revalidate=604800, stale-if-error=604800";
+// Admin writes purge CATALOG_TAG (purgeOnWrite), so the 1 h TTL only bounds edits without a request.
+const EDGE_PAGE = "max-age=3600, stale-while-revalidate=604800, stale-if-error=604800";
 const EDGE_MEDIA = "max-age=604800, stale-if-error=604800";
 const BROWSER_MEDIA = import.meta.env.PROD ? "public, max-age=31536000, immutable" : "public, max-age=86400";
 const NO_STORE = "private, no-store";
@@ -78,6 +80,15 @@ async function complete(res: Response): Promise<Response> {
 	return new Response("Service unavailable", { status: 503, headers: { "cache-control": NO_STORE, "retry-after": "5", "content-type": "text/plain" } });
 }
 
+// Any signed-in write to the EmDash API (content, menus, settings, media, MCP) may change a page.
+function purgeOnWrite(ctx: Ctx, pathname: string, res: Response): void {
+	const method = ctx.request.method;
+	if (method === "GET" || method === "HEAD" || !res.ok || !pathname.startsWith("/_emdash/api/")) return;
+	if (!PERSONAL_COOKIE.test(ctx.request.headers.get("cookie") ?? "") && !ctx.request.headers.has("authorization")) return;
+	const purge = (workers as unknown as { cache?: { purge(o: { tags: string[] }): Promise<unknown> } }).cache?.purge({ tags: [CATALOG_TAG] }).catch(() => {});
+	if (purge) (ctx.locals as { cfContext?: { waitUntil(p: Promise<unknown>): void } }).cfContext?.waitUntil(purge);
+}
+
 export const onRequest =defineMiddleware(async (ctx, next) => {
 	const { pathname, hostname } = ctx.url;
 	if (hostname === "www.apfelreparatur.at") {
@@ -91,7 +102,9 @@ export const onRequest =defineMiddleware(async (ctx, next) => {
 	if (legacy) return new Response(null, { status: 301, headers: { location: legacy, "cache-control": "public, max-age=86400" } });
 	const key = ctx.request.method === "GET" ? mediaKeyOf(ctx.url) : null;
 	if (key) await copyCentralMedia(key).catch(() => {});
-	const out = mutable(await complete(withCache(ctx, pathname, await next())));
+	const res = await next();
+	purgeOnWrite(ctx, pathname, res);
+	const out = mutable(await complete(withCache(ctx, pathname, res)));
 	// Preview hosts (workers.dev) must not compete with apfelreparatur.at in search results.
 	if (hostname !== "apfelreparatur.at" && hostname !== "localhost") out.headers.set("x-robots-tag", "noindex, nofollow");
 	out.headers.set("x-content-type-options", "nosniff");
