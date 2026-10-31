@@ -76,8 +76,8 @@ const detail = (key: ServiceKey): [string, string] | undefined => {
 			<section id="modelle" class="section on-gray" aria-labelledby="models-h">
 				<div class="wrap wrap--xl">
 					<div class="center models__head" data-reveal>
-						<h2 id="models-h" class="t-section">Wählen Sie Ihr {d.key === "mac" ? `${line ? "iMac" : "Mac"} Modell` : d.name}.</h2>
-						<p class="t-lead muted">{d.key === "iphone" ? "Alle Preise auf einen Blick, mit Original Apple Teilen oder als günstigere Alternative." : d.key === "ipad" ? "Alle Preise auf einen Blick, zum Fixpreis je Modell." : "Jedes Modell mit eigener Seite. Den Preis nennen wir Ihnen nach der Diagnose."}</p>
+						<h2 id="models-h" class="t-section">Wählen Sie {de(d.name).ihr} {d.key === "mac" ? `${line ? "iMac" : "Mac"} Modell` : d.name}.</h2>
+						<p class="t-lead muted">{d.key === "iphone" ? "Alle Preise auf einen Blick, mit Original Apple Teilen oder als günstigere Alternative." : d.key === "ipad" ? "Alle Preise auf einen Blick, zum Fixpreis je Modell." : d.key === "apple-watch" ? "Alle Preise auf einen Blick, mit kompatiblen Teilen." : "Jedes Modell mit eigener Seite. Den Preis nennen wir Ihnen nach der Diagnose."}</p>
 					</div>
 					<ModelGrid models={models} grouped rows={2} search={d.key === "mac" ? "Modell oder Modellnummer suchen" : `${d.name} Modell suchen`} />
 				</div>

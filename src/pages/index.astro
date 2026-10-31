@@ -27,6 +27,7 @@ const chapters = [
 	["/mac", "ph:laptop", "Mac"],
 	["/imac", "ph:desktop", "iMac"],
 	["/apple-watch", "ph:watch", "Watch"],
+	["/ankauf", "ph:hand-coins", "Ankauf"],
 	["/datenrettung", "ph:database", "Datenrettung"],
 	["/datenrettung#uebertragung", "ph:arrows-left-right", "Datenübertragung"],
 	["/kontakt", "ph:map-pin", "Standorte"],
@@ -58,7 +59,7 @@ const chapters = [
 		eager
 		photo="hero"
 		eyebrow="Apple Reparatur in Wien"
-		title="Wie am ersten Tag."
+		title={'Apple Reparatur<br /><span style="color: var(--accent)">sofort.</span> Ohne Termin.'}
 		sub={'Premium Reparaturen mit Original Apple Teilen.<a class="fn" href="#fn-1">1</a>'}
 		primary={{ href: "#geraete", label: "Gerät wählen" }}
 		secondary={{ href: "/kontakt", label: "Ohne Termin vorbeikommen" }}
@@ -120,6 +121,7 @@ const chapters = [
 
 	<Tile
 		photo="watch"
+		imgScale={0.8}
 		eyebrow="Apple Watch Reparatur"
 		title="Apple Watch."
 		sub="Display und Akku. Wieder bereit für jeden Tag."
@@ -225,17 +227,29 @@ const chapters = [
 		height: 40px;
 	}
 
+	/* Rounded inset cards, not apple.com's flush squares with thin white gutters (owner 2026-10-28). */
 	.grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 12px;
-		padding: 12px;
+		gap: 24px;
+		max-width: 1440px;
+		margin: 0 auto;
+		padding: 32px 24px;
+	}
+
+	.grid :global(.tile) {
+		border-radius: 28px;
 	}
 
 	@media (max-width: 734px) {
 		.grid {
 			grid-template-columns: 1fr;
-			padding: 12px 0;
+			gap: 16px;
+			padding: 16px;
+		}
+
+		.grid :global(.tile) {
+			border-radius: 22px;
 		}
 	}
 

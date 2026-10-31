@@ -12,6 +12,8 @@ const price = (m: Model, repair: string, quality?: string) => {
 };
 
 const article = (m: Model) => (m.category === "watch" ? "die" : m.category === "mac" ? "den" : "das");
+/** Nominative: "das MacBook", "der iMac", "die Apple Watch". */
+const nom = (m: Model) => (m.category === "watch" ? "die" : m.category === "mac" && !/^MacBook/.test(m.title) ? "der" : "das");
 const dat = (m: Model) => (m.category === "watch" ? "der" : "dem");
 /** "beim iPhone 16" / "bei der Apple Watch Series 9" */
 const bei = (m: Model) => (m.category === "watch" ? `bei der ${m.title}` : `beim ${m.title}`);
@@ -37,7 +39,8 @@ export function modelDescription(m: Model): string {
 		price(m, "backcover") && `Rückglas ${price(m, "backcover")}`,
 		!price(m, "backcover") && price(m, "ladebuchse") && `Ladeanschluss ${price(m, "ladebuchse")}`,
 	].filter(Boolean);
-	return `Was kostet die ${m.title} Reparatur? ${parts.join(", ")}. Premium-Reparatur in Wien ohne Termin, ${g} Monate Garantie.`;
+	const quick = m.category === "mac" ? "" : " Oft in rund 1 Stunde,";
+	return `Was kostet die ${m.title} Reparatur? ${parts.join(", ")}.${quick} ohne Termin in Wien, ${g} Monate Garantie.`.replace(". ohne", ". Ohne");
 }
 
 export function modelSub(m: Model): string {
@@ -73,6 +76,77 @@ export function modelFaq(m: Model): QA[] {
 	out.push({ q: "Welche Garantie bekomme ich?", a: `${g} Monate auf das getauschte Teil und unsere Arbeit, an allen Standorten. Ihre gesetzlichen Gewährleistungsrechte bleiben bestehen.` });
 	out.push({ q: "Brauche ich einen Termin?", a: "Nein. Kommen Sie ohne Termin an einen unserer Standorte in Wien und Umgebung, auch am Wochenende." });
 	return out;
+}
+
+export type RepairDetail = { id: string; repair: string; title: string; text: string; price: string | null };
+
+/** One visible paragraph per main repair (symptoms, parts, duration, price), anchored for search-result jump links. */
+export function repairDetails(m: Model): RepairDetail[] {
+	const t = m.title;
+	const has = (k: string) => m.repairs.some((r) => r.repair === k) || (m.category === "mac" || m.category === "watch" ? ["display", "akku", ...(m.category === "mac" ? ["tastatur"] : [])].includes(k) : false);
+	const parts = (k: string) => {
+		const o = price(m, k, "original"), c = price(m, k, "drittanbieter");
+		if (o && c) return ` Sie wählen zwischen Original Apple Teil (${o}) und kompatiblem Teil (${c}).`;
+		const p = price(m, k);
+		return p ? ` ${p.startsWith("ab ") ? "Preis" : "Fixpreis"}: ${p}.` : " Den Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur.";
+	};
+	const quick = m.category === "mac" ? "" : " Ist das Teil lagernd, ist die Reparatur oft in rund einer Stunde erledigt.";
+	const health =
+		m.category === "smartphone"
+			? " oder zeigt „Einstellungen > Batterie > Batteriezustand“ unter 80 %"
+			: m.category === "mac"
+				? " oder meldet macOS „Service empfohlen“ beim Batteriezustand"
+				: m.category === "watch"
+					? " oder zeigt die Watch beim Batteriezustand unter 80 %"
+					: "";
+	const out: (RepairDetail | false)[] = [
+		has("display") && {
+			id: "display-reparatur",
+			repair: "display",
+			title: `${t} Display Reparatur`,
+			text:
+				m.category === "mac"
+					? `Gesprungenes Glas, Streifen, dunkle Flecken oder ein flackerndes Bild: Dann tauschen wir das Display Ihres ${t}.${parts("display")} Danach testen wir Bild, Helligkeit und Kamera.`
+					: `Gesprungenes Glas, Streifen, dunkle Flecken oder ein Touch, der nicht mehr reagiert: Dann tauschen wir das Display ${m.category === "watch" ? "Ihrer" : "Ihres"} ${t}.${parts("display")}${quick} Danach testen wir Touch, Helligkeit und Sensoren.`,
+			price: price(m, "display"),
+		},
+		has("akku") && {
+			id: "batterietausch",
+			repair: "akku",
+			title: `${t} Batterie tauschen (Akkutausch)`,
+			text: `Hält der Akku nicht mehr durch den Tag, schaltet sich ${nom(m)} ${t} bei Restladung ab${health}, ist eine neue Batterie fällig.${parts("akku")}${quick}`,
+			price: price(m, "akku"),
+		},
+		has("backcover") && {
+			id: "rueckglas-reparatur",
+			repair: "backcover",
+			title: `${t} Rückglas tauschen`,
+			text: `Ein gesprungenes Rückglas splittert weiter und lässt Feuchtigkeit ins Gerät. Wir ersetzen es ${bei(m)} und prüfen danach kabelloses Laden.${parts("backcover")}`,
+			price: price(m, "backcover"),
+		},
+		has("ladebuchse") && {
+			id: "ladeanschluss-reparatur",
+			repair: "ladebuchse",
+			title: `${t} lädt nicht: Ladeanschluss`,
+			text: `Lädt ${nom(m)} ${t} nur, wenn das Kabel in einem bestimmten Winkel steckt, oder gar nicht mehr, tauschen wir den Ladeanschluss.${parts("ladebuchse")}`,
+			price: price(m, "ladebuchse"),
+		},
+		has("kamera") && {
+			id: "kamera-reparatur",
+			repair: "kamera",
+			title: `${t} Kamera Reparatur`,
+			text: `Unscharfe Fotos, Flecken im Bild, ein wackelnder Fokus oder ein gesprungenes Kameraglas: Wir tauschen die Kamera ${bei(m)}.${parts("kamera")}`,
+			price: price(m, "kamera"),
+		},
+		has("tastatur") && {
+			id: "tastatur-reparatur",
+			repair: "tastatur",
+			title: `${t} Tastatur Reparatur`,
+			text: `Klemmende Tasten, doppelte Anschläge oder Tasten ohne Reaktion: Wir prüfen die Tastatur ${bei(m)} und tauschen sie bei Bedarf.${parts("tastatur")}`,
+			price: price(m, "tastatur"),
+		},
+	];
+	return out.filter((x): x is RepairDetail => !!x);
 }
 
 /** Up to three headline prices for the hero. */

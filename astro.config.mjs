@@ -104,6 +104,7 @@ export default defineConfig({
 					"tag",
 					"calendar-x",
 					"info",
+					"hand-coins",
 				],
 			},
 		}),

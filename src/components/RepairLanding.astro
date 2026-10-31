@@ -33,6 +33,7 @@ const cell = (rows: { repair: string; quality?: string | null; price: number; pr
 	return r ? (r.price_from ? "ab " : "") + euro(r.price) : "";
 };
 const priced = all.filter((m) => m.repairs.some((r) => r.repair === rk));
+const anyFrom = priced.some((m) => m.repairs.some((r) => r.repair === rk && r.price_from));
 const split = priced.some((m) => m.repairs.some((r) => r.repair === rk && r.quality === "drittanbieter"));
 const description = c.desc(dn);
 const siblings = repairPages.filter((p) => p.device === page.device && p.path !== page.path);
@@ -108,7 +109,7 @@ const siblings = repairPages.filter((p) => p.device === page.device && p.path !=
 		<div class="wrap wrap--xl">
 			<div class="mhead" data-reveal>
 				<h2 id="models-h" class="t-section">{priced.length ? `${c.label}: Preise für jedes ${dn}.` : `${c.label} für jedes ${dn}.`}</h2>
-				<p class="t-lead muted">{priced.length ? "Fixpreise je Modell. Wählen Sie Ihr Modell für alle Reparaturen und Details." : "Wählen Sie Ihr Modell. Den Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur."}</p>
+				<p class="t-lead muted">{priced.length ? `${anyFrom ? "Preise" : "Fixpreise"} je Modell. Wählen Sie Ihr Modell für alle Reparaturen und Details.` : "Wählen Sie Ihr Modell. Den Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur."}</p>
 			</div>
 			{
 				priced.length > 0 ? (

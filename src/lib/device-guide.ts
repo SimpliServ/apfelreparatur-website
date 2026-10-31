@@ -234,7 +234,7 @@ export const guides: Record<GuideKey, Guide> = {
 	},
 	"apple-watch": {
 		intro:
-			"Ein Sprung im Display, ein Touchscreen, der nicht mehr reagiert, oder eine Batterie, die nicht mehr bis zum Abend hält: Wir reparieren Apple Watch Series, SE und Ultra in Wien, ohne Termin. Den Preis nennen wir Ihnen nach der Diagnose, bevor wir beginnen.",
+			"Ein Sprung im Display, ein Touchscreen, der nicht mehr reagiert, oder eine Batterie, die nicht mehr bis zum Abend hält: Wir reparieren Apple Watch Series, SE und Ultra in Wien, ohne Termin. Display ab 149 € (Ultra ab 179 €), Batterie ab 99 €, jeweils mit kompatiblem Teil. Den Endpreis nennen wir Ihnen, bevor wir beginnen.",
 		topics: [
 			{
 				h: "Display: Glas gesprungen oder Touch tot.",

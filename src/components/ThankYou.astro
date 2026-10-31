@@ -1,0 +1,130 @@
+---
+import { Icon } from "astro-iconset/components";
+
+interface Props {
+	title: string;
+	lead: string;
+	steps: string[];
+	shops: string;
+	ctas: { href: string; label: string }[];
+}
+const { title, lead, steps, shops, ctas } = Astro.props;
+---
+<section class="ty section">
+	<div class="wrap ty__wrap" data-reveal>
+		<span class="ty__badge"><Icon name="ph:check" aria-hidden="true" /></span>
+		<h1 class="t-display ty__title">{title}</h1>
+		<p class="ty__lead">{lead}</p>
+		<ol class="ty__steps" role="list">
+			{
+				steps.map((s, i) => (
+					<li>
+						<span class="ty__num" aria-hidden="true">{i + 1}</span>
+						<span>{s}</span>
+					</li>
+				))
+			}
+		</ol>
+		<div class="btn-row ty__ctas">
+			{ctas.map((c, i) => <a class:list={["btn", i > 0 && "btn--ghost"]} href={c.href}>{c.label}</a>)}
+		</div>
+		<p class="ty__powered">
+			<span>powered by</span>
+			<img src="/img/mobinil-logo.png" width="62" height="24" alt="MobiNil" loading="lazy" decoding="async" />
+		</p>
+		<p class="ty__shops">{shops}</p>
+	</div>
+</section>
+
+<style>
+	.ty {
+		min-height: 70vh;
+		display: flex;
+		align-items: center;
+	}
+	.ty__wrap {
+		max-width: 560px;
+		text-align: center;
+	}
+	.ty__badge {
+		display: inline-grid;
+		place-items: center;
+		width: 56px;
+		height: 56px;
+		border-radius: 50%;
+		background: var(--ok);
+		color: #fff;
+		font-size: 26px;
+		margin-bottom: 20px;
+	}
+	.ty__title {
+		margin: 0;
+	}
+	.ty__lead {
+		margin: 12px auto 0;
+		max-width: 40ch;
+		font-size: 19px;
+		line-height: 1.45;
+		color: var(--ink-2);
+	}
+	.ty__steps {
+		list-style: none;
+		margin: 32px 0 0;
+		padding: 8px 24px;
+		border-radius: var(--radius);
+		background: var(--gray);
+		text-align: left;
+	}
+	.ty__steps li {
+		display: grid;
+		grid-template-columns: 28px minmax(0, 1fr);
+		gap: 14px;
+		align-items: start;
+		padding: 16px 0;
+		font-size: 16px;
+		line-height: 1.45;
+		color: var(--ink);
+	}
+	.ty__steps li + li {
+		border-top: 1px solid var(--line);
+	}
+	.ty__num {
+		display: grid;
+		place-items: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 50%;
+		background: var(--paper);
+		color: var(--accent);
+		font-size: 14px;
+		font-weight: 600;
+	}
+	.ty__ctas {
+		justify-content: center;
+		margin-top: 28px;
+	}
+	.ty__powered {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		margin: 40px 0 0;
+		font-size: 13px;
+		color: var(--muted);
+	}
+	.ty__powered img {
+		display: block;
+	}
+	.ty__shops {
+		margin: 6px 0 0;
+		font-size: 13px;
+		color: var(--muted);
+	}
+	@media (max-width: 600px) {
+		.ty__steps {
+			padding: 4px 18px;
+		}
+		.ty__lead {
+			font-size: 17px;
+		}
+	}
+</style>

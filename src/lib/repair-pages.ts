@@ -26,11 +26,13 @@ const termin = (n: string, label: string): QA => ({
 // iPad and Apple Watch parts are not advertised as Original Apple (see content.ts), so copy only claims them for iPhone and Mac.
 const original = (n: string) => (n === "iPad" || n === "Apple Watch" ? "" : ", mit Original Apple Teilen");
 
-// iPhone and iPad have fixed prices per model (CMS price list); Mac and Watch are priced after diagnosis.
+// iPhone and iPad have fixed prices per model (CMS price list), Watch has "ab" prices, Mac is priced after diagnosis.
 const priceAnswer = (n: string) =>
 	n === "iPhone" || n === "iPad"
 		? `Das hängt vom Modell ab. Die Fixpreise für jedes ${n} Modell stehen in der Preistabelle auf dieser Seite, ohne Arbeitszeit-Zuschlag. Repariert wird erst nach Ihrer Zustimmung.`
-		: "Das hängt vom Modell und vom Schaden ab. Den genauen Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur. Repariert wird erst nach Ihrer Zustimmung.";
+		: n === "Apple Watch"
+			? "Die Preise je Modell stehen in der Preistabelle auf dieser Seite. „ab“-Preise hängen vom genauen Schaden ab, den Endpreis nennen wir Ihnen vor der Reparatur. Repariert wird erst nach Ihrer Zustimmung."
+			: "Das hängt vom Modell und vom Schaden ab. Den genauen Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur. Repariert wird erst nach Ihrer Zustimmung.";
 
 const common = (n: string, work: string) =>
 	[

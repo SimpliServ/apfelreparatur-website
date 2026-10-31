@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-iconset/components";
+import ThankYou from "../components/ThankYou.astro";
 import Base from "../layouts/Base.astro";
 import { devices } from "../lib/content";
 import { inquiry } from "../lib/inquiry-copy";
@@ -66,19 +67,7 @@ const visible = issueOptions[values.device] ?? allIssues;
 >
 	{
 		sent ? (
-			<section class="done section">
-				<div class="wrap wrap--narrow center" data-reveal>
-					<Icon name="ph:check-circle-fill" class="done__icon" aria-hidden="true" />
-					<h1 class="t-display">Danke.</h1>
-					<p class="t-hero-sub done__sub">Ihre Nachricht ist bei uns. Wir melden uns mit einer ersten Einschätzung. Sie können jederzeit ohne Termin an einem unserer Standorte vorbeikommen.</p>
-					<p class="muted">powered by MobiNil · Unsere Standorte sind die MobiNil Shops.</p>
-					<p class="muted">Eine Bestätigung ist unterwegs in Ihr Postfach.</p>
-					<div class="btn-row done__ctas">
-						<a class="btn" href="/">Zur Startseite</a>
-						<a class="btn btn--ghost" href="/reparatur-anfragen">Weitere Nachricht</a>
-					</div>
-				</div>
-			</section>
+			<ThankYou title="Danke." lead="Ihre Nachricht ist bei uns. Eine Bestätigung ist unterwegs in Ihr Postfach." steps={inquiry.customer.steps} shops="Unsere Standorte sind die MobiNil Shops." ctas={[{ href: "/kontakt", label: "Standorte ansehen" }, { href: "/", label: "Zur Startseite" }]} />
 		) : (
 			<>
 				<header class="head">
@@ -542,27 +531,9 @@ const visible = issueOptions[values.device] ?? allIssues;
 		height: 20px;
 	}
 
-	.done {
-		min-height: 70vh;
-		display: flex;
-		align-items: center;
-	}
 
-	.done__icon {
-		width: 64px;
-		height: 64px;
-		color: var(--ok);
-		margin: 0 auto 20px;
-	}
 
-	.done__sub {
-		margin: 18px auto 12px;
-		max-width: 26ch;
-	}
 
-	.done__ctas {
-		margin-top: 32px;
-	}
 
 	@media (max-width: 900px) {
 		.row {

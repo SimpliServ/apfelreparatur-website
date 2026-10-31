@@ -10,7 +10,7 @@ import Closing from "./Closing.astro";
 import { business, telHref } from "../lib/business";
 import { devices } from "../lib/content";
 import { BASE_REPAIRS, DEVICE_OF, euro, imgSrc, modelPath, priceGroups, type Model } from "../lib/devices";
-import { headline, modelDescription, modelFaq, modelSub, modelTitle } from "../lib/model-copy";
+import { headline, modelDescription, modelFaq, modelSub, modelTitle, repairDetails } from "../lib/model-copy";
 import { repairPages } from "../lib/repair-pages";
 import { breadcrumbLd, faqLd, modelServiceLd, organizationLd, SITE } from "../lib/seo";
 import { qualityLabels, repairLabels } from "../i18n/ui";
@@ -38,6 +38,11 @@ const heads = headline(m);
 const title = modelTitle(m);
 const description = modelDescription(m);
 const faq = modelFaq(m);
+const details = repairDetails(m);
+// Sections after the grey price list alternate white/grey.
+const teile = hasCompat && hasOrig;
+const after = (n: number) => (n % 2 === 0 ? "on-gray" : "");
+const nInkl = 1 + (details.length ? 1 : 0) + (teile ? 1 : 0);
 const img = m.image?.meta?.storageKey || m.image?.src ? m.image : null;
 const caption = typeof img?.meta?.caption === "string" ? img.meta.caption : "";
 const credit = caption && !/\b(?:CC0|Public domain)\b/i.test(caption) ? caption : "";
@@ -47,7 +52,7 @@ const updated = m.updatedAt ? new Date(m.updatedAt).toLocaleDateString("de-AT", 
 const service = { display: "display", akku: "akku", backcover: "rueckglas", kamera: "kamera", ladebuchse: "ladebuchse", tastatur: "tastatur" } as Record<string, string>;
 const landing = (repair: string) => repairPages.find((p) => p.device === key && p.service === service[repair]);
 const ICON: Record<string, string> = {
-	display: "ph:device-mobile", aussendisplay: "ph:device-mobile", akku: "ph:battery-full", backcover: "ph:cards", kamera: "ph:camera",
+	display: m.category === "mac" ? (/^MacBook/.test(m.title) ? "ph:laptop" : "ph:desktop") : m.category === "tablet" ? "ph:device-tablet" : m.category === "watch" ? "ph:watch" : "ph:device-mobile", aussendisplay: "ph:device-mobile", akku: "ph:battery-full", backcover: "ph:cards", kamera: "ph:camera",
 	"selfie-kamera": "ph:device-mobile-camera", "face-id": "ph:user-focus", ladebuchse: "ph:plug", lautsprecher: "ph:speaker-high",
 	"power-button": "ph:power", "home-button": "ph:circle", sim: "ph:sim-card", kopfhoererbuchse: "ph:headphones", tastatur: "ph:keyboard",
 	trackpad: "ph:cursor-click", ssd: "ph:hard-drives", datenrettung: "ph:database", datenuebertragung: "ph:arrows-left-right",
@@ -61,7 +66,7 @@ const included = [
 	{ icon: "ph:lock-simple", title: "Daten bleiben privat", text: "Für die Reparatur brauchen wir keinen Zugriff auf Fotos oder Nachrichten." },
 ];
 const offers = m.repairs.map((r) => ({ name: [repairLabels.de[r.repair] ?? r.repair, partLabel(r.quality)].filter(Boolean).join(", "), price: r.price, from: !!r.price_from }));
-const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOrig ? [["#teile", "Original oder kompatibel"] as [string, string]] : []), ["#inklusive", "Inklusive"], ["#faq", "Fragen"]];
+const lnav: [string, string][] = [["#preise", "Preise"], ...(details.length ? [["#reparaturen", "Reparaturen"] as [string, string]] : []), ...(hasCompat && hasOrig ? [["#teile", "Original oder kompatibel"] as [string, string]] : []), ["#inklusive", "Inklusive"], ["#faq", "Fragen"]];
 ---
 
 <Base
@@ -128,6 +133,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 				<ul class="mhero__ticks" role="list">
 					<li><Icon name="ph:check" aria-hidden="true" />{business.warrantyMonths} Monate Garantie</li>
 					<li><Icon name="ph:check" aria-hidden="true" />Ohne Termin</li>
+					{m.category !== "mac" && <li><Icon name="ph:check" aria-hidden="true" />Oft in 1 Stunde</li>}
 					<li><Icon name="ph:check" aria-hidden="true" />Preis vorab</li>
 				</ul>
 			</div>
@@ -138,7 +144,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 		<div class="wrap wrap--xl">
 			<div class="phead" data-reveal>
 				<h2 id="preise-h" class="t-section">{priced ? `Preise für ${m.category === "watch" ? "Ihre" : "Ihr"} ${m.title}.` : `Was wir ${m.category === "watch" ? "an Ihrer" : "an Ihrem"} ${m.title} reparieren.`}</h2>
-				<p class="t-lead muted">{priced ? `Fixpreise je Reparatur${updated ? `, Stand ${updated}` : ""}.` : "Den Preis nennen wir Ihnen nach der Diagnose, bevor wir reparieren."}</p>
+				<p class="t-lead muted">{priced ? `${m.category === "watch" ? "Preise" : "Fixpreise"} je Reparatur${updated ? `, Stand ${updated}` : ""}.` : "Den Preis nennen wir Ihnen nach der Diagnose, bevor wir reparieren."}</p>
 			</div>
 			<ul class="plist" role="list">
 				{
@@ -234,8 +240,33 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 	</section>
 
 	{
+		details.length > 0 && (
+			<section id="reparaturen" class="section" aria-labelledby="rep-h">
+				<div class="wrap wrap--xl">
+					<h2 id="rep-h" class="t-section phead" data-reveal>{m.title} Reparaturen.<br /><span class="muted">Woran Sie den Schaden erkennen.</span></h2>
+					<div class="rdet" style={`--cols:${details.length % 3 === 0 || details.length > 4 ? 3 : 2}`}>
+						{details.map((x, i) => (
+							<article id={x.id} class="rdet__item" data-reveal style={`--i:${i % 2}`}>
+								<Icon name={ICON[x.repair] ?? "ph:wrench"} aria-hidden="true" class="icon-lg" />
+								<h3>{x.title}</h3>
+								<p class="muted">{x.text}</p>
+								{landing(x.repair) && (
+									<a class="more" href={landing(x.repair)!.path}>
+										{d.name} {landing(x.repair)!.copy.label}
+										<Icon name="ph:caret-right" aria-hidden="true" />
+									</a>
+								)}
+							</article>
+						))}
+					</div>
+				</div>
+			</section>
+		)
+	}
+
+	{
 		hasCompat && hasOrig && (
-			<section id="teile" class="section" aria-labelledby="teile-h">
+			<section id="teile" class:list={["section", after(details.length ? 2 : 1)]} aria-labelledby="teile-h">
 				<div class="wrap wrap--xl">
 					<div class="phead center" data-reveal>
 						<h2 id="teile-h" class="t-section">Original oder kompatibel.<br /><span class="muted">Sie haben die Wahl.</span></h2>
@@ -269,7 +300,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 		)
 	}
 
-	<section id="inklusive" class:list={["section", { "on-gray": hasCompat && hasOrig }]} aria-labelledby="inkl-h">
+	<section id="inklusive" class:list={["section", after(nInkl)]} aria-labelledby="inkl-h">
 		<div class="wrap wrap--xl">
 			<h2 id="inkl-h" class="t-section phead" data-reveal>Bei jeder Reparatur inklusive.</h2>
 			<ul class="incl" role="list">
@@ -288,7 +319,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 
 	{
 		siblings.length > 0 && (
-			<section class:list={["section", { "on-gray": !(hasCompat && hasOrig) }]} aria-labelledby="sib-h">
+			<section class:list={["section", after(nInkl + 1)]} aria-labelledby="sib-h">
 				<div class="wrap wrap--xl">
 					<div class="sibhead" data-reveal>
 						<h2 id="sib-h" class="t-title">{m.series && m.series !== m.title ? `Weitere Modelle: ${m.series}` : `Weitere ${d.name} Modelle`}</h2>
@@ -674,6 +705,32 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 		transform: translateY(2px);
 	}
 
+	.rdet {
+		display: grid;
+		grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+		gap: clamp(28px, 4vw, 56px) clamp(32px, 5vw, 80px);
+	}
+
+	.rdet :global(svg) {
+		color: var(--accent);
+	}
+
+	.rdet__item h3 {
+		margin: 14px 0 8px;
+		font-size: 21px;
+		font-weight: 600;
+	}
+
+	.rdet__item p {
+		max-width: 60ch;
+	}
+
+	.rdet__item .more {
+		display: inline-flex;
+		margin-top: 12px;
+		font-size: 15px;
+	}
+
 	.incl {
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -703,6 +760,10 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 	}
 
 	@media (max-width: 1000px) {
+		.rdet {
+			grid-template-columns: 1fr 1fr;
+		}
+
 		.plist {
 			grid-template-columns: 1fr 1fr;
 		}
@@ -757,6 +818,7 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(hasCompat && hasOri
 		}
 
 		.plist,
+		.rdet,
 		.parts,
 		.incl {
 			grid-template-columns: 1fr;

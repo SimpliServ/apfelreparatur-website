@@ -15,8 +15,10 @@ interface Props {
 	heading?: "h1" | "h2" | "h3";
 	eager?: boolean;
 	primaryLast?: boolean;
+	/** Shrinks a seamless product shot, e.g. 0.8 = 20 % smaller. */
+	imgScale?: number;
 }
-const { title, sub, eyebrow, photo, alt, dark = false, half = false, primary, secondary, heading = "h2", eager = false, primaryLast = false } = Astro.props;
+const { title, sub, eyebrow, photo, alt, dark = false, half = false, primary, secondary, heading = "h2", eager = false, primaryLast = false, imgScale = 1 } = Astro.props;
 const H = heading;
 const seamless = !dark && "seamless" in photos[photo];
 const p = photos[photo];
@@ -29,7 +31,7 @@ const [top, bot] = "box" in p ? p.box : [0, 1];
 			heading === "h1" && eyebrow ? (
 				<>
 					<h1 class="tile__eyebrow">{eyebrow}</h1>
-					<p class="tile__title t-hero">{title}</p>
+					<p class="tile__title t-hero" set:html={title} />
 				</>
 			) : (
 				<>
@@ -54,7 +56,7 @@ const [top, bot] = "box" in p ? p.box : [0, 1];
 		}
 		<slot />
 	</div>
-	<div class:list={["tile__media", heading === "h1" ? "settle sd-drift" : "sd-zoom"]} style={`--ar:${p.h / p.w};--top:${top};--bot:${bot}`}>
+	<div class:list={["tile__media", heading === "h1" ? "settle sd-drift" : "sd-zoom"]} style={`--ar:${p.h / p.w};--top:${top};--bot:${bot};--s:${imgScale}`}>
 		<Pic name={photo} alt={alt} sizes={half ? "(max-width: 833px) 100vw, 50vw" : "100vw"} eager={eager} />
 	</div>
 </section>
@@ -181,7 +183,7 @@ const [top, bot] = "box" in p ? p.box : [0, 1];
 	}
 
 	.tile.tile--seamless:not(.tile--hero) .tile__media :global(img) {
-		--iw: min(var(--k) * 100cqw, 100cqh / ((var(--bot) - var(--top)) * var(--ar)));
+		--iw: calc(var(--s, 1) * min(var(--k) * 100cqw, 100cqh / ((var(--bot) - var(--top)) * var(--ar))));
 		position: absolute;
 		left: 50%;
 		bottom: calc(var(--iw) * var(--ar) * (var(--bot) - 1));
