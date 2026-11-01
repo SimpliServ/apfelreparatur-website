@@ -13,13 +13,12 @@ interface Props {
 }
 const { models, id, title, sell = false } = Astro.props;
 
-// Card photo = a catalogue model shot; Watches have none yet, so they fall back to the Pic photo.
-// fit = [width, left, top] in % of the tile, measured from each shot's product bounds so every
-// device fits the same centred 64 % box (the flat Mac 80 % wide). Re-measure when a photo changes.
+// Card photo = a catalogue model shot (cropped tight in MobiNil), contained in one centred box so
+// tall and flat devices look equally big. Watches have none yet: the Pic photo, placed by fit = [width, left, top] %.
 const devices = [
-	{ key: "iphone", label: "iPhone", slug: "iphone-17-pro", fit: [33.7, 33.2, 16.7] },
-	{ key: "ipad", label: "iPad", slug: "ipad-air-11-m3-2025", fit: [52.9, 23.6, 14.9] },
-	{ key: "mac", label: "Mac", slug: "macbook-air-13-m2-2022", fit: [109.3, -6.8, 11.6] },
+	{ key: "iphone", label: "iPhone", slug: "iphone-17-pro" },
+	{ key: "ipad", label: "iPad", slug: "ipad-air-11-m3-2025" },
+	{ key: "mac", label: "Mac", slug: "macbook-air-13-m2-2022" },
 	{ key: "apple-watch", label: "Watch", slug: "", fit: [166.2, -33.7, -8.5] },
 ].map((d) => {
 	const m = models.find((x) => x.slug === d.slug);
@@ -36,7 +35,7 @@ const devices = [
 				devices.map((d) => (
 					<li>
 						<a class="pcard" href={d.href}>
-							<span class="pcard__img" style={`--w:${d.fit[0]}%;--l:${d.fit[1]}%;--t:${d.fit[2]}%`}>
+							<span class={d.image ? "pcard__img pcard__img--fit" : "pcard__img"} style={d.fit && `--w:${d.fit[0]}%;--l:${d.fit[1]}%;--t:${d.fit[2]}%`}>
 								{d.image ? (
 									<Image image={d.image as never} alt="" sizes="(max-width: 734px) 45vw, 280px" placeholder={false} />
 								) : (
@@ -125,6 +124,13 @@ const devices = [
 		width: var(--w);
 		max-width: none;
 		height: auto;
+	}
+
+	.pcard__img--fit :global(img) {
+		inset: 15% 8%;
+		width: 84%;
+		height: 70%;
+		object-fit: contain;
 	}
 
 	.pcard__label {
