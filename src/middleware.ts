@@ -4,9 +4,10 @@ import { defineMiddleware } from "astro:middleware";
 import { CATALOG_TAG } from "./lib/catalog-sync";
 
 // Workers Cache (wrangler.jsonc "cache") answers public pages before the Worker runs; uncached SSR exceeds the free plan's CPU limit.
-// Admin writes purge CATALOG_TAG (purgeOnWrite), so the 1 h TTL only bounds edits without a request.
-const EDGE_PAGE = "max-age=3600, stale-while-revalidate=604800, stale-if-error=604800";
-const EDGE_MEDIA = "max-age=604800, stale-if-error=604800";
+// Admin writes, catalogue changes and new deploys purge CATALOG_TAG, so the 1 day TTL only bounds edits without a
+// request. Shorter TTLs re-render rarely visited pages on nearly every visit (CPU).
+const EDGE_PAGE = "max-age=86400, stale-while-revalidate=604800, stale-if-error=604800";
+const EDGE_MEDIA = "max-age=2592000, stale-while-revalidate=2592000, stale-if-error=2592000";
 const BROWSER_MEDIA = import.meta.env.PROD ? "public, max-age=31536000, immutable" : "public, max-age=86400";
 const NO_STORE = "private, no-store";
 const PERSONAL_COOKIE = /(?:^|;\s*)(?:astro-session|emdash-edit-mode)=/;
