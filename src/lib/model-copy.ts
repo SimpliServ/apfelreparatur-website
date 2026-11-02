@@ -70,7 +70,7 @@ export function modelFaq(m: Model): QA[] {
 		out.push({ q: `Woran erkenne ich, ob ich ${article(m)} ${m.title} habe?`, a: `Im Apple Menü unter „Über diesen Mac“ stehen Modell und Jahr.${m.model_numbers ? ` Die Modellnummer ${m.model_numbers} finden Sie außerdem klein gedruckt auf der Unterseite des Geräts.` : ""}` });
 		out.push({ q: "Bleiben meine Daten bei der Reparatur erhalten?", a: "Bei Display, Batterie und Tastatur bleibt die SSD unberührt. Startet Ihr Mac nicht mehr, hilft unsere Datenrettung." });
 	} else {
-		out.push({ q: `Wie lange dauert die Reparatur ${bei(m)}?`, a: "Ist das Teil lagernd, ist ein Display- oder Batterietausch oft in rund einer Stunde erledigt. Sonst nennen wir Ihnen die Dauer vorab." });
+		out.push({ q: `Wie lange dauert die Reparatur ${bei(m)}?`, a: "Ein Display- oder Batterietausch ist oft in rund einer Stunde erledigt. Bei aufwendigeren Reparaturen nennen wir Ihnen die Dauer vorab." });
 		out.push({ q: "Bleiben meine Daten erhalten?", a: `Ja, bei Display, Batterie und Rückglas bleiben Ihre Daten auf ${dat(m)} ${m.title}.` });
 	}
 	out.push({ q: "Welche Garantie bekomme ich?", a: `${g} Monate auf das getauschte Teil und unsere Arbeit, an allen Standorten. Ihre gesetzlichen Gewährleistungsrechte bleiben bestehen.` });
@@ -90,7 +90,7 @@ export function repairDetails(m: Model): RepairDetail[] {
 		const p = price(m, k);
 		return p ? ` ${p.startsWith("ab ") ? "Preis" : "Fixpreis"}: ${p}.` : " Den Preis nennen wir Ihnen nach der Diagnose, vor der Reparatur.";
 	};
-	const quick = m.category === "mac" ? "" : " Ist das Teil lagernd, ist die Reparatur oft in rund einer Stunde erledigt.";
+	const quick = m.category === "mac" ? "" : " Die Reparatur ist oft in rund einer Stunde erledigt.";
 	const health =
 		m.category === "smartphone"
 			? " oder zeigt „Einstellungen > Batterie > Batteriezustand“ unter 80 %"

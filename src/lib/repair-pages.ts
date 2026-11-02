@@ -59,7 +59,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		steps: (n) => common(n, "Wir tauschen das Displaymodul, setzen es staubfrei ein und prüfen Helligkeit, Farben und Touch."),
 		faq: (n) => [
 			{ q: `Was kostet eine ${n} Display Reparatur in Wien?`, a: priceAnswer(n) },
-			{ q: `Wie lange dauert der Displaytausch ${de(n).beim} ${n}?`, a: "Ist das Display lagernd, ist der Tausch oft in rund einer Stunde erledigt. Sonst nennen wir Ihnen die Dauer vorab." },
+			{ q: `Wie lange dauert der Displaytausch ${de(n).beim} ${n}?`, a: "Der Tausch ist oft in rund einer Stunde erledigt. Bei aufwendigeren Reparaturen nennen wir Ihnen die Dauer vorab." },
 			{ q: "Bleiben meine Daten beim Displaytausch erhalten?", a: "Ja, beim Displaytausch bleiben Ihre Daten auf dem Gerät." },
 			{ q: "Verwenden Sie ein Original Apple Display?", a: "Ja, sofern Apple das Display für Ihr Modell bereitstellt. Sonst besprechen wir die Alternative vorher mit Ihnen." },
 			n === "iPhone"
@@ -85,7 +85,7 @@ const COPY: Partial<Record<ServiceKey, Copy>> = {
 		faq: (n) => [
 			{ q: `Was kostet ein ${n} Akkutausch in Wien?`, a: priceAnswer(n) },
 			{ q: "Wann sollte ich den Akku tauschen?", a: "Wenn die maximale Kapazität deutlich gesunken ist, das System einen Service empfiehlt oder das Gerät unerwartet ausgeht." },
-			{ q: `Wie lange dauert ein Akkutausch ${de(n).beim} ${n}?`, a: "Ist der Akku lagernd, oft rund eine Stunde. Sonst nennen wir Ihnen die Dauer vorab." },
+			{ q: `Wie lange dauert ein Akkutausch ${de(n).beim} ${n}?`, a: "Oft in rund einer Stunde. Bei aufwendigeren Reparaturen nennen wir Ihnen die Dauer vorab." },
 			...(n === "iPhone"
 				? [{ q: "Wo sehe ich den Batteriezustand meines iPhone?", a: "Unter Einstellungen › Batterie › Batteriezustand. Liegt die maximale Kapazität deutlich unter 80 % oder empfiehlt iOS einen Service, lohnt sich ein neuer Akku." }]
 				: n === "MacBook"

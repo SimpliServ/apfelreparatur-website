@@ -14,7 +14,7 @@ export type Guide = {
 export const guides: Record<GuideKey, Guide> = {
 	iphone: {
 		intro:
-			"Gesprungenes Display, schwache Batterie oder ein iPhone, das nicht mehr lädt: Die meisten Schäden beheben wir in Wien ohne Termin, oft in rund einer Stunde, wenn das Teil lagernd ist. Hier steht, was Sie vorab wissen sollten: welche Teile wir verbauen, was mit Ihren Daten passiert und wie Sie Ihr iPhone vorbereiten.",
+			"Gesprungenes Display, schwache Batterie oder ein iPhone, das nicht mehr lädt: Die meisten Schäden beheben wir in Wien ohne Termin, oft in rund einer Stunde. Hier steht, was Sie vorab wissen sollten: welche Teile wir verbauen, was mit Ihren Daten passiert und wie Sie Ihr iPhone vorbereiten.",
 		topics: [
 			{
 				h: "Original Apple Teil oder kompatibles Teil?",
@@ -66,7 +66,7 @@ export const guides: Record<GuideKey, Guide> = {
 		faq: [
 			{ q: "Was bedeutet „Unbekanntes Teil“ in den Einstellungen?", a: "iOS zeigt diesen Hinweis, wenn ein Teil nicht als Original Apple Teil erkannt wird, zum Beispiel ein kompatibles Display. Das iPhone funktioniert weiter, je nach Teil können einzelne Funktionen wie True Tone fehlen. Wir sagen Ihnen vorab, was Sie bei welchem Teil erwartet." },
 			{ q: "Lohnt sich die Reparatur bei einem älteren iPhone?", a: "Meist ja. Ein Display oder eine Batterie kostet nur einen Bruchteil eines neuen iPhone, und Ihr Gerät bekommt weiter iOS Updates, solange Apple es unterstützt. Die Preise stehen auf der Seite Ihres Modells, so können Sie direkt vergleichen." },
-			{ q: "Kann ich während der Reparatur warten?", a: "Ja. Ist das Teil lagernd, ist ein Display- oder Batterietausch oft in rund einer Stunde erledigt. Sie können warten, in der Zwischenzeit etwas erledigen oder das iPhone später abholen." },
+			{ q: "Kann ich während der Reparatur warten?", a: "Ja. Ein Display- oder Batterietausch ist oft in rund einer Stunde erledigt. Sie können warten, in der Zwischenzeit etwas erledigen oder das iPhone später abholen." },
 		],
 	},
 	ipad: {

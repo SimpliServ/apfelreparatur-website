@@ -25,7 +25,7 @@ const facts = (locations: Location[]) => [
 	`- Standorte: ${[...new Set(locations.map((l) => l.name))].join(", ")} (Details: ${SITE}/kontakt)`,
 	"- Termin: nicht nötig, einfach vorbeikommen.",
 	"- Preise: iPhone und iPad zum Fixpreis je Modell (Preisliste unten bzw. auf der Modellseite), ohne Arbeitspauschale oder Arbeitszeit-Zuschlag. Apple Watch: Display ab 149 € (Ultra ab 179 €), Batterie ab 99 €, jeweils mit kompatiblem Teil (Preisliste unten). Mac: Preis nach der Diagnose, vor der Reparatur. Repariert wird erst nach Zustimmung.",
-	"- Dauer: ist das Teil lagernd, ist ein Display- oder Akkutausch oft in rund einer Stunde erledigt.",
+	"- Dauer: Ein Display- oder Akkutausch ist oft in rund einer Stunde erledigt.",
 	`- Garantie: ${business.warrantyMonths} Monate auf getauschte Teile und Arbeit, gesetzliche Gewährleistung bleibt bestehen.`,
 	`- Kontakt: ${business.email}, gratis Service-Hotline ${business.hotline}`,
 	"- Bezahlung: bei Abholung.",
