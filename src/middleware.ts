@@ -105,8 +105,13 @@ export const onRequest =defineMiddleware(async (ctx, next) => {
 	const res = await next();
 	purgeOnWrite(ctx, pathname, res);
 	const out = mutable(await complete(withCache(ctx, pathname, res)));
-	// Preview hosts (workers.dev) must not compete with apfelreparatur.at in search results.
-	if (hostname !== "apfelreparatur.at" && hostname !== "localhost") out.headers.set("x-robots-tag", "noindex, nofollow");
+	// Preview hosts (workers.dev) must not compete with apfelreparatur.at in search results. The edge cache key
+	// ignores the host, so their responses must never be cached or the noindex header leaks onto the real domain.
+	if (hostname !== "apfelreparatur.at" && hostname !== "localhost") {
+		out.headers.set("x-robots-tag", "noindex, nofollow");
+		out.headers.set("cache-control", NO_STORE);
+		out.headers.delete("cloudflare-cdn-cache-control");
+	}
 	out.headers.set("x-content-type-options", "nosniff");
 	out.headers.set("referrer-policy", "strict-origin-when-cross-origin");
 	out.headers.set("permissions-policy", "camera=(), microphone=(), geolocation=(), payment=()");

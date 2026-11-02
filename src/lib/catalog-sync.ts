@@ -19,8 +19,18 @@ export async function refreshCatalog(): Promise<boolean> {
 	const body = await res.text();
 	if (!body.includes('"devices"') || (known && etag === known)) return false;
 	await bucket().put(KEY, body, { httpMetadata: { contentType: "application/json" }, customMetadata: { etag, fetchedAt: new Date().toISOString() } });
-	if (current) await (workers as unknown as { cache?: { purge(o: { tags: string[] }): Promise<unknown> } }).cache?.purge({ tags: [CATALOG_TAG] }).catch(() => {});
+	if (current) await purgePages()?.catch(() => {});
 	return true;
+}
+
+const purgePages = () => (workers as unknown as { cache?: { purge(o: { tags: string[] }): Promise<unknown> } }).cache?.purge({ tags: [CATALOG_TAG] });
+
+/** Cron: a new deploy changes page markup, so drop every cached page once per Worker version. */
+export async function purgeAfterDeploy(version: string | undefined): Promise<void> {
+	const key = "_catalog/purged-version";
+	if (!version || (await (await bucket().get(key))?.text()) === version) return;
+	await purgePages();
+	await bucket().put(key, version);
 }
 
 /** Current snapshot; body is only read when its version differs from `seen`. Missing snapshot: fetched once. */
