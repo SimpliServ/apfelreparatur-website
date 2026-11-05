@@ -318,9 +318,15 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 	/* "Gratis Hotline" label fits next to the links down to 1200px. */
 	@media (max-width: 1199px) {
 		.gnav__call {
-			width: 40px;
+			width: 46px;
+			height: 46px;
 			padding: 0;
 			justify-content: center;
+		}
+
+		.gnav__call :global(svg) {
+			width: 22px;
+			height: 22px;
 		}
 
 		.gnav__call-num {
@@ -410,6 +416,21 @@ const current = (href: string) => (path === href ? "page" : href.length > 2 && !
 
 		.gnav__toggle {
 			display: block;
+		}
+
+		/* Bigger menu bars on phones and tablets (Jonas 2026-11-05). */
+		.gnav__toggle span {
+			left: 12px;
+			width: 20px;
+			height: 1.6px;
+		}
+
+		.gnav__toggle span:first-child {
+			top: calc(50% - 5px);
+		}
+
+		.gnav__toggle span:last-child {
+			top: calc(50% + 4px);
 		}
 
 		.gnav__logo :global(.wm) {
