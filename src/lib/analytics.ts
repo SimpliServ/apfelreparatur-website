@@ -1,5 +1,5 @@
 // Cookieless analytics: the beacon in components/Analytics.astro posts here, rows go to the shared
-// Workers Analytics Engine dataset "site_analytics" (dashboard: SimpliServ/site-analytics).
+// Workers Analytics Engine dataset "site_analytics".
 // Nothing is stored on the device, the visitor id is a daily-rotating hash (no cookie banner needed).
 
 type Env = { ANALYTICS?: AnalyticsEngineDataset; EMDASH_ENCRYPTION_KEY?: string };

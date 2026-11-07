@@ -34,7 +34,7 @@ Stack: EmDash (Astro SSR) on Cloudflare Workers + D1 + R2. npm, not pnpm.
 
 ## Production
 
-- **Analytics:** cookieless beacon `src/components/Analytics.astro` → POST `/_a` → `src/lib/analytics.ts` (handled in `src/worker.ts` before EmDash) → shared Analytics Engine dataset `site_analytics`. Dashboard https://site-analytics.simpliserv.workers.dev (`../site-analytics`, password in Keychain "Site Analytics dashboard"). No cookies or device storage, so no cookie banner; never add trackers that would need one (GA, pixels, embeds).
+- **Analytics:** cookieless beacon `src/components/Analytics.astro` → POST `/_a` → `src/lib/analytics.ts` (handled in `src/worker.ts` before EmDash) → shared Analytics Engine dataset `site_analytics`. No dashboard: query via the AE SQL API (`POST /accounts/<id>/analytics_engine/sql`, the wrangler OAuth token works); columns: blob1 host, blob2 type pv/ev/end, blob3 path, blob4 event, blob5 label, blob6 referrer host, blob7-9 utm, blob10 country, blob11 city, blob13 device, blob14 browser, blob15 os, blob16 daily visitor hash, blob17 language, double3 engaged ms, double4 scroll %. No cookies or device storage, so no cookie banner; never add trackers that would need one (GA, pixels, embeds).
 - Worker `apfelreparatur-website` → https://apfelreparatur-website.simpliserv.workers.dev (same CF account as MobiNil, free-plan quota shared). D1/R2/KV `apfelreparatur-website-*`.
 - `npm run deploy`, `npm run logs`, rollback `npx wrangler rollback`. Workers Cache is on; `src/middleware.ts` sets the TTLs.
 - Secrets: `EMDASH_ENCRYPTION_KEY` (Keychain "Apfelreparatur EmDash encryption key"), `EMDASH_SITE_URL`. Mail secrets: see Forms above.
