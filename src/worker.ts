@@ -1,4 +1,5 @@
 import handler, { createScheduledHandler, PluginBridge } from "@emdash-cms/cloudflare/worker";
+import { isBeacon, trackBeacon } from "./lib/analytics";
 import { purgeAfterDeploy, refreshCatalog } from "./lib/catalog-sync";
 
 export { PluginBridge };
@@ -7,6 +8,9 @@ const emdashScheduled = createScheduledHandler();
 
 export default {
 	...handler,
+	fetch(request, env, ctx) {
+		return isBeacon(request) ? trackBeacon(request, env as never) : handler.fetch!(request, env, ctx);
+	},
 	scheduled(event, env, ctx) {
 		// MobiNil catalogue once an hour (owner: up to ~2 h delay is fine); EmDash's own tasks every 15 min.
 		if (new Date(event.scheduledTime).getUTCMinutes() === 17) ctx.waitUntil(refreshCatalog().catch(() => false));
