@@ -4,7 +4,6 @@ import { EmDashBodyEnd, EmDashBodyStart, EmDashHead } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
 import GlobalNav from "../components/GlobalNav.astro";
 import Footer from "../components/Footer.astro";
-import Analytics from "../components/Analytics.astro";
 import { business } from "../lib/business";
 import "../styles/global.css";
 
@@ -70,7 +69,6 @@ const pageCtx = createPublicPageContext({
 		<meta property="og:image:alt" content={title ?? siteTitle} />
 		<meta name="format-detection" content="telephone=no" />
 		<script is:inline>document.documentElement.classList.add("js");</script>
-		<Analytics />
 		{jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
 	</head>
 	<body>
