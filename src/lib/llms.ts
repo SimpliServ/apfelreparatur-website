@@ -50,7 +50,7 @@ export function llmsTxt(locations: Location[]): string {
 		"",
 		"## Anfrage",
 		`- [Reparatur anfragen](${SITE}/reparatur-anfragen): Formular mit Gerät, Anliegen, Name, E-Mail, optional Telefon und Modell. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&anliegen=display|rueckglas|akku|kamera|ladebuchse|tastatur|datenrettung|datenuebertragung\`. Das Formular ist als WebMCP-Tool \`request_repair\` annotiert.`,
-		`- [Gerät verkaufen (Ankauf)](${SITE}/ankauf): iPhone, iPad, Mac und Apple Watch, auch defekt. Formular mit Gerät, Modell, Speicher, Zustand, Übergabe (Standort oder Post), Name, E-Mail. Preis erst nach Prüfung des Geräts. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&modell=…\`. WebMCP-Tool \`request_device_buyback\`.`,
+		`- [iPhone verkaufen (Ankauf)](${SITE}/ankauf): iPhone Ankauf in Wien & Niederösterreich, auch mit Displaybruch oder schwacher Batterie; ebenso iPad, Mac und Apple Watch. Ohne Termin im Shop verkaufen oder online anfragen. Seite erklärt die Preisfaktoren (Modell, Speicher, Batteriezustand, Display/Face ID, Teilehistorie, Aktivierungssperre) und die Vorbereitung (Backup, „Wo ist?“ aus, Apple Account abmelden, zurücksetzen). Formular mit Gerät, Modell, Speicher, Zustand, Übergabe (Standort oder Post), Name, E-Mail. Preis erst nach Prüfung des Geräts. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&modell=…\`. WebMCP-Tool \`request_device_buyback\`.`,
 		`- [Standorte und Öffnungszeiten](${SITE}/kontakt)`,
 		"",
 		"## Optional",
