@@ -128,4 +128,8 @@ export const slug = (s: string) =>
 export const storeId = (l: Location) => slug(l.venue);
 
 export const telHref = (n: string) => `tel:${n.replace(/[^\d+]/g, "")}`;
-export const whatsappHref = `https://wa.me/${business.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Hallo, ich habe eine Frage")}`;
+
+// The greeting names this site, so staff see in WhatsApp which brand site a chat came from (owner 2026-11-08).
+export const waGreeting = (text: string) => text.replace(/^Hallo,/, "Hallo Apfelreparatur Team,");
+export const whatsappFor = (text: string) => `https://wa.me/${business.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(waGreeting(text))}`;
+export const whatsappHref = whatsappFor("Hallo, ich habe eine Frage.");
