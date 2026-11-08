@@ -7,7 +7,7 @@ import LocalNav from "../components/LocalNav.astro";
 import DevicePicker from "../components/DevicePicker.astro";
 import PlusCards, { type PlusCard } from "../components/PlusCards.astro";
 import Steps from "../components/Steps.astro";
-import FAQ, { type QA } from "../components/FAQ.astro";
+import FAQ from "../components/FAQ.astro";
 import Closing from "../components/Closing.astro";
 import StoreList from "../components/StoreList.astro";
 import { devices } from "../lib/content";
@@ -17,6 +17,7 @@ import { getLocations, getModels } from "../lib/mobinil";
 import { loadModels } from "../lib/devices";
 import { business } from "../lib/business";
 import { breadcrumbLd, faqLd, serviceLd } from "../lib/seo";
+import { ankaufFaq as faq, ankaufFactors as factors, ankaufPrep as prep } from "../lib/ankauf";
 
 Astro.response.headers.set("Cache-Control", "private, no-store");
 
@@ -51,86 +52,52 @@ const stores = locations.map((l) => `${l.name} · ${l.venue.split(", ").slice(1)
 const cards: PlusCard[] = [
 	{
 		icon: "ph:tag",
-		pre: "Ein",
-		hl: "fairer Preis",
-		post: "nach Prüfung.",
-		detailTitle: "Geprüft. Dann bewertet.",
+		pre: "Das Angebot",
+		hl: "nach dem Check.",
+		detailTitle: "Erst getestet, dann beziffert.",
 		detail: [
-			"Unsere Techniker prüfen Display, Akku, Kameras, Tasten und Anschlüsse. Modell, Speicher und Zustand ergeben den Ankaufspreis.",
-			"Je genauer Ihre Angaben im Formular, desto besser können wir Ihr Gerät vorab einschätzen.",
+			"Ein Techniker sieht sich Bildschirm, Batterie, Kameras, Face ID bzw. Touch ID und den Ladeanschluss an. Daraus, aus der Generation und der Speichergröße entsteht unser Angebot.",
+			"Je vollständiger Sie das Formular ausfüllen, desto treffender fällt unsere erste Einschätzung aus.",
 		],
 	},
 	{
 		icon: "ph:wrench",
-		pre: "Auch",
-		hl: "defekte Geräte.",
-		detailTitle: "Gesprungen, schwach, still?",
+		pre: "Beschädigt?",
+		hl: "Kein Hindernis.",
+		detailTitle: "Sprung im Glas, müde Batterie?",
 		detail: [
-			"Geben Sie den Zustand einfach ehrlich an. Wir prüfen jedes Gerät, auch mit Glasbruch oder schwachem Akku.",
-			"Geräte, die wir nicht ankaufen, entsorgen wir auf Wunsch kostenlos und umweltgerecht.",
+			"Beschreiben Sie Schäden offen. Auch ein iPhone mit gesprungenem Glas oder verbrauchter Batterie sehen wir uns genau an.",
+			"Was wir nicht übernehmen, recyceln wir auf Ihren Wunsch fachgerecht und ohne Kosten.",
 		],
 	},
 	{
 		icon: "ph:storefront",
-		pre: "Vorbeibringen",
+		pre: "Abgeben",
 		hl: "ohne Termin.",
-		detailTitle: "Einfach vorbeikommen.",
+		detailTitle: "Spontan in den Shop.",
 		detail: [
-			"Bringen Sie Ihr Gerät an einen unserer Standorte in Wien und Umgebung, auch am Wochenende. Mit oder ohne Anfrage vorab.",
-			"Lieber per Post? Schicken Sie uns zuerst die Anfrage, wir melden uns mit den Versanddetails.",
+			"Kommen Sie zu den Öffnungszeiten in einen unserer Shops in Wien, Vösendorf oder Gerasdorf, samstags eingeschlossen.",
+			"Versand statt Besuch? Senden Sie zuerst das Formular ab. Adresse und Vorgehen für das Paket erhalten Sie dann per E-Mail.",
 		],
 	},
 ];
 
 const steps = [
-	{ n: "01", title: "Gerät angeben.", text: "Modell, Speicher und Zustand. Dauert nur eine Minute." },
-	{ n: "02", title: "Vorbeibringen.", text: "Ohne Termin an einen unserer Standorte. Oder per Post, nach Rücksprache." },
-	{ n: "03", title: "Prüfung.", text: "Unsere Techniker prüfen Ihr Gerät und nennen den Ankaufspreis." },
-	{ n: "04", title: "Sie entscheiden.", text: "Passt der Preis, kaufen wir an. Sonst bekommen Sie Ihr Gerät zurück." },
+	{ n: "01", title: "Eckdaten eintragen.", text: "Generation, Speichergröße und Zustand. In rund 60 Sekunden erledigt." },
+	{ n: "02", title: "Ins Geschäft bringen.", text: "Spontan in einen unserer Shops, oder nach kurzer Absprache als Paket." },
+	{ n: "03", title: "Technischer Check.", text: "Wir testen das Gerät und beziffern unser Angebot." },
+	{ n: "04", title: "Ihre Entscheidung.", text: "Sie sagen zu, oder Ihr Gerät geht unverändert an Sie zurück." },
 ];
 
-// Value factors an iPhone owner can check on the device before selling.
-const factors = [
-	{ icon: "ph:device-mobile", title: "Modell", text: "Die Generation zählt am meisten. Pro und Pro Max liegen über den Basismodellen derselben Reihe." },
-	{ icon: "ph:hard-drives", title: "Speicher", text: "128 GB, 256 GB, 512 GB oder 1 TB. Steht unter Einstellungen › Allgemein › Info." },
-	{ icon: "ph:battery-medium", title: "Batteriezustand", text: "Die maximale Kapazität in Prozent finden Sie unter Einstellungen › Batterie. Eine schwache Batterie senkt den Preis, schließt den Ankauf aber nicht aus." },
-	{ icon: "ph:scan-smiley", title: "Display und Face ID", text: "Risse, Streifen, Flecken oder ein Face ID, das nicht mehr entsperrt, prüfen wir einzeln." },
-	{ icon: "ph:wrench", title: "Teile und Reparaturen", text: "Ab iOS 17.4 zeigt Einstellungen › Allgemein › Info, ob Teile getauscht wurden. Auch das fließt in die Bewertung ein." },
-	{ icon: "ph:lock-key", title: "Aktivierungssperre", text: "Ist „Wo ist?“ noch aktiv, ist das iPhone an Ihren Apple Account gebunden. Dann können wir es nicht ankaufen." },
-];
-
-const prep = [
-	{ title: "Backup erstellen.", path: "Einstellungen › [Ihr Name] › iCloud › iCloud-Backup", text: "Oder am Computer über den Finder bzw. iTunes." },
-	{ title: "Apple Watch entkoppeln.", path: "Watch-App › Alle Uhren › ⓘ › Apple Watch entkoppeln", text: "Nur wenn eine Apple Watch mit dem iPhone verbunden ist." },
-	{ title: "„Wo ist?“ ausschalten.", path: "Einstellungen › [Ihr Name] › Wo ist? › Mein iPhone suchen", text: "Damit ist die Aktivierungssperre aufgehoben." },
-	{ title: "Vom Apple Account abmelden.", path: "Einstellungen › [Ihr Name] › Abmelden", text: "Ganz unten in der Liste. Ihr Passwort brauchen Sie dafür." },
-	{ title: "iPhone zurücksetzen.", path: "Einstellungen › Allgemein › iPhone übertragen/zurücksetzen › Alle Inhalte & Einstellungen löschen", text: "Danach sind Fotos, Nachrichten und Konten vom Gerät gelöscht." },
-	{ title: "SIM-Karte entnehmen.", path: "SIM-Fach seitlich am iPhone", text: "Eine eSIM übertragen Sie vorher auf Ihr neues iPhone." },
-];
-
-const faq: QA[] = [
-	{ q: "Was ist mein iPhone noch wert?", a: "Das hängt vor allem von Modell, Speicher, Batteriezustand und dem Zustand von Display und Gehäuse ab. Den genauen Ankaufspreis nennen wir, nachdem unsere Techniker Ihr iPhone geprüft haben. Mit Ihren Angaben im Formular können wir es vorab einschätzen." },
-	{ q: "Wie wird der Ankaufspreis berechnet?", a: "Wir prüfen Display, Face ID, Kameras, Batterie, Tasten und Anschlüsse und sehen uns die Teile- und Reparaturhistorie in den Einstellungen an. Zusammen mit Modell und Speicher ergibt das den Preis. Sie entscheiden danach, ob Sie verkaufen." },
-	{ q: "Kann ich ein iPhone mit Displaybruch verkaufen?", a: "Ja. Geben Sie den Schaden im Formular an oder bringen Sie das iPhone einfach vorbei. Ein gebrochenes Display senkt den Preis, wir prüfen aber jedes Gerät." },
-	{ q: "Kann ich ein iPhone mit schwacher Batterie verkaufen?", a: "Ja. Den Batteriezustand in Prozent sehen Sie unter Einstellungen › Batterie. Er fließt in die Bewertung ein, ein Ankauf ist trotzdem möglich." },
-
-	{ q: "Welche Apple Geräte kaufen Sie an?", a: "iPhone, iPad, MacBook, iMac und Apple Watch, auch ältere Modelle. Für andere Geräte schreiben Sie uns einfach im Feld „Anmerkungen“." },
-	{ q: "Kann ich ein defektes iPhone verkaufen?", a: "Ja, wir kaufen auch defekte iPhones, iPads und Macs an und prüfen jedes Gerät, auch mit kaputtem Display, Glasbruch oder schwachem Akku. Geräte, die wir nicht ankaufen, entsorgen wir auf Wunsch kostenlos und umweltgerecht." },
-	{ q: "Wo kann ich mein iPhone in Wien und Niederösterreich verkaufen?", a: "An jedem unserer Standorte am Wiener Hauptbahnhof, in der Shopping City Süd und im G3 Gerasdorf, auch am Wochenende." },
-	{ q: "Brauche ich einen Termin?", a: "Nein. Sie können Ihr iPhone ohne Termin an einen unserer Standorte bringen, mit oder ohne Anfrage vorab." },
-	{ q: "Kann ich mein iPhone auch per Post verkaufen?", a: "Ja. Wählen Sie im Formular bei „Übergabe“ den Versand. Wir melden uns dann mit den Versanddetails." },
-	{ q: "Was muss ich vor dem Verkauf tun?", a: "Sichern Sie Ihre Daten, schalten Sie „Wo ist?“ aus, melden Sie sich von Ihrem Apple Account ab, setzen Sie das iPhone zurück und entnehmen Sie die SIM-Karte. Ohne Abmeldung von Ihrem Apple Account können wir ein Gerät nicht ankaufen." },
-	{ q: "Kaufen Sie iPhones mit Aktivierungssperre?", a: "Nein. Ein iPhone mit aktiver Aktivierungssperre ist noch an einen Apple Account gebunden. Heben Sie die Sperre vorher auf, indem Sie „Wo ist?“ ausschalten und sich abmelden." },
-];
-const desc = "iPhone verkaufen in Wien & NÖ: iPhone Ankauf, auch mit Displaybruch oder schwacher Batterie. Ohne Termin vorbeikommen, Preis nach Prüfung. Auch iPad, Mac und Watch.";
+const desc = "Apple Ankauf Wien: iPhone, iPad, Mac und Apple Watch verkaufen, auch mit Displaybruch oder defekt. Ohne Termin vorbeikommen, Angebot nach technischem Check.";
 const checked = (name: string, v: string) => values[name] === v;
 ---
 
 <Base
-	title="iPhone verkaufen Wien & NÖ – iPhone Ankauf, auch defekt"
+	title="Apple Ankauf Wien: Was ist mein iPhone noch wert?"
 	description={desc}
 	og="ankauf"
-	jsonLd={[breadcrumbLd([["Start", "/"], ["Ankauf", "/ankauf"]]), serviceLd("iPhone Ankauf in Wien", desc, "/ankauf", "Ankauf gebrauchter und defekter Apple Geräte"), faqLd(faq)]}
+	jsonLd={[breadcrumbLd([["Start", "/"], ["Ankauf", "/ankauf"]]), serviceLd("Apple Ankauf in Wien", desc, "/ankauf", "Ankauf gebrauchter und defekter iPhone, iPad, Mac und Apple Watch"), faqLd(faq)]}
 	robots={Astro.request.method === "POST" ? "noindex" : undefined}
 >
 	{
@@ -138,15 +105,15 @@ const checked = (name: string, v: string) => values[name] === v;
 			<ThankYou title="Danke." lead="Ihre Ankauf-Anfrage ist bei uns. Eine Bestätigung ist unterwegs in Ihr Postfach." steps={inquiry.sell.customer.steps} shops="Unsere Standorte sind die MobiNil Shops." ctas={[{ href: "/kontakt", label: "Standorte ansehen" }, { href: "/", label: "Zur Startseite" }]} />
 		) : (
 			<>
-				<LocalNav title="Ankauf" links={[["#wert", "Wert"], ["#ablauf", "Ablauf"], ["#filiale", "Standorte"], ["#vorbereiten", "Vorbereiten"], ["#faq", "Fragen"]]} cta={{ href: "#anfrage", label: "iPhone verkaufen" }} />
+				<LocalNav title="Ankauf" links={[["#wert", "Wert"], ["#ablauf", "Ablauf"], ["#filiale", "Standorte"], ["#vorbereiten", "Vorbereiten"], ["#faq", "Fragen"]]} cta={{ href: "#anfrage", label: "Gerät verkaufen" }} />
 
 				<Tile
 					heading="h1"
 					eager
 					photo="hero"
-					eyebrow="iPhone Ankauf in Wien & Niederösterreich"
-					title={'iPhone verkaufen.<br /><span style="color: var(--accent)">In Wien & NÖ.</span>'}
-					sub="Gebraucht oder defekt. Auch iPad, Mac und Apple Watch."
+					eyebrow="Apple Ankauf in Wien"
+					title={'Was ist Ihr iPhone<br /><span style="color: var(--accent)">noch wert?</span>'}
+					sub="iPhone, iPad, Mac und Apple Watch. Gebraucht, beschädigt oder defekt."
 					primary={{ href: "#anfrage", label: "Jetzt verkaufen" }}
 					secondary={{ href: "/kontakt", label: "Ohne Termin vorbeikommen" }}
 					primaryLast
@@ -157,8 +124,8 @@ const checked = (name: string, v: string) => values[name] === v;
 				<section class="section on-gray" id="wert" aria-labelledby="wert-h">
 					<div class="wrap wrap--xl worth">
 						<div class="worth__head" data-reveal>
-							<h2 id="wert-h" class="t-section">Was ist mein iPhone noch wert?</h2>
-							<p class="t-lead muted">Sechs Dinge entscheiden den Ankaufspreis. Die meisten sehen Sie selbst in den Einstellungen.</p>
+							<h2 id="wert-h" class="t-section">Darauf achten wir beim Angebot.</h2>
+							<p class="t-lead muted">Sechs Punkte bestimmen den Betrag. Fast alle können Sie vorab selbst am iPhone nachsehen.</p>
 						</div>
 						<ul class="worth__list" role="list">
 							{factors.map((f) => (
@@ -172,16 +139,16 @@ const checked = (name: string, v: string) => values[name] === v;
 					</div>
 				</section>
 
-				<Steps id="ablauf" title="So funktioniert der Ankauf." items={steps} />
+				<Steps id="ablauf" title="In vier Schritten zum Angebot." items={steps} />
 
-				<PlusCards id="vorteile" title="Verkaufen. Ganz einfach." cards={cards} />
+				<PlusCards id="vorteile" title="Warum hier verkaufen." cards={cards} />
 
 				<section class="section on-gray" id="filiale" aria-labelledby="filiale-h">
 					<div class="wrap wrap--xl walkin">
 						<div data-reveal>
 							<p class="t-eyebrow walkin__eyebrow">Kein Termin nötig</p>
-							<h2 id="filiale-h" class="t-section">Einfach im Shop verkaufen.</h2>
-							<p class="t-lead muted walkin__text">Bringen Sie Ihr iPhone direkt vorbei, mit oder ohne Anfrage vorab. Wir prüfen es vor Ort und nennen Ihnen den Preis. Auch am Wochenende.</p>
+							<h2 id="filiale-h" class="t-section">Lieber persönlich abgeben?</h2>
+							<p class="t-lead muted walkin__text">Nehmen Sie Ihr Gerät einfach mit in einen der Shops, ob mit oder ohne Online-Anfrage. Ein Techniker sieht es sich gleich an der Theke an und sagt Ihnen, was wir bieten.</p>
 							<div class="btn-row walkin__ctas">
 								<a class="btn btn--lg" href="/kontakt">Standorte ansehen</a>
 								<a class="btn btn--lg btn--ghost" href="#anfrage">Online anfragen</a>
@@ -195,11 +162,11 @@ const checked = (name: string, v: string) => values[name] === v;
 					<div class="wrap wrap--xl">
 						<div class="head" data-reveal>
 							<p class="t-eyebrow muted head__eyebrow">Kostenlos und unverbindlich</p>
-							<h2 id="anfrage-h" class="t-section">Online verkaufen.</h2>
-							<p class="t-lead muted head__sub">Ein paar Angaben zu Ihrem Gerät. Den Preis nennen wir nach der Prüfung, Sie entscheiden dann.</p>
+							<h2 id="anfrage-h" class="t-section">Erst online anfragen.</h2>
+							<p class="t-lead muted head__sub">Beschreiben Sie Ihr Gerät in wenigen Feldern. Das konkrete Angebot folgt nach dem Test, zusagen müssen Sie erst dann.</p>
 						</div>
 
-						<form method="post" action="/ankauf#anfrage" class="cfg" novalidate data-form toolname="request_device_buyback" tooldescription="Ankauf-Anfrage für ein gebrauchtes iPhone, iPad, Mac oder Apple Watch an Apfelreparatur in Wien senden. Der Preis wird nach Prüfung des Geräts genannt.">
+						<form method="post" action="/ankauf#anfrage" class="cfg" novalidate data-form toolname="request_device_buyback" tooldescription="Apple Ankauf in Wien: Verkaufsanfrage für ein gebrauchtes oder defektes iPhone, iPad, Mac oder Apple Watch an Apfelreparatur senden. Das Angebot folgt nach einem technischen Check des Geräts.">
 							{error && (
 								<p class="cfg__error" role="alert">
 									<Icon name="ph:warning-circle" aria-hidden="true" />
@@ -349,7 +316,7 @@ const checked = (name: string, v: string) => values[name] === v;
 									</div>
 									<button class="btn btn--lg cfg__submit" type="submit">Anfrage senden</button>
 									<p class="cfg__small muted">
-										Den Preis nennen wir nach der Prüfung. Lieber direkt schreiben? <a href={`mailto:${business.email}`}>{business.email}</a>
+										Das Angebot erhalten Sie nach dem Test. Fragen vorab? <a href={`mailto:${business.email}`}>{business.email}</a>
 									</p>
 								</div>
 							</div>
@@ -359,8 +326,8 @@ const checked = (name: string, v: string) => values[name] === v;
 
 				<section class="section on-gray" id="vorbereiten" aria-labelledby="vorbereiten-h">
 					<div class="wrap wrap--narrow">
-						<h2 id="vorbereiten-h" class="t-section" data-reveal>Vor dem Verkauf.</h2>
-						<p class="t-lead muted prep__lead">So geben Sie Ihr iPhone ohne persönliche Daten und ohne Aktivierungssperre ab.</p>
+						<h2 id="vorbereiten-h" class="t-section" data-reveal>Ihr iPhone startklar machen.</h2>
+						<p class="t-lead muted prep__lead">Sechs Handgriffe, damit keine persönlichen Daten und keine Aktivierungssperre mehr auf dem Gerät sind.</p>
 						<ol class="prep" role="list">
 							{prep.map((p, i) => (
 								<li class="prep__item">
@@ -376,9 +343,9 @@ const checked = (name: string, v: string) => values[name] === v;
 					</div>
 				</section>
 
-				<FAQ id="faq" title="Fragen zum iPhone Ankauf." items={faq} />
+				<FAQ id="faq" title="Fragen zum Apple Ankauf." items={faq} />
 
-				<Closing title="Lieber gleich vorbeikommen?" text="Ohne Termin an unseren Standorten in Wien und Umgebung, auch am Wochenende. Wir prüfen Ihr Gerät direkt vor Ort." />
+				<Closing title="Am liebsten persönlich?" text="Ein Shop in Ihrer Nähe sieht sich Ihr Gerät ohne Voranmeldung an, auch am Samstag." />
 			</>
 		)
 	}

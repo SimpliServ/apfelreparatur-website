@@ -1,4 +1,5 @@
 // llms.txt (index) and llms-full.txt (all facts in one file) for AI agents, built from the same data as the pages.
+import { ankaufFaq, ankaufFactors, ankaufPrep } from "./ankauf";
 import { business, type Location } from "./business";
 import { dataCards, deviceFaq, homeFaq, steps, whyCards } from "./copy";
 import { deviceList, imac, services, type DeviceKey } from "./content";
@@ -50,7 +51,7 @@ export function llmsTxt(locations: Location[]): string {
 		"",
 		"## Anfrage",
 		`- [Reparatur anfragen](${SITE}/reparatur-anfragen): Formular mit Gerät, Anliegen, Name, E-Mail, optional Telefon und Modell. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&anliegen=display|rueckglas|akku|kamera|ladebuchse|tastatur|datenrettung|datenuebertragung\`. Das Formular ist als WebMCP-Tool \`request_repair\` annotiert.`,
-		`- [iPhone verkaufen (Ankauf)](${SITE}/ankauf): iPhone Ankauf in Wien & Niederösterreich, auch mit Displaybruch oder schwacher Batterie; ebenso iPad, Mac und Apple Watch. Ohne Termin im Shop verkaufen oder online anfragen. Seite erklärt die Preisfaktoren (Modell, Speicher, Batteriezustand, Display/Face ID, Teilehistorie, Aktivierungssperre) und die Vorbereitung (Backup, „Wo ist?“ aus, Apple Account abmelden, zurücksetzen). Formular mit Gerät, Modell, Speicher, Zustand, Übergabe (Standort oder Post), Name, E-Mail. Preis erst nach Prüfung des Geräts. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&modell=…\`. WebMCP-Tool \`request_device_buyback\`.`,
+		`- [Apple Ankauf: Was ist mein iPhone noch wert?](${SITE}/ankauf): iPhone, iPad, Mac und Apple Watch verkaufen, auch mit Displaybruch, verbrauchter Batterie oder defekt. Ohne Termin im Shop abgeben (Wien Hauptbahnhof, Shopping City Süd, G3 Gerasdorf) oder per Post nach Online-Anfrage. Angebot erst nach technischem Check. Die Seite nennt die Wertfaktoren (Generation, Speicher, Batteriezustand, Display/Face ID, Teile-Historie, Aktivierungssperre) und die Vorbereitung (Backup, „Wo ist?“ aus, Apple Account abmelden, Werkseinstellungen). Formular mit Gerät, Modell, Speicher, Zustand, Übergabe (Standort oder Post), Name, E-Mail. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&modell=…\`. WebMCP-Tool \`request_device_buyback\`.`,
 		`- [Standorte und Öffnungszeiten](${SITE}/kontakt)`,
 		"",
 		"## Optional",
@@ -104,6 +105,23 @@ export function llmsFullTxt(locations: Location[], models: Model[] = []): string
 		out.push("", `### Gut zu wissen: ${d.name}`, "", ...guideLines(d.key));
 		if (d.key === "mac") out.push(`## iMac Reparatur Wien`, "", `${SITE}/imac`, "", `${imac.headline} ${imac.sub}`, "", ...guideLines("imac"), "### Häufige Fragen zur iMac Reparatur", "", ...[...deviceFaq(imac), ...guides.imac.faq].map((f) => qa(f.q, f.a)), "");
 	}
+	out.push(
+		"## Apple Ankauf: Was ist mein iPhone noch wert?",
+		"",
+		`${SITE}/ankauf`,
+		"",
+		"iPhone, iPad, Mac und Apple Watch verkaufen, auch beschädigt oder defekt. Ohne Termin im Shop abgeben oder online anfragen; das Angebot folgt nach einem technischen Check.",
+		"",
+		"### Wertfaktoren",
+		...ankaufFactors.map((f) => `- **${f.title}:** ${f.text}`),
+		"",
+		"### iPhone vor der Abgabe vorbereiten",
+		...ankaufPrep.map((p, i) => `${i + 1}. **${p.title}** ${p.path}. ${p.text}`),
+		"",
+		"### Häufige Fragen zum Apple Ankauf",
+		"",
+		...ankaufFaq.map((f) => qa(f.q, f.a)),
+	);
 	out.push("## Reparaturen im Detail", "");
 	for (const p of repairPages) {
 		const d = deviceList.find((x) => x.key === p.device)!;
