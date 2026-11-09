@@ -10,6 +10,7 @@ import Steps from "../components/Steps.astro";
 import FAQ from "../components/FAQ.astro";
 import Closing from "../components/Closing.astro";
 import StoreList from "../components/StoreList.astro";
+import Pic from "../components/Pic.astro";
 import { devices } from "../lib/content";
 import { inquiry } from "../lib/inquiry-copy";
 import { sendToPlugin } from "../lib/send";
@@ -126,6 +127,9 @@ const checked = (name: string, v: string) => values[name] === v;
 						<div class="worth__head" data-reveal>
 							<h2 id="wert-h" class="t-section">Darauf achten wir beim Angebot.</h2>
 							<p class="t-lead muted">Sechs Punkte bestimmen den Betrag. Fast alle können Sie vorab selbst am iPhone nachsehen.</p>
+							<div class="worth__pic">
+								<Pic name="display" sizes="(max-width: 900px) 100vw, 480px" />
+							</div>
 						</div>
 						<ul class="worth__list" role="list">
 							{factors.map((f) => (
@@ -143,9 +147,9 @@ const checked = (name: string, v: string) => values[name] === v;
 
 				<PlusCards id="vorteile" title="Warum hier verkaufen." cards={cards} />
 
-				<section class="section on-gray" id="filiale" aria-labelledby="filiale-h">
+				<section class="section" id="filiale" aria-labelledby="filiale-h">
 					<div class="wrap wrap--xl walkin">
-						<div data-reveal>
+						<div class="walkin__copy" data-reveal>
 							<p class="t-eyebrow walkin__eyebrow">Kein Termin nötig</p>
 							<h2 id="filiale-h" class="t-section">Lieber persönlich abgeben?</h2>
 							<p class="t-lead muted walkin__text">Nehmen Sie Ihr Gerät einfach mit in einen der Shops, ob mit oder ohne Online-Anfrage. Ein Techniker sieht es sich gleich an der Theke an und sagt Ihnen, was wir bieten.</p>
@@ -154,7 +158,9 @@ const checked = (name: string, v: string) => values[name] === v;
 								<a class="btn btn--lg btn--ghost" href="#anfrage">Online anfragen</a>
 							</div>
 						</div>
-						<StoreList stores={locations} />
+						<div class="walkin__stores">
+							<StoreList stores={locations} />
+						</div>
 					</div>
 				</section>
 
@@ -325,9 +331,11 @@ const checked = (name: string, v: string) => values[name] === v;
 				</section>
 
 				<section class="section on-gray" id="vorbereiten" aria-labelledby="vorbereiten-h">
-					<div class="wrap wrap--narrow">
-						<h2 id="vorbereiten-h" class="t-section" data-reveal>Ihr iPhone startklar machen.</h2>
-						<p class="t-lead muted prep__lead">Sechs Handgriffe, damit keine persönlichen Daten und keine Aktivierungssperre mehr auf dem Gerät sind.</p>
+					<div class="wrap wrap--xl prep-wrap">
+						<div class="prep__head" data-reveal>
+							<h2 id="vorbereiten-h" class="t-section">Ihr iPhone startklar machen.</h2>
+							<p class="t-lead muted prep__lead">Sechs Handgriffe, damit keine persönlichen Daten und keine Aktivierungssperre mehr auf dem Gerät sind.</p>
+						</div>
 						<ol class="prep" role="list">
 							{prep.map((p, i) => (
 								<li class="prep__item">
@@ -698,6 +706,30 @@ const checked = (name: string, v: string) => values[name] === v;
 		margin-top: 16px;
 	}
 
+	/* Product shots are exported on #f6f5f8, one step off --gray: a framed card instead of a visible seam. */
+	.worth__pic {
+		margin-top: 32px;
+		overflow: hidden;
+		border-radius: var(--radius);
+		background: #f6f5f8;
+	}
+
+	.worth__pic {
+		aspect-ratio: 16 / 10;
+	}
+
+	.worth__pic :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.worth__pic :global(img) {
+		object-position: 50% 59%;
+		transform: scale(1.7);
+		transform-origin: 50% 59%;
+	}
+
 	.worth__list {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -732,8 +764,17 @@ const checked = (name: string, v: string) => values[name] === v;
 	.walkin {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		grid-template-areas: "copy stores";
 		gap: 40px 64px;
 		align-items: center;
+	}
+
+	.walkin__copy {
+		grid-area: copy;
+	}
+
+	.walkin__stores {
+		grid-area: stores;
 	}
 
 	.walkin__eyebrow {
@@ -751,12 +792,20 @@ const checked = (name: string, v: string) => values[name] === v;
 		justify-content: flex-start;
 	}
 
-	.walkin :global(.slist) {
-		background: var(--paper);
+	.prep-wrap {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+		gap: 32px 64px;
+		align-items: start;
+	}
+
+	.prep__head {
+		position: sticky;
+		top: 140px;
 	}
 
 	.prep__lead {
-		margin: 16px 0 32px;
+		margin-top: 16px;
 	}
 
 	.prep {
@@ -803,8 +852,21 @@ const checked = (name: string, v: string) => values[name] === v;
 
 	@media (max-width: 900px) {
 		.worth,
+		.prep-wrap {
+			grid-template-columns: 1fr;
+		}
+
 		.walkin {
 			grid-template-columns: 1fr;
+			grid-template-areas: "copy" "stores";
+		}
+
+		.prep__head {
+			position: static;
+		}
+
+		.worth__pic {
+			max-width: 560px;
 		}
 
 		.row {
