@@ -3,6 +3,7 @@ import type { RouteContext } from "emdash";
 import { env } from "cloudflare:workers";
 import { mailHtml, mailText, type MailContent } from "../lib/mail";
 import { inquiry as q } from "../lib/inquiry-copy";
+import { TURNSTILE_FIELD, TURNSTILE_HOST, turnstileOk } from "../lib/turnstile";
 
 // Repair, buyback and withdrawal requests only go out as mails (office + confirmation to the customer); nothing is stored.
 type Limit = { count: number; expiresAt: number };
@@ -36,6 +37,9 @@ async function limit(store: Store<Limit>, key: string, max: number): Promise<boo
 	return true;
 }
 
+// Bots post straight to this public route too, so the Turnstile check lives here and not in the page.
+const human = (ctx: RouteContext, i: Record<string, unknown>) => turnstileOk(i[TURNSTILE_FIELD], ctx.requestMeta.ip ?? undefined, cfg.TURNSTILE_SECRET_KEY, (url, init) => ctx.http!.fetch(url, init));
+
 async function deliver(ctx: RouteContext, kind: string, staff: MailContent & { subject: string }, customer: (MailContent & { subject: string }) | null, replyTo: string) {
 	const limits = ctx.storage.limits as unknown as Store<Limit>;
 	if (!(await limit(limits, "ip:" + (ctx.requestMeta.ip ?? "local"), 10)) || !(await limit(limits, "email:" + replyTo, 5))) return fail("RATE_LIMIT");
@@ -59,7 +63,8 @@ export function createPlugin() {
 	return definePlugin({
 		id: "apfel-inquiry",
 		version: "1.0.0",
-		capabilities: ["email:send"],
+		capabilities: ["email:send", "network:request"],
+		allowedHosts: [TURNSTILE_HOST],
 		storage: { limits: { indexes: ["expiresAt"] } },
 		routes: {
 			repair: {
@@ -75,6 +80,7 @@ export function createPlugin() {
 						name: line(i.name, 120), email: line(i.email, 160).toLowerCase(), phone: line(i.phone, 40), contact: line(i.contact, 20),
 					};
 					if (str(i.website)) return fail("SPAM");
+					if (!(await human(ctx, i))) return fail("CAPTCHA");
 					if (i.consent !== true) return fail("CONSENT");
 					if (!q.devices[d.device] || !issues.length || !d.name || !d.email) return fail("MISSING_FIELDS");
 					if (!EMAIL_RE.test(d.email)) return fail("INVALID_EMAIL");
@@ -107,6 +113,7 @@ export function createPlugin() {
 						name: line(i.name, 120), email: line(i.email, 160).toLowerCase(), phone: line(i.phone, 40),
 					};
 					if (str(i.website)) return fail("SPAM");
+					if (!(await human(ctx, i))) return fail("CAPTCHA");
 					if (i.consent !== true) return fail("CONSENT");
 					if (!Object.hasOwn(s.devices, d.device) || !d.model || !Object.hasOwn(s.conditions, d.condition) || !Object.hasOwn(s.handoffs, d.handoff) || !d.name || !d.email) return fail("MISSING_FIELDS");
 					if (d.handoff === "post" && (!d.street || !d.zip || !d.city)) return fail("ADDRESS_REQUIRED");
@@ -136,6 +143,7 @@ export function createPlugin() {
 					const f = q.withdrawal.field;
 					const d = { name: line(i.name, 120), email: line(i.email, 160).toLowerCase(), order: line(i.order, 80), date: line(i.date, 20), message: str(i.message, 2000) };
 					if (str(i.website)) return fail("SPAM");
+					if (!(await human(ctx, i))) return fail("CAPTCHA");
 					if (!d.name || !d.email || !d.order) return fail("MISSING_FIELDS");
 					if (!EMAIL_RE.test(d.email)) return fail("INVALID_EMAIL");
 					const rows = facts([[f.name, d.name], [f.email, d.email], [f.order, d.order], [f.date, d.date], [f.message, d.message], [q.received, received()]]);

@@ -7,6 +7,7 @@ export const inquiry = {
 		CONSENT: "Bitte bestätigen Sie, dass Sie die Datenschutzerklärung zur Kenntnis genommen haben.",
 		RATE_LIMIT: "Zu viele Anfragen in kurzer Zeit. Bitte versuchen Sie es später erneut.",
 		SPAM: "Anfrage abgelehnt.",
+		CAPTCHA: "Die Sicherheitsprüfung hat nicht geklappt. Bitte senden Sie die Anfrage noch einmal oder rufen Sie uns an.",
 		UNAVAILABLE: "Die Anfrage konnte gerade nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie uns eine E-Mail.",
 	} as Record<string, string>,
 	devices: { iphone: "iPhone", ipad: "iPad", mac: "Mac", "apple-watch": "Apple Watch", andere: "Anderes Gerät" } as Record<string, string>,

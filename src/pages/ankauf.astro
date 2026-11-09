@@ -1,4 +1,5 @@
 ---
+import Turnstile from "../components/Turnstile.astro";
 import { Icon } from "astro-iconset/components";
 import ThankYou from "../components/ThankYou.astro";
 import Base from "../layouts/Base.astro";
@@ -320,6 +321,7 @@ const checked = (name: string, v: string) => values[name] === v;
 									<div class="hp" aria-hidden="true">
 										<label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
 									</div>
+									<Turnstile />
 									<button class="btn btn--lg cfg__submit" type="submit">Anfrage senden</button>
 									<p class="cfg__small muted">
 										Das Angebot erhalten Sie nach dem Test. Fragen vorab? <a href={`mailto:${business.email}`}>{business.email}</a>

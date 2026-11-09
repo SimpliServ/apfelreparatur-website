@@ -1,0 +1,76 @@
+---
+// Spam check inside a form: loads Turnstile on first interaction, mostly invisible; submit waits for the token.
+import { TURNSTILE_SITEKEY } from "../lib/turnstile";
+---
+
+<div class="ts" data-ts={TURNSTILE_SITEKEY}></div>
+<p class="ts__wait" role="status" hidden>Sicherheitsprüfung läuft …</p>
+<noscript><p class="ts__wait">Zum Senden bitte JavaScript aktivieren oder anrufen.</p></noscript>
+
+<script>
+	type Api = { render(el: HTMLElement, opts: Record<string, unknown>): string; reset(id: string): void };
+	let api: Promise<Api> | undefined;
+	const load = () =>
+		(api ??= new Promise<Api>((ok, fail) => {
+			const s = document.createElement("script");
+			s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+			s.async = true;
+			s.onload = () => ok((window as unknown as { turnstile: Api }).turnstile);
+			s.onerror = () => ((api = undefined), fail());
+			document.head.appendChild(s);
+		}));
+
+	for (const box of document.querySelectorAll<HTMLElement>("[data-ts]")) {
+		const form = box.closest("form");
+		if (!form) continue;
+		const wait = box.nextElementSibling as HTMLElement;
+		let token = "";
+		let waiting = false;
+		let started = false;
+		const start = () => {
+			if (started) return;
+			started = true;
+			load()
+				.then((t) =>
+					t.render(box, {
+						sitekey: box.dataset.ts,
+						language: "de",
+						size: "flexible",
+						appearance: "interaction-only",
+						callback: (v: string) => {
+							token = v;
+							if (!waiting) return;
+							waiting = false;
+							wait.hidden = true;
+							form.requestSubmit();
+						},
+						"expired-callback": () => (token = ""),
+					}),
+				)
+				.catch(() => (started = false));
+		};
+		form.addEventListener("focusin", start, { once: true });
+		form.addEventListener("pointerdown", start, { once: true });
+		// Document listener runs after the form's own validation, so an invalid form never waits here.
+		document.addEventListener("submit", (e) => {
+			if (e.target !== form || e.defaultPrevented || token) return;
+			e.preventDefault();
+			form.querySelectorAll("button[type=submit][disabled]").forEach((b) => b.removeAttribute("disabled"));
+			waiting = true;
+			wait.hidden = false;
+			start();
+		});
+	}
+</script>
+
+<style>
+	.ts:empty {
+		display: none;
+	}
+
+	.ts__wait {
+		margin: 0;
+		font-size: 14px;
+		color: var(--muted);
+	}
+</style>

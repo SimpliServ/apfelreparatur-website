@@ -1,4 +1,5 @@
 ---
+import Turnstile from "../components/Turnstile.astro";
 import LegalLayout from "../components/LegalLayout.astro";
 import { inquiry } from "../lib/inquiry-copy";
 import { sendToPlugin } from "../lib/send";
@@ -36,6 +37,7 @@ if (Astro.request.method === "POST") {
 					<label>Datum des Vertragsabschlusses<input name="date" type="date" value={values.date ?? ""} /></label>
 					<label>Nachricht (optional)<textarea name="message" rows="4" maxlength="2000">{values.message ?? ""}</textarea></label>
 					<div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off" /></label></div>
+					<Turnstile />
 					<button class="btn" type="submit">Widerruf bestätigen</button>
 				</form>
 			</>
