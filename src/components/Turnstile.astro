@@ -4,7 +4,7 @@ import { TURNSTILE_SITEKEY } from "../lib/turnstile";
 ---
 
 <div class="ts" data-ts={TURNSTILE_SITEKEY}></div>
-<p class="ts__wait" role="status" hidden>Sicherheitsprüfung läuft …</p>
+<p class="ts__wait" role="status" hidden></p>
 <noscript><p class="ts__wait">Zum Senden bitte JavaScript aktivieren oder anrufen.</p></noscript>
 
 <script>
@@ -27,6 +27,14 @@ import { TURNSTILE_SITEKEY } from "../lib/turnstile";
 		let token = "";
 		let waiting = false;
 		let started = false;
+		let timer = 0;
+		// Never leave the visitor stuck on "läuft": on error, blocked script or timeout ask to send again.
+		const giveUp = () => {
+			if (!waiting) return;
+			waiting = false;
+			clearTimeout(timer);
+			wait.textContent = "Sicherheitsprüfung fehlgeschlagen. Bitte noch einmal senden oder anrufen.";
+		};
 		const start = () => {
 			if (started) return;
 			started = true;
@@ -41,13 +49,21 @@ import { TURNSTILE_SITEKEY } from "../lib/turnstile";
 							token = v;
 							if (!waiting) return;
 							waiting = false;
+							clearTimeout(timer);
 							wait.hidden = true;
 							form.requestSubmit();
 						},
 						"expired-callback": () => (token = ""),
+						"error-callback": () => {
+							giveUp();
+							return false;
+						},
 					}),
 				)
-				.catch(() => (started = false));
+				.catch(() => {
+					started = false;
+					giveUp();
+				});
 		};
 		form.addEventListener("focusin", start, { once: true });
 		form.addEventListener("pointerdown", start, { once: true });
@@ -57,7 +73,10 @@ import { TURNSTILE_SITEKEY } from "../lib/turnstile";
 			e.preventDefault();
 			form.querySelectorAll("button[type=submit][disabled]").forEach((b) => b.removeAttribute("disabled"));
 			waiting = true;
+			wait.textContent = "Sicherheitsprüfung läuft …";
 			wait.hidden = false;
+			clearTimeout(timer);
+			timer = window.setTimeout(giveUp, 20_000);
 			start();
 		});
 	}
