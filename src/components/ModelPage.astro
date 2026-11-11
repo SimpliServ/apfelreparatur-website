@@ -719,6 +719,8 @@ const lnav: [string, string][] = [["#preise", "Preise"], ...(details.length ? [[
 		margin: 14px 0 8px;
 		font-size: 21px;
 		font-weight: 600;
+		/* Long card titles at 320px hyphenated "tau-schen"; break only at spaces. */
+		hyphens: manual;
 	}
 
 	.rdet__item p {

@@ -103,7 +103,7 @@ export function repairDetails(m: Model): RepairDetail[] {
 		has("display") && {
 			id: "display-reparatur",
 			repair: "display",
-			title: `${t} Display Reparatur`,
+			title: `${t} Display tauschen\u00a0– Bildschirm\u00a0wechseln`,
 			text:
 				m.category === "mac"
 					? `Gesprungenes Glas, Streifen, dunkle Flecken oder ein flackerndes Bild: Dann tauschen wir das Display Ihres ${t}.${parts("display")} Danach testen wir Bild, Helligkeit und Kamera.`
@@ -113,7 +113,7 @@ export function repairDetails(m: Model): RepairDetail[] {
 		has("akku") && {
 			id: "batterietausch",
 			repair: "akku",
-			title: `${t} Batterie tauschen (Akkutausch)`,
+			title: `${t} Akkutausch\u00a0– Akku wechseln & Batterie\u00a0tauschen`,
 			text: `Hält der Akku nicht mehr durch den Tag, schaltet sich ${nom(m)} ${t} bei Restladung ab${health}, ist eine neue Batterie fällig.${parts("akku")}${quick}`,
 			price: price(m, "akku"),
 		},
