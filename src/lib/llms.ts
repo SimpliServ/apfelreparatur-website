@@ -59,6 +59,7 @@ export function llmsTxt(locations: Location[]): string {
 		`- [Impressum](${SITE}/impressum)`,
 		`- [Datenschutz](${SITE}/datenschutz)`,
 		`- [AGB](${SITE}/agb)`,
+		`- [Barrierefreiheit](${SITE}/barrierefreiheit)`,
 		`- [Vertrag widerrufen](${SITE}/vertrag-widerrufen)`,
 		"",
 	].join("\n");
@@ -134,7 +135,7 @@ export function llmsFullTxt(locations: Location[], models: Model[] = []): string
 	out.push(
 		"## Rechtliches",
 		"",
-		`Anbieterangaben: ${SITE}/impressum, Datenschutz: ${SITE}/datenschutz, AGB: ${SITE}/agb.`,
+		`Anbieterangaben: ${SITE}/impressum, Datenschutz: ${SITE}/datenschutz, AGB: ${SITE}/agb, Barrierefreiheit: ${SITE}/barrierefreiheit.`,
 		"",
 		"Apple, iPhone, iPad, Mac und MacBook sind Marken der Apple Inc. Apfelreparatur ist ein unabhängiger Reparaturbetrieb und steht in keiner Verbindung zu Apple Inc.",
 		"",

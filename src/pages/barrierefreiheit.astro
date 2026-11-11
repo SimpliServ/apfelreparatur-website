@@ -1,0 +1,74 @@
+---
+import LegalLayout from "../components/LegalLayout.astro";
+import { business } from "../lib/business";
+
+const b = business;
+const tel = (n: string) => `tel:${n.replace(/[^\d+]/g, "")}`;
+---
+
+<LegalLayout title="Barrierefreiheit" slug="barrierefreiheit" updated="11. November 2026" description={`Barrierefreiheit bei ${b.brand}: Ablauf unserer Reparaturdienstleistungen, Umsetzung von WCAG 2.2 AA, andere Wege zu uns und wo Sie Barrieren melden können.`}>
+	<p>
+		Wir möchten, dass alle Menschen unsere Website und unsere Dienstleistungen gut nutzen können. Hier beschreiben wir unsere Dienstleistungen, wie sie ablaufen und wie
+		wir die Anforderungen an die Barrierefreiheit nach dem Barrierefreiheitsgesetz (BaFG) umsetzen.
+	</p>
+
+	<h2>Unsere Dienstleistungen</h2>
+	<p>
+		{b.brand} ist eine Marke der {b.legalName} und repariert iPhone, iPad, Mac und Apple Watch und bietet Datenrettung und Datenübertragung an. Sie können Ihr Gerät ohne Termin an einem unserer Standorte in Wien abgeben (<a href="/kontakt">Kontakt</a>).
+		Online können Sie Reparaturpreise nachsehen, eine Reparatur anfragen, ein Gerät zum Ankauf anbieten und einen online abgeschlossenen Vertrag widerrufen.
+	</p>
+
+	<h2>So läuft eine Reparatur ab</h2>
+	<ul>
+		<li>Sie beschreiben Ihr Anliegen im Formular <a href="/reparatur-anfragen">Reparatur anfragen</a> oder kommen direkt an einen unserer Standorte.</li>
+		<li>Wir prüfen Ihre Angaben und melden uns mit einer ersten Einschätzung per E-Mail oder Telefon, ganz wie Sie es im Formular wählen.</li>
+		<li>Vor der Reparatur nennen wir Ihnen den Preis. Repariert wird erst nach Ihrer Zustimmung.</li>
+		<li>Einen online abgeschlossenen Vertrag widerrufen Sie unter <a href="/vertrag-widerrufen">Vertrag widerrufen</a>.</li>
+	</ul>
+
+	<h2>Wie wir die Anforderungen umsetzen</h2>
+	<p>Unser Ziel ist die Konformitätsstufe AA der Web Content Accessibility Guidelines (WCAG) 2.2 im Sinne der Europäischen Norm EN 301 549. Konkret bedeutet das:</p>
+	<ul>
+		<li>Klare Seitenstruktur mit Überschriften, Navigationsbereichen und einem Link „Zum Inhalt springen“.</li>
+		<li>Alle Funktionen sind mit der Tastatur bedienbar; das aktive Element ist deutlich hervorgehoben.</li>
+		<li>Bilder haben Textalternativen, Symbole ohne eigene Bedeutung werden von Screenreadern übersprungen.</li>
+		<li>Reparaturpreise stehen als Text auf den Geräte- und Modellseiten; Preistabellen haben Spalten- und Zeilenüberschriften.</li>
+		<li>Formularfelder haben sichtbare Beschriftungen; Fehlermeldungen werden angesagt und erklären, was zu tun ist.</li>
+		<li>Adressen und Öffnungszeiten unserer Standorte stehen als Text auf der Seite.</li>
+		<li>Die Seiten passen sich an kleine Bildschirme und vergrößerte Schrift an. Animationen werden reduziert, wenn Sie das in Ihrem Betriebssystem eingestellt haben.</li>
+	</ul>
+	<p>
+		Am 11. November 2026 haben wir die wichtigsten Seitentypen (Startseite, Geräte- und Preisseiten, Standorte, Reparatur anfragen, Ankauf und Vertrag
+		widerrufen) automatisiert nach WCAG 2.2 AA geprüft und gefundene Kontrastfehler behoben.
+	</p>
+
+	<h2>Bekannte Einschränkungen</h2>
+	<ul>
+		<li>Formulare sind mit Cloudflare Turnstile vor Spam geschützt. Falls die Prüfung für Sie nicht funktioniert, erreichen Sie uns telefonisch, per E-Mail oder vor Ort.</li>
+		<li>Routenplaner (Google Maps) und WhatsApp sind Angebote Dritter; auf deren Barrierefreiheit haben wir nur begrenzt Einfluss.</li>
+	</ul>
+
+	<h2>Andere Wege zu uns</h2>
+	<p>Alle Dienstleistungen können Sie auch ohne Website nutzen:</p>
+	<ul>
+		<li>Gratis Service-Hotline: <a href={tel(b.hotline)}>{b.hotline}</a></li>
+		<li>Telefon: <a href={tel(b.phone)}>{b.phone}</a></li>
+		<li>E-Mail: <a href={`mailto:${b.email}`}>{b.email}</a></li>
+		<li>WhatsApp: <a href={`https://wa.me/${b.whatsapp.replace(/\D/g, "")}`} rel="noopener">{b.whatsapp}</a>, rund um die Uhr</li>
+		<li>Persönlich an jedem unserer <a href="/kontakt">Standorte</a>, ohne Termin</li>
+	</ul>
+	<p>Die Informationen auf dieser Seite schicken wir Ihnen auf Wunsch auch schriftlich zu oder erklären sie Ihnen am Telefon oder vor Ort.</p>
+
+	<h2>Barriere gefunden?</h2>
+	<p>
+		Wenn Sie auf unserer Website oder bei unseren Dienstleistungen auf eine Barriere stoßen, schreiben Sie uns bitte an <a href={`mailto:${b.email}`}>{b.email}</a> oder rufen
+		Sie uns an. Nennen Sie uns die Seite und beschreiben Sie das Problem. Wir antworten so schnell wie möglich und helfen Ihnen in der Zwischenzeit auf anderem Weg weiter.
+	</p>
+
+	<h2>Zuständige Behörde</h2>
+	<p>
+		Wenn Sie der Meinung sind, dass unsere Dienstleistung die Anforderungen des Barrierefreiheitsgesetzes nicht erfüllt, können Sie sich an das
+		<a href="https://www.sozialministeriumservice.gv.at" rel="noopener">Sozialministeriumservice</a> wenden. Es ist in Österreich für die Marktüberwachung nach dem
+		Barrierefreiheitsgesetz zuständig. Dort können Sie auch ein Schlichtungsverfahren beantragen.
+	</p>
+</LegalLayout>
