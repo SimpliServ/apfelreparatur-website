@@ -2,8 +2,9 @@ import type { APIRoute } from "astro";
 import { SITE } from "../lib/seo";
 import { repairPages } from "../lib/repair-pages";
 import { loadModels, modelPath } from "../lib/devices";
+import { regionPath, regions } from "../lib/regions";
 
-const PATHS = ["/", "/iphone", "/ipad", "/mac", "/imac", "/apple-watch", ...repairPages.map((p) => p.path), "/datenrettung", "/reparatur-anfragen", "/ankauf", "/kontakt", "/impressum", "/datenschutz", "/agb", "/barrierefreiheit"];
+const PATHS = ["/", "/iphone", "/ipad", "/mac", "/imac", "/apple-watch", ...repairPages.map((p) => p.path), "/datenrettung", "/reparatur-anfragen", "/ankauf", "/kontakt", ...regions.map(regionPath), "/impressum", "/datenschutz", "/agb", "/barrierefreiheit"];
 
 // Build date: every deploy may change copy on any page.
 const LASTMOD = __BUILD_DATE__;

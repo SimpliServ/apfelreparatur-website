@@ -141,3 +141,8 @@ export function modelServiceLd(o: { name: string; description: string; path: str
 			: undefined,
 	});
 }
+
+/** Service for a federal-state page: same provider, areaServed = the state. */
+export function regionServiceLd(o: { name: string; state: string; wikidata: string; description: string; path: string }) {
+	return { ...serviceLd(o.name, o.description, o.path, "Apple Reparatur"), areaServed: { "@type": "State", name: o.state, sameAs: `https://www.wikidata.org/wiki/${o.wikidata}` } };
+}

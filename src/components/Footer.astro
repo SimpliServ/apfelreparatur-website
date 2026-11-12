@@ -1,6 +1,7 @@
 ---
 import { business } from "../lib/business";
 import { loadModels, modelPath, popular } from "../lib/devices";
+import { regionPath, regions } from "../lib/regions";
 
 const top = popular((await loadModels().catch(() => ({ models: [] }))).models);
 
@@ -37,13 +38,16 @@ const columns = [
 		],
 	},
 	{
+		title: "iPhone reparieren lassen",
+		links: regions.map((r) => [regionPath(r), r.name] as [string, string]),
+	},
+	{
 		title: "Rechtliches",
 		links: [
 			["/impressum", "Impressum"],
 			["/datenschutz", "Datenschutz"],
 			["/agb", "AGB"],
 			["/vertrag-widerrufen", "Vertrag widerrufen"],
-,
 		],
 	},
 ];
@@ -144,7 +148,7 @@ const year = new Date().getFullYear();
 
 	.foot__dir {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(5, 1fr);
 		gap: 24px;
 		padding: 20px 0 30px;
 	}

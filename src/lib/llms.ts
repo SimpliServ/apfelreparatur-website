@@ -4,6 +4,7 @@ import { business, type Location } from "./business";
 import { dataCards, deviceFaq, homeFaq, steps, whyCards } from "./copy";
 import { deviceList, imac, services, type DeviceKey } from "./content";
 import { repairPages } from "./repair-pages";
+import { h1Of, opensSunday, regionPath, regions } from "./regions";
 import { guides, richText, type GuideKey } from "./device-guide";
 import { SITE } from "./seo";
 import { CATEGORY, euro, modelPath, priceGroups, type Model } from "./devices";
@@ -53,6 +54,9 @@ export function llmsTxt(locations: Location[]): string {
 		`- [Reparatur anfragen](${SITE}/reparatur-anfragen): Formular mit Gerät, Anliegen, Name, E-Mail, optional Telefon und Modell. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&anliegen=display|rueckglas|akku|kamera|ladebuchse|tastatur|datenrettung|datenuebertragung\`. Das Formular ist als WebMCP-Tool \`request_repair\` annotiert.`,
 		`- [iPhone verkaufen in Wien: Was ist mein iPhone noch wert?](${SITE}/ankauf): iPhone, iPad, Mac und Apple Watch verkaufen, auch mit Displaybruch, verbrauchter Batterie oder defekt. Ohne Termin im Shop abgeben (Wien Hauptbahnhof, Shopping City Süd, G3 Gerasdorf) oder per Post nach Online-Anfrage. Angebot erst nach technischem Check. Die Seite nennt die Wertfaktoren (Generation, Speicher, Batteriezustand, Display/Face ID, Teile-Historie, Aktivierungssperre) und die Vorbereitung (Backup, „Wo ist?“ aus, Apple Account abmelden, Werkseinstellungen). Formular mit Gerät, Modell, Speicher, Zustand, Übergabe (Standort oder Post), Name, E-Mail. Vorauswahl per URL: \`?geraet=iphone|ipad|mac|apple-watch&modell=…\`. WebMCP-Tool \`request_device_buyback\`.`,
 		`- [Standorte und Öffnungszeiten](${SITE}/kontakt)`,
+		"",
+		"## Bundesländer",
+		...regions.map((r) => `- [${h1Of(r)}](${SITE}${regionPath(r)}): ${r.description}`),
 		"",
 		"## Optional",
 		`- [Alle Inhalte in einer Datei](${SITE}/llms-full.txt)`,
@@ -129,6 +133,11 @@ export function llmsFullTxt(locations: Location[], models: Model[] = []): string
 		const n = dn(d.key, d.name);
 		out.push(`### ${repairName(p)} Wien`, "", `${SITE}${p.path}`, "", p.copy.sub(n), "", "Typische Anzeichen:", ...p.copy.signs.filter((s) => !s.skip?.includes(n)).map((s) => `- ${s.title}: ${s.text}`), "");
 		out.push(...p.copy.faq(n).map((f) => qa(f.q, f.a)));
+	}
+	out.push("## iPhone reparieren lassen in ganz Österreich", "", "Reparaturen nur an den Standorten in Wien und Umgebung, ohne Termin. Entfernungen in Luftlinie.", "");
+	for (const r of regions) {
+		out.push(`### ${h1Of(r)}`, "", `${SITE}${regionPath(r)}`, "", r.lead, "", ...r.guide.flatMap((g) => [`#### ${g.h}`, "", ...g.p, ""]));
+		out.push(...r.faq({ sunday: locations.filter(opensSunday) }).map((f) => qa(f.q, f.a)));
 	}
 	out.push("## Datenrettung und Datenübertragung", "", `${SITE}/datenrettung`, "", ...dataCards.map(card), "");
 	out.push("## Häufige Fragen", "", ...homeFaq.map((f) => qa(f.q, f.a)));
